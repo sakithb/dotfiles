@@ -1,0 +1,77 @@
+/*
+ *
+ * Author  : Aditya Shakya
+ * Mail    : adi1090x@gmail.com
+ * Github  : @adi1090x
+ * Twitter : @adi1090x
+ *
+ */
+
+configuration {
+	font:							"Noto Sans Bold 14";
+    disable-history:                false;
+    fullscreen:                     false;
+	hide-scrollbar: 				true;
+	sidebar-mode: 					false;
+}
+
+* {
+    background:                     #00000080;
+    background-alt:              	#00000000;
+    background-bar:                 #f2f2f215;
+    foreground:                     #f2f2f2EE;
+    accent:			            	#3DAEE966;
+}
+
+window {
+    transparency:                   "real";
+    background-color:               @background;
+    text-color:                     @foreground;
+	border:							0px;
+	border-color:					@border;
+    border-radius:                  0px;
+	width:							20%;
+    location:                       center;
+    x-offset:                       0;
+    y-offset:                       0;
+}
+
+listview {
+    background-color:               @background-alt;
+    columns:                        1;
+    lines:                          2;
+    spacing:                        0%;
+    cycle:                          false;
+    dynamic:                        true;
+}
+
+mainbox {
+    background-color:               @background-alt;
+	border:							0% 0% 0% 0%;
+    border-radius:                  0% 0% 0% 0%;
+	border-color:					@accent;
+    children:                       [ listview ];
+    padding:                        2%;
+}
+
+element {
+    background-color:               @background-alt;
+    text-color:                     @foreground;
+    orientation:                    horizontal;
+    border-radius:                  0%;
+    padding:                        2% 0%;
+}
+
+element-text {
+    expand:                         true;
+    horizontal-align:               0;
+    vertical-align:                 0.5;
+}
+
+element selected {
+    background-color:               @background-bar;
+    text-color:                     @foreground;
+	border:							0% 0% 0% 0%;
+    border-radius:                  12px;
+    border-color:                  	@accent;
+}
