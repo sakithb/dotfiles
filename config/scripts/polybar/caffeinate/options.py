@@ -44,7 +44,7 @@ if time_amount is not None:
         abbr_1 = "{0} hour(s){1}".format(no_of_hours, " and {0} minute(s)".format(no_of_minutes) if no_of_minutes > 0 else "")
 else:
     abbr_0 = "until"
-    abbr_1 = "the process \"{0}\" quits".format(process_name)
+    abbr_1 = "the process quits and \"{0}\" ".format(process_name)
 
 abbr_2 = quit_action if quit_action != "Nothing" else ""
 
