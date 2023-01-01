@@ -20,17 +20,17 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "none";
+      # dns = "none";
     };
 
-    nameservers = [
-      "127.0.0.1"
-      "::1"
-    ];
-
-    dhcpcd = {
-      extraConfig = "nohook resolv.conf";
-    };
+    # nameservers = [
+    #   "127.0.0.1"
+    #   "::1"
+    # ];
+    #
+    # dhcpcd = {
+    #   extraConfig = "nohook resolv.conf";
+    # };
   };
 
   nix = {
@@ -82,18 +82,18 @@
       enable = true;
       enableNotifications = true;
     };
-    dnscrypt-proxy = {
-      enable = true;
-      settings = {
-        ipv6_servers = true;
-		doh_servers = true;
-		dnscrypt_servers = true;
-        require_dnssec = true;
-        require_nolog = true;
-        require_nofilter = true;
-		http3 = true;
-      };
-    };
+		#   dnscrypt-proxy = {
+		#     enable = true;
+		#     settings = {
+		#       ipv6_servers = true;
+		# doh_servers = true;
+		# dnscrypt_servers = true;
+		#       require_dnssec = true;
+		#       require_nolog = true;
+		#       require_nofilter = true;
+		# http3 = true;
+		#     };
+		#   };
   };
 
   fonts = {
