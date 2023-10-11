@@ -1,5 +1,5 @@
 ## Important
-Do not run the `arch_install.sh` script, it intended to be run on a clean arch install. However I will create a script to setup the desktop as displayed in the screenshots. 
+Do not run the `arch_install.sh` script, it intended to be run on a clean arch install.
 
 ---
 
