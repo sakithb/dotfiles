@@ -7,6 +7,7 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+vim.opt.autoindent = true
 
 -- Wrapping and max width
 vim.opt.textwidth = 120
@@ -15,7 +16,7 @@ vim.opt.breakindent = true
 vim.opt.linebreak = true
 
 -- Autocompletion
-vim.opt.completeopt:append({ "menuone", "noinsert" })
+vim.opt.completeopt:append({ "menu", "menuone", "preview", "noinsert" })
 
 -- Line numbers and current line
 vim.opt.number = true
@@ -28,9 +29,14 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.mouse = "a"
 
 -- Misc
+vim.opt.pumheight = 10
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 vim.opt.hidden = true
 vim.opt.confirm = true
 vim.opt.title = true
 vim.opt.inccommand = "nosplit"
+vim.opt.signcolumn = "yes"
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
