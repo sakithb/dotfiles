@@ -1,8 +1,10 @@
 return {
 	{
-		"navarasu/onedark.nvim",
+		"folke/tokyonight.nvim",
+		lazy = false,
+		priority = 1000,
 		config = function()
-			require("onedark").load()
+			vim.cmd.colorscheme("tokyonight")
 		end,
 	},
 	{
@@ -11,7 +13,7 @@ return {
 		config = function()
 			require("lualine").setup({
 				options = {
-					theme = "onedark",
+					theme = "tokyonight",
 					component_separators = " ",
 				},
 				sections = {

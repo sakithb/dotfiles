@@ -6,8 +6,15 @@ return {
 	},
 	{
 		"nvim-treesitter-context",
-		opts = {
-			max_lines = 5,
-		},
+		config = function()
+			require("treesitter-context").setup({
+				max_lines = 5,
+				mode = "cursor",
+			})
+
+			vim.keymap.set("n", "<leader>gc", function()
+				require("treesitter-context").go_to_context(vim.v.count1)
+			end, { silent = true })
+		end,
 	},
 }

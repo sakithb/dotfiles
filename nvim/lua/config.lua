@@ -23,6 +23,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
+vim.opt.scrolloff = 10
 
 -- Clipboard and mouse
 vim.opt.clipboard = "unnamedplus"
@@ -37,6 +38,7 @@ vim.opt.confirm = true
 vim.opt.title = true
 vim.opt.inccommand = "nosplit"
 vim.opt.signcolumn = "yes"
+vim.opt.sessionoptions:append("globals")
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1

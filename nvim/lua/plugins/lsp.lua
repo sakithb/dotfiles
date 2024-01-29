@@ -3,16 +3,17 @@ vim.diagnostic.config({
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+	group = vim.api.nvim_create_augroup("LspConfig", {}),
 	callback = function(ev)
 		local opts = { buffer = ev.buf }
 		vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, opts)
 		vim.keymap.set("n", "<leader>fm", vim.lsp.buf.format, opts)
 		vim.keymap.set("n", "<leader>ga", vim.lsp.buf.code_action, opts)
-		vim.keymap.set("n", "<leader>gl", vim.lsp.buf.declaration, opts)
+		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
 		vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, opts)
 		vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, opts)
+
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
 		vim.keymap.set("n", "<S-k>", vim.lsp.buf.hover, opts)
 	end,
