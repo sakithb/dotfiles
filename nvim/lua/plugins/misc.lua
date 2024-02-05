@@ -1,5 +1,11 @@
 return {
 	{
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup()
+		end,
+	},
+	{
 		"m4xshen/hardtime.nvim",
 		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
 		opts = {},
@@ -28,7 +34,8 @@ return {
 					vim.cmd(":Telescope neovim-project discover")
 				end, 0)
 			else
-				vim.cmd("cd " .. vim.fn.argv()[1])
+				local path = vim.fn.fnamemodify(vim.fn.argv()[1], ":p:h")
+				vim.cmd("cd " .. path)
 			end
 		end,
 	},

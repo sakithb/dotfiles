@@ -25,11 +25,8 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.scrolloff = 10
 
--- Clipboard and mouse
-vim.opt.clipboard = "unnamedplus"
-vim.opt.mouse = "a"
-
 -- Misc
+vim.opt.mouse = "a"
 vim.opt.pumheight = 10
 vim.opt.termguicolors = true
 vim.opt.undofile = true
@@ -42,3 +39,26 @@ vim.opt.sessionoptions:append("globals")
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+	opts = opts or {}
+
+	opts.border = opts.border or "single"
+	opts.max_width = opts.max_width or 100
+    opts.max_height = opts.max_height or 20
+
+	return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+local orig_buf_format = vim.lsp.buf.format
+function vim.lsp.buf.format(opts, ...)
+	opts = opts or {}
+
+	opts.formatting_options = {
+		tabSize = vim.g.shiftwidth,
+		insertSpaces = vim.g.expandtab,
+	}
+
+	return orig_buf_format(opts, ...)
+end

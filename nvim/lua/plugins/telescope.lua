@@ -11,11 +11,25 @@ return {
 		},
 		config = function()
 			local telescope = require("telescope")
+
 			local builtin = require("telescope.builtin")
+			local actions = require("telescope.actions")
+			local actions_layout = require("telescope.actions.layout")
 
 			telescope.setup({
+				defaults = {
+					mappings = {
+						i = {
+							["<M-p>"] = actions_layout.toggle_preview,
+							["<M-s>"] = actions.toggle_all,
+							["<esc>"] = actions.close,
+						},
+					},
+				},
 				extensions = {
 					file_browser = {
+						layout_strategy = "vertical",
+						previewer = false,
 						hijack_netrw = true,
 						respect_gitignore = false,
 						hidden = {
@@ -24,11 +38,33 @@ return {
 						},
 					},
 				},
-				defaults = {
-					mappings = {
-						i = {
-							["<C-p>"] = require("telescope.actions.layout").toggle_preview,
+				pickers = {
+					buffers = {
+						theme = "dropdown",
+						previewer = false,
+                        ignore_current_buffer = true,
+                        sort_mru = true,
+						mappings = {
+							i = {
+								["<M-d>"] = actions.delete_buffer,
+							},
 						},
+					},
+					oldfiles = {
+						theme = "dropdown",
+						previewer = false,
+					},
+					registers = {
+						theme = "dropdown",
+						previewer = false,
+					},
+					kemaps = {
+						theme = "dropdown",
+						previewer = false,
+					},
+					git_branches = {
+						theme = "dropdown",
+						previewer = false,
 					},
 				},
 			})
@@ -40,8 +76,10 @@ return {
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 			vim.keymap.set("n", "<leader>fr", builtin.oldfiles, {})
 
-			vim.keymap.set("n", "<leader>lb", builtin.buffers, {})
+			vim.keymap.set("n", "<leader><CR>", builtin.buffers, {})
 			vim.keymap.set("n", "<leader>lq", builtin.quickfix, {})
+            vim.keymap.set("n", "<leader>lm", builtin.marks, {})
+            vim.keymap.set("n", "<leader>lj", builtin.jumplist, {})
 			vim.keymap.set("n", "<leader>lvr", builtin.registers, {})
 			vim.keymap.set("n", "<leader>lvk", builtin.keymaps, {})
 			vim.keymap.set("n", "<leader>fb", builtin.current_buffer_fuzzy_find, {})

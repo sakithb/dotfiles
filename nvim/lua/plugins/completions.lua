@@ -45,6 +45,7 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-Esc>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = false }),
+					["<S-CR>"] = cmp.mapping.confirm({ select = true }),
 				}),
 				window = {
 					completion = cmp.config.window.bordered({

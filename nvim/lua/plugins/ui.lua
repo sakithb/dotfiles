@@ -1,10 +1,19 @@
 return {
 	{
-		"folke/tokyonight.nvim",
-		lazy = false,
+		"catppuccin/nvim",
+		name = "catppuccin",
 		priority = 1000,
 		config = function()
-			vim.cmd.colorscheme("tokyonight")
+			require("catppuccin").setup({
+				flavour = "macchiato",
+				integrations = {
+					fidget = true,
+					mason = false,
+					treesitter_context = true,
+				},
+			})
+
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
 	{
@@ -13,7 +22,7 @@ return {
 		config = function()
 			require("lualine").setup({
 				options = {
-					theme = "tokyonight",
+					theme = "catppuccin",
 					component_separators = " ",
 				},
 				sections = {
@@ -34,6 +43,11 @@ return {
 	{
 		"j-hui/fidget.nvim",
 		opts = {
+			notification = {
+				window = {
+					winblend = 0,
+				},
+			},
 			progress = {
 				suppress_on_insert = false,
 				ignore_done_already = false,
