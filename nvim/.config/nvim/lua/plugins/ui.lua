@@ -18,12 +18,12 @@ return {
                 },
                 sections = {
                     lualine_x = {
-                        {
-                            "copilot",
-                            symbols = {
-                                spinners = require("copilot-lualine.spinners").pipe,
-                            },
-                        },
+                        -- {
+                        --     "copilot",
+                        --     symbols = {
+                        --         spinners = require("copilot-lualine.spinners").pipe,
+                        --     },
+                        -- },
                         "filetype",
                     },
                     lualine_y = { "searchcount", "selectioncount", "tabs" },
