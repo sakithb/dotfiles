@@ -1,3 +1,15 @@
+## GNOME
+
+![Screenshot](assets/gnome_screenshot.png)
+
+**Extensions**
+Dash to Dock
+Blur my Shell
+Media Controls
+Just Perfection
+Wallhub
+Arcmenu
+
 ## i3
 
 ![Screenshot](assets/i3_screenshot.png)
