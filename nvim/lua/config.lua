@@ -36,9 +36,15 @@ vim.opt.title = true
 vim.opt.inccommand = "nosplit"
 vim.opt.signcolumn = "yes"
 vim.opt.sessionoptions:append("globals")
+vim.opt.updatetime = 250
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.have_nerd_font = true
+
+vim.diagnostic.config({
+    update_in_insert = true,
+})
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)

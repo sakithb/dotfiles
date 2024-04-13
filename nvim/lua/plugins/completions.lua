@@ -1,20 +1,20 @@
 return {
-	{
-		"zbirenbaum/copilot.lua",
-		dependencies = {
-			"AndreM222/copilot-lualine",
-			"zbirenbaum/copilot-cmp",
-		},
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot_cmp").setup({})
-			require("copilot").setup({
-				suggestion = { enabled = false },
-				panel = { enabled = false },
-			})
-		end,
-	},
+	-- {
+	-- 	"zbirenbaum/copilot.lua",
+	-- 	dependencies = {
+	-- 		"AndreM222/copilot-lualine",
+	-- 		"zbirenbaum/copilot-cmp",
+	-- 	},
+	-- 	cmd = "Copilot",
+	-- 	event = "InsertEnter",
+	-- 	config = function()
+	-- 		require("copilot_cmp").setup({})
+	-- 		require("copilot").setup({
+	-- 			suggestion = { enabled = false },
+	-- 			panel = { enabled = false },
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
@@ -34,8 +34,8 @@ return {
 				},
 				sources = cmp.config.sources({
 					{ name = "path", group_index = 1 },
-					{ name = "copilot", group_index = 1 },
 					{ name = "nvim_lsp", group_index = 1 },
+                    -- { name = "copilot", group_index = 1 },
 					{ name = "luasnip", group_index = 1 },
 					{ name = "buffer", group_index = 2 },
 				}),
@@ -44,14 +44,15 @@ return {
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-Esc>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = false }),
-					["<S-CR>"] = cmp.mapping.confirm({ select = true }),
+					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                    ["<C-n>"] = cmp.mapping.select_next_item(),
+                    ["<C-p>"] = cmp.mapping.select_prev_item(),
 				}),
 				window = {
+                    documentation = cmp.config.window.bordered(),
 					completion = cmp.config.window.bordered({
 						winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
 					}),
-					documentation = cmp.config.window.bordered(),
 				},
 			})
 		end,

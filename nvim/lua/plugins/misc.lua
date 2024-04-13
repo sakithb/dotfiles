@@ -6,11 +6,6 @@ return {
 		end,
 	},
 	{
-		"m4xshen/hardtime.nvim",
-		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-		opts = {},
-	},
-	{
 		"coffebar/neovim-project",
 		lazy = false,
 		priority = 100,
@@ -23,19 +18,19 @@ return {
 			require("neovim-project").setup({
 				projects = {
 					"~/Projects/*/*",
+                    "~/.config/nvim/"
 				},
 			})
 
-			vim.keymap.set("n", "<leader>pa", ":Telescope neovim-project discover<CR>")
+			vim.keymap.set("n", "<leader>pp", ":Telescope neovim-project discover<CR>")
 			vim.keymap.set("n", "<leader>pr", ":Telescope neovim-project history<CR>")
 
-			if vim.fn.argc() == 0 then
+			if vim.fn.argc() == 0 and vim.fn.expand("%") == vim.loop.cwd() then
 				vim.defer_fn(function()
 					vim.cmd(":Telescope neovim-project discover")
 				end, 0)
 			else
-				local path = vim.fn.fnamemodify(vim.fn.argv()[1], ":p:h")
-				vim.cmd("cd " .. path)
+				vim.cmd("cd " .. vim.fn.expand("%:p:h") )
 			end
 		end,
 	},
