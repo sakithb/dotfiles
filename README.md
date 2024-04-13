@@ -1,6 +1,6 @@
 ## i3
 
-![Screenshot](assets/screenshot.png)
+![Screenshot](assets/i3_screenshot.png)
 
 - WM - i3-gaps
 - Compositor - ibhagwan's picom fork
