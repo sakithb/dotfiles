@@ -22,6 +22,7 @@ return {
 
             telescope.setup({
                 defaults = {
+                    file_ignore_patterns = {".git/"},
                     mappings = {
                         i = {
                             ["<M-p>"] = actions_layout.toggle_preview,
