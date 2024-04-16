@@ -10,7 +10,6 @@ vim.opt.expandtab = true
 vim.opt.autoindent = true
 
 -- Wrapping and max width
-vim.opt.textwidth = 120
 vim.opt.colorcolumn = { 121 }
 vim.opt.breakindent = true
 vim.opt.linebreak = true

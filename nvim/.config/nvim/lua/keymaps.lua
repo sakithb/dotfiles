@@ -89,20 +89,18 @@ local LspAuGRP = vim.api.nvim_create_augroup("LspConfig", {});
 vim.api.nvim_create_autocmd("LspAttach", {
     group = LspAuGRP,
     callback = function(ev)
-        local opts = { buffer = ev.buf }
+        vim.keymap.set("n", "<leader>gr", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename symbol" })
+        vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, { buffer = ev.buf, desc = "Format" })
+        vim.keymap.set("n", "<leader>ga", vim.lsp.buf.code_action, { buffer = ev.buf, desc = "List code actions" })
+        vim.keymap.set("n", "<leader>gl", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "Goto declaration" })
+        vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = ev.buf, desc = "Goto definition" })
+        vim.keymap.set("n", "<leader>gy", vim.lsp.buf.type_definition, { buffer = ev.buf, desc = "Goto type definition" })
+        vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { buffer = ev.buf, desc = "Goto implementation" })
 
-        vim.keymap.set("n", "<leader>gr", vim.lsp.buf.rename, opts)
-        vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, opts)
-        vim.keymap.set("n", "<leader>ga", vim.lsp.buf.code_action, opts)
-        vim.keymap.set("n", "<leader>gl", vim.lsp.buf.declaration, opts)
-        vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, opts)
-        vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, opts)
-
-        vim.keymap.set("n", "<S-k>", vim.lsp.buf.hover, opts)
-        vim.keymap.set({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, opts)
-        vim.keymap.set({ "n", "i" }, "<M-k>", vim.diagnostic.open_float, opts)
-        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+        vim.keymap.set("n", "<S-k>", vim.lsp.buf.hover, { buffer = ev.buf, desc = "Show documentation" })
+        vim.keymap.set({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "Show signature help" })
+        vim.keymap.set({ "n", "i" }, "<M-k>", vim.diagnostic.open_float, { buffer = ev.buf, desc = "Show diagnostics in the line" })
+        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { buffer = ev.buf, desc = "Goto previous diagnostic" })
+        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { buffer = ev.buf, desc = "Goto next diagnostic" })
     end,
 })

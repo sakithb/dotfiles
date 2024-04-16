@@ -18,7 +18,6 @@ return {
 			require("neovim-project").setup({
 				projects = {
 					"~/Projects/*/*",
-                    "~/.config/nvim/"
 				},
 			})
 

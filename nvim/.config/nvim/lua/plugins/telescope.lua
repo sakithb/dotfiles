@@ -27,6 +27,8 @@ return {
                             ["<M-p>"] = actions_layout.toggle_preview,
                             ["<M-s>"] = actions.toggle_all,
                             ["<esc>"] = actions.close,
+                            ["<C-k>"] = actions.cycle_history_next,
+                            ["<C-j>"] = actions.cycle_history_prev,
                         },
                     },
                 },
@@ -43,6 +45,9 @@ return {
                     },
                 },
                 pickers = {
+                    find_files = {
+                        hidden = true,
+                    },
                     buffers = {
                         theme = "dropdown",
                         previewer = false,
@@ -73,31 +78,32 @@ return {
                 },
             })
 
-            vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
-            vim.keymap.set("n", "<leader>fg", builtin.git_files, {})
-            vim.keymap.set("n", "<leader>fr", builtin.oldfiles, {})
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+            vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Find git files" })
+            vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Find recent files" })
 
-            vim.keymap.set("n", "<leader>ss", builtin.live_grep, {})
-            vim.keymap.set("n", "<leader>sw", builtin.grep_string, {})
-            vim.keymap.set("n", "<leader>sh", builtin.help_tags, {})
-            vim.keymap.set("n", "<leader>sb", builtin.current_buffer_fuzzy_find, {})
+            vim.keymap.set("n", "<leader>ss", builtin.live_grep, { desc = "Search across files" })
+            vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "Search word" })
+            vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Search help" })
+            vim.keymap.set("n", "<leader>sb", builtin.current_buffer_fuzzy_find, { desc = "Search in buffer" })
 
-            vim.keymap.set("n", "<leader><CR>", builtin.buffers, {})
-            vim.keymap.set("n", "<leader>lq", builtin.quickfix, {})
-            vim.keymap.set("n", "<leader>lm", builtin.marks, {})
-            vim.keymap.set("n", "<leader>lj", builtin.jumplist, {})
-            vim.keymap.set("n", "<leader>lr", builtin.registers, {})
-            vim.keymap.set("n", "<leader>lk", builtin.keymaps, {})
+            vim.keymap.set("n", "<leader><CR>", builtin.buffers, { desc = "List open buffers" })
+            vim.keymap.set("n", "<leader>lq", builtin.quickfix, { desc = "List quickfix items" })
+            vim.keymap.set("n", "<leader>lm", builtin.marks, { desc = "List marks" })
+            vim.keymap.set("n", "<leader>lj", builtin.jumplist, { desc = "List jumplist" })
+            vim.keymap.set("n", "<leader>lr", builtin.registers, { desc = "List registers" })
+            vim.keymap.set("n", "<leader>lk", builtin.keymaps, { desc = "List keymaps" })
 
-            vim.keymap.set("n", "<leader>gls", builtin.lsp_document_symbols, {})
-            vim.keymap.set("n", "<leader>glw", builtin.lsp_workspace_symbols, {})
-            vim.keymap.set("n", "<leader>glr", builtin.lsp_references, {})
-            vim.keymap.set("n", "<leader>gld", builtin.diagnostics, {})
+            vim.keymap.set("n", "<leader>gls", builtin.lsp_document_symbols, { desc = "List document symbols" })
+            vim.keymap.set("n", "<leader>glw", builtin.lsp_workspace_symbols, { desc = "List workspace symbols" })
+            vim.keymap.set("n", "<leader>glr", builtin.lsp_references, { desc = "List references" })
+            vim.keymap.set("n", "<leader>gld", builtin.diagnostics, { desc = "List diagnostics" })
 
-            vim.keymap.set("n", "<leader>gtc", builtin.git_commits, {})
-            vim.keymap.set("n", "<leader>gts", builtin.git_status, {})
-            vim.keymap.set("n", "<leader>gth", builtin.git_stash, {})
-            vim.keymap.set("n", "<leader>gtb", builtin.git_branches, {})
+            vim.keymap.set("n", "<leader>gtc", builtin.git_commits, { desc = "List git commits" })
+            vim.keymap.set("n", "<leader>gtm", builtin.git_bcommits, { desc = "List git buffer commits" })
+            vim.keymap.set("n", "<leader>gts", builtin.git_status, { desc = "Show git status" })
+            vim.keymap.set("n", "<leader>gth", builtin.git_stash, { desc = "List git stash" })
+            vim.keymap.set("n", "<leader>gtb", builtin.git_branches, { desc = "List git branches" })
 
             telescope.load_extension("file_browser")
             telescope.load_extension("ui-select")
