@@ -18,7 +18,7 @@ return {
                     end,
                 },
                 indent = {
-                    enable = true
+                    enable = false
                 },
             })
         end

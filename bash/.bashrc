@@ -18,7 +18,8 @@ alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
 
-PATH="$PATH:~/.local/bin/"
+export GOPATH="$HOME/.go"
+PATH="$PATH:$GOPATH/bin:~/.local/bin/"
 
 # Pyenv
 # export PYENV_ROOT="$HOME/.pyenv"
@@ -27,3 +28,5 @@ PATH="$PATH:~/.local/bin/"
 
 # Nodenv
 eval "$(nodenv init -)"
+
+. "$HOME/.cargo/env"
