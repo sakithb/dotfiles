@@ -42,6 +42,8 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.have_nerd_font = true
 
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
 vim.diagnostic.config({
     update_in_insert = true,
 })
@@ -65,6 +67,14 @@ function vim.lsp.buf.format(opts, ...)
 		tabSize = vim.g.shiftwidth,
 		insertSpaces = vim.g.expandtab,
 	}
+
+	opts.filter = function (client)
+		if vim.bo.filetype == "templ" then
+			return client.name == "templ"
+		end
+
+		return true
+	end
 
 	return orig_buf_format(opts, ...)
 end

@@ -33,11 +33,11 @@ return {
 					end,
 				},
 				sources = cmp.config.sources({
-					{ name = "path", group_index = 1 },
+					{ name = "path",     group_index = 1 },
 					{ name = "nvim_lsp", group_index = 1 },
-                    -- { name = "copilot", group_index = 1 },
-					{ name = "luasnip", group_index = 1 },
-					{ name = "buffer", group_index = 2 },
+					-- { name = "copilot", group_index = 1 },
+					{ name = "luasnip",  group_index = 1 },
+					{ name = "buffer",   group_index = 2 },
 				}),
 				mapping = cmp.mapping.preset.insert({
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -45,11 +45,11 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-Esc>"] = cmp.mapping.abort(),
 					["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
+					["<C-n>"] = cmp.mapping.select_next_item(),
+					["<C-p>"] = cmp.mapping.select_prev_item(),
 				}),
 				window = {
-                    documentation = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
 					completion = cmp.config.window.bordered({
 						winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
 					}),

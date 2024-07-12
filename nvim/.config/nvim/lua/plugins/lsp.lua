@@ -32,11 +32,19 @@ return {
 						})
 					elseif server_name == "emmet_ls" then
 						server_config = vim.tbl_extend("force", server_config, {
-							filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue", "templ"}
+							filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue", "templ" }
 						})
 					elseif server_name == "html" then
 						server_config = vim.tbl_extend("force", server_config, {
-							filetypes = { "html", "templ"}
+							filetypes = { "html", "templ" }
+						})
+					elseif server_name == "htmx" then
+						server_config = vim.tbl_extend("force", server_config, {
+							filetypes = { "html", "templ" }
+						})
+					elseif server_name == "templ" then
+						server_config = vim.tbl_extend("force", server_config, {
+							cmd = { "env", "TEMPL_EXPERIMENT=rawgo", "templ", "lsp" }
 						})
 					end
 
