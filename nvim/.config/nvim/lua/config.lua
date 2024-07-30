@@ -45,7 +45,13 @@ vim.g.have_nerd_font = true
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 vim.diagnostic.config({
-    update_in_insert = true,
+	update_in_insert = true,
+})
+
+vim.filetype.add({
+	extension = {
+		gotmpl = "gotmpl",
+	},
 })
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -54,7 +60,7 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 
 	opts.border = opts.border or "single"
 	opts.max_width = opts.max_width or 100
-    opts.max_height = opts.max_height or 20
+	opts.max_height = opts.max_height or 20
 
 	return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
@@ -68,7 +74,7 @@ function vim.lsp.buf.format(opts, ...)
 		insertSpaces = vim.g.expandtab,
 	}
 
-	opts.filter = function (client)
+	opts.filter = function(client)
 		if vim.bo.filetype == "templ" then
 			return client.name == "templ"
 		end

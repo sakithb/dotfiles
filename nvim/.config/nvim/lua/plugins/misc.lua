@@ -29,7 +29,7 @@ return {
 					vim.cmd(":Telescope neovim-project discover")
 				end, 0)
 			else
-				vim.cmd("cd " .. vim.fn.expand("%:p:h") )
+				vim.cmd("cd " .. vim.fn.expand("%:p:h"))
 			end
 		end,
 	},
