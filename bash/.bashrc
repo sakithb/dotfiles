@@ -22,14 +22,17 @@ export GOPATH="$HOME/.go"
 export FLYCTL_INSTALL="/home/sakithb/.fly"
 export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin"
 
-# Pyenv
+set -o vi
+
+# pyenv
 # export PYENV_ROOT="$HOME/.pyenv"
 # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 # eval "$(pyenv init -)"
 
-# Nodenv
+# nodenv
 eval "$(nodenv init -)"
 
+# cargo
 . "$HOME/.cargo/env"
 
 # pnpm
