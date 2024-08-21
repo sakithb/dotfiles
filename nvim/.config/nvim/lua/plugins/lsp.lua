@@ -51,6 +51,9 @@ return {
 				},
 				templ = {
 					cmd = { "env", "TEMPL_EXPERIMENT=rawgo", "templ", "lsp" }
+				},
+				clangd = {
+					cmd = { "clangd", "--fallback-style=webkit" }
 				}
 			}
 		},

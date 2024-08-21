@@ -31,3 +31,11 @@ export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin"
 eval "$(nodenv init -)"
 
 . "$HOME/.cargo/env"
+
+# pnpm
+export PNPM_HOME="/home/sakithb/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
