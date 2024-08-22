@@ -24,18 +24,18 @@ return {
 					},
 				},
 				emmet_ls = {
-					filetypes = { "templ", "gotmpl" }
+					filetypes = { "templ", "gotmpl", "html" }
 				},
 				html = {
 
-					filetypes = { "templ", "gotmpl" }
+					filetypes = { "templ", "gotmpl", "html" }
 				},
 				htmx = {
 
-					filetypes = { "templ", "gotmpl" }
+					filetypes = { "templ", "gotmpl", "html" }
 				},
 				tailwindcss = {
-					filetypes = { "templ", "gotmpl" },
+					filetypes = { "templ", "gotmpl", "html" },
 					init_options = {
 						userLanguages = {
 							templ = "html",

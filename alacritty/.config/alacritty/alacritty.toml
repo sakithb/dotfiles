@@ -1,0 +1,10 @@
+[window]
+padding = { x = 5, y = 5 }
+decorations = "None"
+startup_mode = "Maximized"
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font" }
+size = 12.0
+offset = { x = 0, y = 1 }
+

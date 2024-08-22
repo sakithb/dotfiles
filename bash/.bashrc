@@ -22,7 +22,7 @@ export GOPATH="$HOME/.go"
 export FLYCTL_INSTALL="/home/sakithb/.fly"
 export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin"
 
-set -o vi
+#set -o vi
 
 # pyenv
 # export PYENV_ROOT="$HOME/.pyenv"
