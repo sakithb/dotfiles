@@ -43,6 +43,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.have_nerd_font = true
 
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 vim.diagnostic.config({
 	update_in_insert = true,

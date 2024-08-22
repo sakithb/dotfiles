@@ -5,6 +5,25 @@ return {
 			require("mason").setup()
 		end,
 	},
+	{
+	  'rmagatti/auto-session',
+	  lazy = false,
+	  dependencies = {
+		'nvim-telescope/telescope.nvim',
+	  },
+	  keys = {
+		  { '<leader>wr', '<cmd>SessionSearch<CR>', desc = 'Session search' },
+		  { '<leader>ws', '<cmd>SessionSave<CR>', desc = 'Save session' },
+		  { '<leader>wa', '<cmd>SessionToggleAutoSave<CR>', desc = 'Toggle autosave' },
+	  },
+	  opts = {
+		auto_session_allowed_dirs = {
+			"/mnt/Projects/personal/*",
+			"/mnt/Projects/work/*",
+			"/mnt/Projects/temp/*"
+		},
+	  }
+	}
 	-- {
 	-- 	"coffebar/neovim-project",
 	-- 	lazy = false,
