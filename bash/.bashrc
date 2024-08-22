@@ -20,7 +20,7 @@ alias cdtt="cdt && cd"
 
 export GOPATH="$HOME/.go"
 export FLYCTL_INSTALL="/home/sakithb/.fly"
-export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin"
+export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin:~/Projects/scripts"
 
 #set -o vi
 
