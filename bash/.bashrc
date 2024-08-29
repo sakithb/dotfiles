@@ -18,9 +18,7 @@ alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
 
-export GOPATH="$HOME/.go"
-export FLYCTL_INSTALL="/home/sakithb/.fly"
-export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin:~/Projects/scripts"
+export PATH="$PATH:~/Projects/scripts"
 
 #set -o vi
 
@@ -30,15 +28,19 @@ export PATH="$PATH:$GOPATH/bin:~/.local/bin/:~/.nodenv/bin:$FLYCTL_INSTALL/bin:~
 # eval "$(pyenv init -)"
 
 # nodenv
-eval "$(nodenv init -)"
+# eval "$(nodenv init -)"
 
 # cargo
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 
 # pnpm
-export PNPM_HOME="/home/sakithb/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+# export PNPM_HOME="/home/sakithb/.local/share/pnpm"
+# case ":$PATH:" in
+#   *":$PNPM_HOME:"*) ;;
+#   *) export PATH="$PNPM_HOME:$PATH" ;;
+# esac
 # pnpm end
+
+#emscripten
+#export EMSDK_QUIET=1
+#source "/mnt/Projects/temp/emsdk/emsdk_env.sh"

@@ -1,0 +1,38 @@
+// -*- mode: json -*-
+
+{
+	"layer": "top",
+	"position": "top",
+
+	"modules-left": [
+		"hyprland/workspaces",
+	],
+	"modules-center": [
+	],
+	"modules-right": [
+		"cpu",
+		"memory",
+		"wireplumber",
+		"network",
+		"tray",
+		"clock"
+	],
+
+	"cpu": {
+		"format": "CPU {usage}%"
+	},
+
+	"memory": {
+		"format": "RAM {percentage}%"
+	},
+
+	"wireplumber": {
+		"format": "VOL {volume}%"
+	},
+
+	"network": {
+		"format-wifi": "Wifi",
+		"format-ethernet": "Ethernet",
+		"format-disconnected": "No network",
+	}
+}

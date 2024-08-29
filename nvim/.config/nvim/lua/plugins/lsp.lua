@@ -53,7 +53,10 @@ return {
 					cmd = { "env", "TEMPL_EXPERIMENT=rawgo", "templ", "lsp" }
 				},
 				clangd = {
-					cmd = { "clangd", "--fallback-style=webkit" }
+					cmd = { "clangd", "--fallback-style=webkit" },
+					init_options = {
+						fallbackFlags = {'--std=c99'}
+					},
 				}
 			}
 		},
