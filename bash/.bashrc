@@ -20,27 +20,9 @@ alias cdtt="cdt && cd"
 
 export PATH="$PATH:~/Projects/scripts"
 
-#set -o vi
-
-# pyenv
-# export PYENV_ROOT="$HOME/.pyenv"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
 # nodenv
-# eval "$(nodenv init -)"
-
-# cargo
-# . "$HOME/.cargo/env"
+eval "$(nodenv init -)"
 
 # pnpm
-# export PNPM_HOME="/home/sakithb/.local/share/pnpm"
-# case ":$PATH:" in
-#   *":$PNPM_HOME:"*) ;;
-#   *) export PATH="$PNPM_HOME:$PATH" ;;
-# esac
-# pnpm end
-
-#emscripten
-#export EMSDK_QUIET=1
-#source "/mnt/Projects/temp/emsdk/emsdk_env.sh"
+export PNPM_HOME="/home/sakithb/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
