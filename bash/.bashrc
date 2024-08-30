@@ -1,5 +1,5 @@
 # If not running interactively, don't do anything
-# [[ $- != *i* ]] && return
+[[ $- != *i* ]] && return
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -17,6 +17,7 @@ alias cdt="cd ~/Projects/temp"
 alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
+alias ts="tmux-sessionizer"
 
 export PATH="$PATH:~/Projects/scripts"
 
