@@ -8,31 +8,67 @@
 		"hyprland/workspaces",
 	],
 	"modules-center": [
+		"mpris",
 	],
 	"modules-right": [
 		"cpu",
 		"memory",
 		"wireplumber",
 		"network",
+		"gamemode",
+		"idle_inhibitor",
 		"tray",
+		"privacy",
 		"clock"
 	],
+
+	"mpris": {
+		"format": "{status_icon} | {title} - {artist}",
+		"title-len": 40,
+		"artist-len": 20,
+		"status-icons": {
+			"paused": "",
+			"playing": "",
+		},
+	},
 
 	"cpu": {
 		"format": "CPU {usage}%"
 	},
-
 	"memory": {
 		"format": "RAM {percentage}%"
 	},
-
 	"wireplumber": {
-		"format": "VOL {volume}%"
+		"format": "VOL {volume}%",
+		"max-volume": 150,
 	},
-
 	"network": {
 		"format-wifi": "Wifi",
 		"format-ethernet": "Ethernet",
 		"format-disconnected": "No network",
-	}
+		"tooltip-format": "Down:{bandwidthDownBytes} Up:{bandwidthUpBytes}",
+	},
+	"gamemode": {
+		"format": " GM ",
+		"format-alt": " GM {count} ",
+		"icon-spacing": 0,
+		"icon-size": 0,
+		"use-icon": false,
+	},
+	"idle_inhibitor": {
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "IH O",
+			"deactivated": "IH .",
+		}
+	},
+	"privacy": {
+		"icon-size": 16
+	},
+	"clock": {
+		"interval": 60,
+		"tooltip": true,
+		"format": "{:%H.%M}",
+		"tooltip-format": "{:%a, %d of %b}",
+	},
 }

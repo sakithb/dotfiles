@@ -18,9 +18,9 @@ return {
 	  },
 	  opts = {
 		auto_session_allowed_dirs = {
-			"/mnt/Projects/personal/*",
-			"/mnt/Projects/work/*",
-			"/mnt/Projects/temp/*"
+			"~/Projects/personal/*",
+			"~/Projects/work/*",
+			"~/Projects/temp/*"
 		},
 	  }
 	}

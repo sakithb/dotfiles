@@ -11,19 +11,20 @@ if [ -f ~/.bashrc.sensible ]; then
 fi
 
 # Aliases
-alias cdp="cd ~/Projects/personal"
-alias cdw="cd ~/Projects/work"
-alias cdt="cd ~/Projects/temp"
+alias cdp="cd $HOME/Projects/personal"
+alias cdw="cd $HOME/Projects/work"
+alias cdt="cd $HOME/Projects/temp"
 alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
 alias ts="tmux-sessionizer"
 
-export PATH="$PATH:~/Projects/scripts"
+export GOPATH="$HOME/.local/share/go"
+export PATH="$PATH:$GOPATH/bin:$HOME/Projects/scripts"
 
 # nodenv
 eval "$(nodenv init -)"
 
 # pnpm
-export PNPM_HOME="/home/sakithb/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"

@@ -4,11 +4,9 @@ vim.opt.smartcase = true
 
 -- Tabs and spaces
 vim.opt.tabstop = 4
---vim.opt.softtabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
---vim.opt.expandtab = true
---vim.opt.autoindent = true
---vim.opt.smartindent = true
+vim.opt.smarttab = true
 
 -- Wrapping and max width
 vim.opt.colorcolumn = { 121 }
@@ -52,8 +50,24 @@ vim.diagnostic.config({
 vim.filetype.add({
 	extension = {
 		gotmpl = "gotmpl",
+		glsl = "glsl",
+		frag = "glsl",
+		vert = "glsl",
 	},
 })
+
+-- vim.g.clipboard = {
+-- 	name = 'TmuxClipboard',
+-- 	copy = {
+-- 		['+'] = {'wl-copy', '-'},
+-- 		['*'] = {'tmux', 'load-buffer', '-'},
+-- 	},
+-- 	paste = {
+-- 		['+'] = {'wl-paste', '-'},
+-- 		['*'] = {'tmux', 'save-buffer', '-'},
+-- 	},
+-- 	cache_enabled = true
+-- }
 
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
@@ -74,14 +88,6 @@ function vim.lsp.buf.format(opts, ...)
 		tabSize = vim.g.shiftwidth,
 		insertSpaces = vim.g.expandtab,
 	}
-
-	opts.filter = function(client)
-		if vim.bo.filetype == "templ" then
-			return client.name == "templ"
-		end
-
-		return true
-	end
 
 	return orig_buf_format(opts, ...)
 end
