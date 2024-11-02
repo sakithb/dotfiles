@@ -1,4 +1,3 @@
-import = ["~/.config/alacritty/catppuccin-mocha.toml"]
 
 [window]
 padding = { x = 5, y = 5 }
@@ -9,4 +8,7 @@ startup_mode = "Maximized"
 normal = { family = "JetBrainsMono Nerd Font" }
 size = 12.0
 offset = { x = 0, y = 1 }
+
+[general]
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
 

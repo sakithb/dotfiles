@@ -49,6 +49,9 @@ return {
                     find_files = {
                         hidden = true,
                     },
+					git_files = {
+						show_untracked = true,
+					},
                     buffers = {
                         theme = "dropdown",
                         previewer = false,

@@ -10,6 +10,8 @@ if [ -f ~/.bashrc.sensible ]; then
    source ~/.bashrc.sensible
 fi
 
+export EDITOR="vim"
+
 # Aliases
 alias cdp="cd $HOME/Projects/personal"
 alias cdw="cd $HOME/Projects/work"

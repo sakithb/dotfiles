@@ -70,5 +70,6 @@
 		"tooltip": true,
 		"format": "{:%H.%M}",
 		"tooltip-format": "{:%a, %d of %b}",
+		"timezone": "Asia/Colombo",
 	},
 }

@@ -1,5 +1,8 @@
 return {
 	{
+		"RRethy/vim-illuminate",
+	},
+	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		opts = {},
