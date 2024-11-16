@@ -1,0 +1,443 @@
+#!/usr/bin/env bash
+
+#
+# https://codeberg.org/NihaAlGhul/MarCLIdown
+# MarCLIdown, a decent way to render markdown files directly in your terminal.
+#
+
+export PERL_BADLANG=0
+
+# Declaring functions.
+# Note that the order in which they are declared does not matter, only the order in which they will be called later.
+resetvars(){ # (re)set main variables
+local -g # make vars readable for other functions
+termWIDTH=$(( $(tput cols) - 1 ))
+optA=false
+optF=false
+optN=false
+optP=false
+optS=false
+}
+
+unsetvars(){ # unset exported variables, used before all 'exit' and script ends
+unset optS
+unset optN
+unset LESSUTFCHARDEF
+}
+
+optionstratament(){
+ARGS=$(getopt -o aAhfFnNpPsS --long auto-update,AUTO-UPDATE,help,force,FORCE,non-interactive,NON-INTERACTIVE,paging,PAGING,show-urls,SHOW-URLS -n "$0" -- "$@")
+eval set -- "$ARGS"
+while true; do
+  case "$1" in
+    -a | --auto-update) optA=true; shift
+      ;;
+    -A | --AUTO-UPDATE) optA=false; shift ;;
+    -h | --help)
+      echo "Usage: ${0/#$HOME/\~} [-a] [-h] [-f] [-n]/[-s] <file> [<file{2...}>]"
+      echo "-a, --auto-update      Enables automatic updates (not implemented yet)"
+      echo "-A, --AUTO-UPDATE      Disables the --auto-update flag"
+      echo "-f, --force            Forces the operation if the passed files are invalid"
+      echo "-F, --FORCE            Disables the --force flag"
+      echo "-h, --help             Shows this help message and exit"
+      echo "-n, --non-interactive  Does not apply OSC8 formatting to interactive elements"
+      echo "                       (hyperlinks, images, emails, ..)"
+      echo "-N, --NON-INTERACTIVE  Disables the --non-interactive flag"
+      echo "-p, --paging           Prints the files using a terminal pager"
+      echo "-P, --PAGING           Disables the --paging flag"
+      echo "-s, --show-urls        Does not abbreviate hyperlinks and images"
+      echo "-S, --SHOW-URLS        Disables the --show-urls flag"
+      echo "    <file>             The file to use"
+      unsetvars
+      exit 0
+      ;;
+    -f | --force ) optF=true; shift ;;
+    -F | --FORCE ) optF=false; shift ;;
+    -n | --non-interactive ) export optN="true"; shift ;;
+    -N | --NON-INTERACTIVE ) unset optN; shift ;;
+    -p | --paging ) optP=true; shift ;;
+    -P | --PAGING ) optP=false; shift ;;
+    -s | --show-urls ) export optS="true"; shift ;;
+    -S | --SHOW-URLS ) unset optS; shift ;;
+    -- ) shift; break ;;
+    * ) echo "Invalid option: $1"; unsetvars ; exit 1 ;;
+  esac
+done
+shift $((OPTIND-1))
+
+
+if [ "$optA" == false ]; then # Checks if --auto-update flag has been passed
+# Checks if at least one file was passed as a parameter
+  if [ $# -eq 0 ]; then
+    echo "No file provided. Use: $0 <file>"
+    unsetvars
+    exit 1
+  fi
+else
+# Checks if exactly one file was passed as a parameter
+  if [ $# -ne 1 ]; then
+    echo "Invalid number of arguments. Use: $0 <file>"
+    unsetvars
+    exit 1
+  fi
+fi
+}
+
+
+filecheck() { # Performs several checks on the files passed as parameters (one by one),
+  # this function is called by the input_treatment function
+  local file="$1"
+  # Check if the file exists
+  if [ ! -f "$file" ]; then
+    echo "Warning: file '$file' does not exist or is not a regular file"
+    return 1
+  fi
+
+  # Check if the file is readable
+  if [ ! -r "$file" ]; then
+    echo "Warning: file '$file' is not readable"
+    return 1
+  fi
+# check if the file has the .md extension if --force option was not passed
+  if [ "$optF" == false ]; then
+    if [ "${file##*.}" != "md" ]; then
+      echo "Warning: file '$file' does not have a .md extension"
+      return 1
+    fi
+  fi
+  # If all checks pass, return 0
+  return 0
+}
+
+input_treatment() {
+  files_to_process=()
+
+  for file in "$@"; do
+    if [[ $file == -* ]]; then # Checks and skips the parameter if it is a flag (if it starts with "-")
+        continue
+    fi
+    if filecheck "$file"; then
+      files_to_process+=("$file")
+    fi
+  done
+
+  if [ ${#files_to_process[@]} -eq 0 ]; then
+    echo "Warning: no valid files found. Exiting script."
+    unsetvars
+    exit 1
+  fi
+
+  for file in "${files_to_process[@]}"; do
+    local file_content=$(< "$file")
+
+  if ! [ "$optP" == true ]; then
+      if $first_file; then
+        #echo -e "  \ueeab \e[1m ${file/#$HOME/\~}/\e[0m"
+        first_file=false
+      else
+        echo -e "\n  \ueeab \e[1m ${file/#$HOME/\~}/\e[0m\n"
+      fi
+  fi
+    formatfile "$file_content"
+: ' variable used to store the name of the current file,
+  it is displayed before the file content when the ´-p´ flag is passed:
+  '
+    file_name_pg=$(echo -e "  \ueeab \e[1m ${file/#$HOME/\~}/\e[0m")
+    printfile "$file_content"
+  done
+}
+
+formatfile(){ # formats the file content inside $FILE
+FILE=$(echo -e "$1")
+# All lines starting with "FILE=$(" represent an important step in content formatting.
+# It could all be in a single section but that would make it difficult for humans to read.
+# Before each “section”, there is a tldr/summary so that you can understand what it does without decoding the regexes.
+: '
+  # preparing codeblocks
+  [TLDR]:
+    disable formatting inside code blocks;
+  '
+FILE=$(echo -e "$FILE"|
+    sed -r '/^```.*$/!b;N;/^\n/{N;d};s/^(```.*\n)(.*)$/\1\n\2/'| # <- small fix
+    perl -e '
+    undef $/; $_ = <>;
+    s/(^```(?!\n$))/$1\n<> /gm;
+    s/(^```\n<>)\s*/$1 /gm;
+    print'| # <- adjusts the position of the language name in the codeblock after opening
+    sed -r '/^```$/,/^```$/ {
+    s/^ ?#{1,6}/𒀰&/
+    /[\|]/ s/[\|]/𒀰&/g
+    /[\\]/ s/[\\]/𒀰&/g
+    /[\/]/ s/[\/]/𒀰&/g
+    /[\ ]/ s/[\ ]/𒀰&/g
+    /[~]/ s/[~]/𒀰&/g
+    /[!]/ s/[!]/𒀰&/g
+    s/[<>]/𒀰&/g
+    s/[{}]/𒀰&/g
+    s/[[]]/𒀰&/g
+    s/[()]/𒀰&/g
+    s/[-+*_]/𒀰&/g
+    s/&/𒀰&/
+    }'| # <- disable formatting (almost) inside codeblocks adding 𒀰 before inline codes inside codeblocks
+    sed -r '/^```$/,/^```$/!b;/^```$/{n;/^\s*$/d}'| # <- small fix
+    sed -e '/^\x60\x60\x60/s/^\x60\x60\x60\|^\x60\x60\x60$/𒀰a1b0a3/g' | # <- replace codeblock indicators by "𒀰a1b0a3
+    # ^ The use of “𒀰” is an arbitrary choice, this is only because it is an unusual character.
+    sed -r '/^𒀰a1b0a3$/,/^𒀰a1b0a3$/ {s/[`]/𒀱&/g}' | # <- add "𒀱" before inline code(s) inside codeblocks
+    sed -r 's/𒀰a1b0a3/```/g' # <- replace "𒀰a1b0a3" by codeblocks indicator
+)
+
+: '
+  # preparing inline code
+  [TLDR]:
+    disable codeblock indicators; disable formatting inside inline codes; re-enable codeblocks
+    (This way, the code that look for inline code do not identify the blocks.)
+  # Perhaps a better way would be to transform each line within the codeblocks into an line-wide code and then treat everything as if it were simple inline code.
+    # Unfortunately I found some conflicts with this approach, but I intend to return attention to this in the future.
+  '
+FILE=$(echo -e "$FILE"|
+    sed -e '/^\x60\x60\x60/s/^\x60\x60\x60\|^\x60\x60\x60$/𒀰a1b0a3/g' | # <- replace codeblock indicators by "𒀰a1b0a3
+    sed -r '/`([^`]*)`/ {
+    /[\|]/ s/[\|]/𒀰&/g
+    /[\\]/ s/[\\]/𒀰&/g
+    /[\/]/ s/[\/]/𒀰&/g
+    /[\ ]/ s/[\ ]/𒀰&/g
+    /[~]/ s/[~]/𒀰&/g
+    /[!]/ s/[!]/𒀰&/g
+    s/[<>]/𒀰&/g
+    s/[{}]/𒀰&/g
+    s/[[]]/𒀰&/g
+    s/[()]/𒀰&/g
+    s/[-+*_]/𒀰&/g
+    s/&/𒀰&/g
+    }' | # <- add "𒀰" before inline code(s) inside codeblocks
+    sed -r 's/𒀰a1b0a3/```/g' # <- replace "𒀰a1b0a3" by codeblocks indicator
+)
+
+: '
+  # Formatting all elements (except tables and code [inline and block] )
+    (probably everything here can be done with sed)
+  '
+
+FILE=$(echo -e "$FILE"|
+    perl -X -ne '
+    s/(?<!𒀰|\\)[-+*] \[ \]/ ☐/g; s/(?<!𒀰|\\)[-+*] \[(x|X)\]/ ☑/g; # checkboxes
+    my $optS = $ENV{optS}; my $optN = $ENV{optN};
+    s/(?<=\S)(?<!𒀰|\\| |\!)(\]|\))\[(?!.*\[)(.*?)\]\((.*?)\)/$1 \[$2\]\($3\)/g; # dealing with bad syntax (missing gap after images)
+    if (!$optS) {
+      s/(?<!𒀰|\\|\!|\])\[(.+?)\]\((## "(.+?)")\)/f1c652𒀰$&/g; # preparing text with tooltip
+      s/(?<!𒀰|\\|\!|\])\[(.+?)\]\((.+?)( "(.+?)?")\)/\[$1\]\($2\)/g; # remove tooltip from hyperlinks
+      s/(?<!𒀰|\\)\[(!\[(.*?)\]\((.*?)\))\]\((.*?)\)/922414𒀰\[922414𒀰$1\]\($4\)922414𒀰922414/g; # preparing badges
+    }
+    if (!$optS) {
+        if (!$optN) {
+          s/(?<!𒀰|\\|\!|\])\[(.+?)\]\((.+?)\)/\x1B]8;;$2\a\e[4m$1\e[24m\x1B]8;;\a/g; # clickable hiperlinks "[]()"
+          s/f1c652𒀰\[(.+?)\]\((## "(.+?)")\)/\x1B]8;; Tooltip: $3\a\e[4m$1\e[24m\e[0m\x1B]8;;\a/g; # text with tooltip
+        } else {
+          s/(?<!𒀰|\\|\!|\])\[(.+?)\]\((.+?)\)/\e[4m$1\e[24m/g; # non-clickable hiperlinks "[]()"
+          s/f1c652𒀰\[(.+?)\]\((## "(.+?)")\)/\e[4m$1\e[24m/g; # text with tooltip (occurrence continues to be formatted even with this line commented, but I havent found what is causing this)
+        }
+    }
+    if (!$optS) {
+      if (!$optN) {
+          s/(?<!𒀰|\\)\!\[(.+?)\](\((.+?)\)|\[(.+?)\])/\033[1m\!\033[0m\[\x1B]8;;$3$4\a\033[1m\e[4m$1\e[24m\033[0m\x1B]8;;\a\]/g; # clickable images "![][]"/"![][]"
+      } else {
+          s/(?<!𒀰|\\)\!\[(.+?)\](\((.+?)\)|\[(.+?)\])/\e[1m!\e[22m[\x1B[1m\e[4m$1\x1B[0m\e[24m]/g; # non-clickable images "![]()"/"![][]"
+      }
+    }
+    if (!$optS) {
+      s/(?<!𒀰|\\)922414𒀰(922414)?//g;
+      if (!$optN) {
+        s/(?<!𒀰|\\)\[(!\[(.*?)\]\((.*?)\))\]\((.*?)\)/\x1B[1m!\e[22m[\x1B[0m\x1B]8;;$3\a󰴳\x1B]8;;\a|\x1B]8;;$4\a\x1B[1m\x1B[4m$2\x1B[0m\x1B]8;;\a\]/g; # ^ clickable badges "[![]()]()"
+      } else {
+        s/(?<!𒀰|\\)\[(!\[(.*?)\]\((.*?)\))\]\((.*?)\)/\x1B[1m!\x1B[0m[󰴳|\x1B[1m\x1B[4m$2\x1B[0m\]/g; # ^ non-clickable badges "[![]()]()"
+    }
+    }
+    if (!$optN) {
+      s/(?!^)\[\^([0-9]+)\]/\e[1m\x1B]8;; This\ is\ the\ footnote\ $1\.\a\e[4m\[$1\]\e[24m\e[0m\x1B]8;;\a/g; # footnote indicators with tooltip "[^0-9]"
+    } else {
+      s/(?!^)\[\^([0-9]+)\]/[\e[1;4m$1\e[22;24m]/g; # footnote indicators without tooltip "[^0-9]"
+    }
+    s/^(?<!𒀰|\\|\)|\])(\[\^([0-9]+)\])/[\e[1m$2\e[22m]/g; # footnotes "[^0-9]"
+    s/^(( ?#{1,6}) (.*)$)/\e[1m$1\e[22m/; # headers "1-6#"
+    s/(?<!𒀰|\\)\*\*(.+?)\*\*/\e[1m$1\e[22m/g; # bold "**"
+    s/(?<!𒀰|\\)\*(.+?)\*/\e[3m$1\e[23m/g; # italic "*"
+    s/(?<!𒀰|\\)\*\*\*(.+?)\*\*\*/\e[1;3m$1\e[22;23m/g; # bold and italic "***"
+    s/\~\~(.+?)\~\~/\e[9m$1\e[29m/g; # strikethrough "~"
+    s/\\$//g; # hide linebreak character
+    s/<\/p>|<br>/\n/g; # HTML linebreak "</p>"
+    $_ = /^<\/details>$/ ? "\n" . "⎯" x '$termWIDTH' . "\n\n" : $_; # transformor end of <details> tag in horizontal rule
+    s|<summary>| |g; # replace <summary> with ⍡ # html <summary> tag
+    #s/\s*$//;
+    s/<(https?:\/\/[^\s]+)>/\e[4m$1\e[24m/g; # urls "<http[s]://...>"
+    if (!$optN) {
+      s/\<([^<>]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\>/\x1B]8;;mailto:$1\a\e[4m$1\e[24m\x1B]8;;\a/g; # clickable emails "<mail@domain.com>"
+    } else {
+      s/\[(.+?)\]\((.+?)\)/\e[4m$1\e[24m/g; # non-clickable emails "<mail@domain.com>"
+      s/\<([^<>]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\>/\e[4m$1\e[24m/g; # non-clickable emails "<mail@domain.com>"
+    }
+    s/(?<!𒀰|\\)<.*?>//g; # hide other HTML tags
+    s/^(-{3,}|\_{3,})$/"⎯" x '$termWIDTH'/eg; # horizontal line "---"/"___"/"***"
+    s/^([ \t]*)([-*]) ?/ \1• /; # unordered list "- "/"- "/" * "/"* "
+    s/^([ \t]{2})•/ •/; # unordered list part2 (fix doubble blank space)
+    s/^>(.*)$/\│$1/g; # blockquote "> " (not ideal)
+    s/^│ ?>(.*)$/\│ │$1/g; # nested blockquote "> > " (not ideal)
+    s/^│ │ ?>(.*)$/\│ │ │$1/g; # nested blockquote "> > " (not ideal)
+
+    s/(?<=\S) {2,}/ /g; # dealing with bad syntax: remove consecutive spaces
+    s/(?<!𒀰|\\)(&ensp;|&nbsp;|&thinsp;)/ /g; # HTML extra spaces
+    s/(?<!𒀰|\\)&emsp;/  /g; # HTML large space
+    s/(?<!𒀰|\\)&[a-zA-Z0-9#]+;//g; # hide other entities
+
+    s/^│ \[\!NOTE\]/│ 󰋽 \e[1mNOTE\e[22m/g; # "[!NOTE]"
+    s/^│ \[\!TIP\]/│ 󰌶 \e[1mTIP\e[22m/g; # "[!TIP]"
+    s/^│ \[\!IMPORTANT\]/│ 󰅾 \e[1mIMPORTANT\e[22m/g; # "[!IMPORTANT]"
+    s/^│ \[\!WARNING\]/│ 󰀪 \e[1mWARNING\e[22m/g; # "[!WARNING]"
+    s/^│ \[\!CAUTION\]/│  \e[1mCAUTION\e[22m/g; # "[!CAUTION]"
+
+    print' | perl -ne 'chomp; s/$// && ($_ .= <STDIN>) ; print $_, "\n"'
+)
+
+: '
+  # formatting tables
+  '
+FILE=$(echo -e "$FILE" | sed -e '$a𒀰70cc80')  # <- add extra line at botom of document
+# ^ because the table parser doesn't print until it finds a non-table element
+numOFmatches=0
+currenttable=""
+tablesize=0
+has_header=false
+
+FILE=$(while IFS= read -r line; do
+  if [[ $line =~ ^\| ]]; then
+    ((numOFmatches++))
+    currenttable+=" $line\n"
+  else
+    if [ $numOFmatches -gt 0 ]; then
+      lines=(${currenttable//|/ })
+      if [ ${#lines[@]} -gt 1 ]; then
+        has_header=true
+      fi
+      if $has_header; then
+        table=$(echo -e "$currenttable" | awk 'NR==2{gsub(/-/,"="); print} NR!=2{print}')
+      else
+        table=$(echo -e "$currenttable")
+      fi
+      header=$(echo -e "${table}" | head -1)
+      data=$(echo -e "${table}" | tail -n +2)
+      echo -e "\x1b[1m${header}\x1b[0m" | column -t -s '|'
+      echo -e "${data}" | column -t -s '|'
+      echo
+      for ((i=0; i<$tablesize; i++)); do
+        echo
+      done
+      numOFmatches=0
+      currenttable=""
+      has_header=false
+    fi
+    echo "$line"
+  fi
+done <<< "$FILE")
+
+if [ $numOFmatches -gt 0 ]; then
+  lines=(${currenttable//|/ })
+  if [ ${#lines[@]} -gt 1 ]; then
+    has_header=true
+  fi
+  if $has_header; then
+    table=$(echo -e "$currenttable" | awk 'NR==2{gsub(/-/,"="); print} NR!=2{print}')
+  else
+    table=$(echo -e "$currenttable")
+  fi
+  header=$(echo -e "${table}" | head -1)
+  data=$(echo -e "${table}" | tail -n +2)
+  echo -e "\x1b[1m${header}\x1b[0m" | column -t -s '|'
+  echo -e "${data}" | column -t -s '|'
+  echo
+  for ((i=0; i<$tablesize; i++)); do
+    echo
+  done
+fi
+FILE=$(echo -e "$FILE" | sed -e '$d') # <- remove extra line added at botom of document
+
+: '
+  # formatting inline code (similar to "preparing inline code")
+  [TLDR]:
+    disable codeblock indicators; re-enable formatting inside inline code;
+    format inline codes; re-enable codeblocks with the second;
+  '
+FILE=$(echo -e "$FILE" |
+    sed -e '/^\x60\x60\x60/s/^\x60\x60\x60\|^\x60\x60\x60$/𒀰a1b0a3/g' | # <- replace codeblock indicators by "𒀰a1b0a3"
+    sed -r '/`([^`]*)`/ {
+    s/𒀰//g
+    #s//\e[48;5;237m&\e[0m/; # Failed attempt to format without perl
+    }' | # <- remove all "𒀰" added inside codeblocks
+    perl -X -e '
+    undef $/; $_ = <>;
+    #s/(^```|```$)/\x{12030}/gm; # same as the first sed
+    s/(?<!𒀰|𒀱|\\)((`{1,3}))(.*?)\2(?!`)/\e[48;5;237m$3\e[49m/g; # Inline code "1-3 `" (without backslash)
+    #s/𒀰/```/gm; # same as the last sed
+    print' | # <- apply the background color to the inline codes and remove the backticks that indicate this
+    sed -r 's/𒀰a1b0a3/```/g' # <- replace "𒀰a1b0a3" by codeblock indicator
+)
+
+: '
+  # formatting codeblocks
+  [TLDR]:
+    re-enable formatting inside codeblocks; format codeblocks
+  '
+FILE=$(echo -e "$FILE" |
+    sed '/^```$/,/^```$/ {/[𒀱𒀰]/ s/[𒀱𒀰]//g
+    #/.*/ s/.*/\x1B[48;5;237m&\x1B[0m/g # Failed attempt to format without perl
+    }' | # <- remove unicode characters added inside codeblocks
+    #perl -e 'undef $/; $_ = <>; s/^```(.*?)^```/"\e[48;5;237m$1\e[0m"/gms; print'
+    #perl -e 'undef $/; $_ = <>; s/^\s*\n```(.*?)\n(.*?)\n```/\e[48;5;237m$1\n$2\e[0m/gms; print' #top!
+    perl -e '
+    undef $/; $_ = <>;
+    s/^\s*\n```(.*?)\n(.*?)\n```/\e[48;5;237m$1\n$2\e[0m\n/gms;
+    print' # <- apply the background color to the code blocks and remove the backticks that indicate this
+    # ^ ...and fix the blank lines before and after codeblocks ^ #
+)
+
+FILE="$(echo "$FILE" | sed '/^$/N;/^\n$/D')" # remove multiple blank lines
+# ^ reminder: Make sure it doesn't affect lines inside codeblocks
+
+#printfile "$@"
+  # ^ Commented and moved to input_treatment function because calling here/
+  # it is displaying an unwanted line at the end of the command output #
+
+}
+
+testfunction(){
+: '
+  This is a function that I use to test extra regular expressions to the content of the markdown file, put a sed, awk, grep or perl here and pass it to the $FILE variable.
+  And uncomment the line that calls this.
+  '
+FILE=$(echo "$FILE" | echo
+)
+
+}
+
+printfile(){ # Prints the content of $FILE (the content of the file passed as a parameter that was treated in the formatfile function)
+if [ "$optP" == false ]; then # prints the $FILE variable using `echo` when the `-p` flag is not passed and using `less` when it is.
+  echo -e "\n$FILE\n"
+else
+  export LESSUTFCHARDEF=E000-F8FF:p,F0000-FFFFD:p,100000-10FFFD:p
+  FILE=$(echo -e "${file_name_pg}\n${FILE}")
+  echo "$FILE" | less -R
+fi
+
+}
+
+: '
+  # Calling functions, just comment out a line to disable a function.
+  If you want to test changes to the code, you can duplicate the function it is in and change the line that calls it here
+  or if this makes sense just add the new code inside the "testfunction" function.
+  "$*" is used after functions to make them able to read existing variables. #
+  '
+resetvars "$@"
+optionstratament "$@"
+input_treatment "$@" # consequently, this also calls the filecheck, formatfile and printfile functions
+formatfile "$@"
+#testfunction
+unsetvars
+

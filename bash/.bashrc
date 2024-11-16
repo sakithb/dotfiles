@@ -20,13 +20,22 @@ alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
 alias ts="tmux-sessionizer"
+alias nt="ts ~/Projects/personal/notes"
 
+if [ -f ~/Projects/personal/notes/todo.txt ]; then
+	echo -e "$(cat ~/Projects/personal/notes/todo.txt)\n"
+fi
+
+export PATH="$PATH:$HOME/Projects/scripts"
+
+# Go
 export GOPATH="$HOME/.local/share/go"
-export PATH="$PATH:$GOPATH/bin:$HOME/Projects/scripts"
+export PATH="$PATH:$GOPATH/bin"
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PATH:$PNPM_HOME"
 
 # nodenv
 eval "$(nodenv init -)"
 
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
