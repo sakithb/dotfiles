@@ -43,7 +43,7 @@ return {
 				clangd = {
 					cmd = { "clangd", "--fallback-style=webkit" },
 					init_options = {
-						fallbackFlags = {'--std=c99'}
+						fallbackFlags = { '--std=c99' }
 					},
 				},
 			}
@@ -56,6 +56,10 @@ return {
 				ensure_installed = vim.tbl_keys(servers),
 				handlers = {
 					function(server_name)
+						if server_name == "rust_analyzer" then
+							return
+						end
+
 						require("lspconfig")[server_name].setup({
 							capabilities = capabilities,
 							settings = servers[server_name],
@@ -66,4 +70,8 @@ return {
 			})
 		end,
 	},
+	{
+		"mrcjkb/rustaceanvim",
+		version = "^5",
+	}
 }

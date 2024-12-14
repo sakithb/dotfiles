@@ -20,11 +20,6 @@ alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
 alias ts="tmux-sessionizer"
-alias nt="ts ~/Projects/personal/notes"
-
-if [ -f ~/Projects/personal/notes/todo.txt ]; then
-	echo -e "$(cat ~/Projects/personal/notes/todo.txt)\n"
-fi
 
 export PATH="$PATH:$HOME/Projects/scripts"
 
