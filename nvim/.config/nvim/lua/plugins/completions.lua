@@ -37,6 +37,7 @@ M[2] = {
                 { name = "buffer",   group_index = 2 },
             }),
             mapping = keymaps.getCmpMappings(),
+            completion = { autocomplete = false },
             window = {
                 documentation = cmp.config.window.bordered(),
                 completion = cmp.config.window.bordered({

@@ -19,7 +19,6 @@ alias cdt="cd $HOME/Projects/temp"
 alias cdpt="cdp && cd"
 alias cdwt="cdw && cd"
 alias cdtt="cdt && cd"
-alias ts="tmux-sessionizer"
 
 export PATH="$PATH:$HOME/Projects/scripts"
 

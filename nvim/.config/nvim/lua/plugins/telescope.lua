@@ -12,14 +12,18 @@ M[1] = {
 			"nvim-telescope/telescope-file-browser.nvim",
 			dependencies = {
 				"nvim-lua/plenary.nvim",
-				"nvim-telescope/telescope.nvim"
 			}
 		},
+        {
+	        "nvim-telescope/telescope-ui-select.nvim",
+            dependencies = {
+				"nvim-lua/plenary.nvim",
+			},
+		},
 		{
-			"nvim-telescope/telescope.nvim",
+			"debugloop/telescope-undo.nvim",
 			dependencies = {
 				"nvim-lua/plenary.nvim",
-				"debugloop/telescope-undo.nvim",
 			},
 		},
 		{
@@ -82,6 +86,7 @@ M[1] = {
 		telescope.setup(opts)
 
 		telescope.load_extension("file_browser")
+        telescope.load_extension("ui-select")
 		telescope.load_extension("undo")
 	end
 }

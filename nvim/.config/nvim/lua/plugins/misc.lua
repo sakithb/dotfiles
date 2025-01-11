@@ -3,7 +3,11 @@ local M = {}
 M[1] = {
     "ellisonleao/gruvbox.nvim",
     priority = 1000,
-    init = function()
+    opts = {
+        invert_tabline = true
+    },
+    config = function(opts)
+        require("gruvbox").setup(opts)
         vim.cmd.colorscheme("gruvbox")
     end,
     config = true
@@ -28,12 +32,15 @@ M[3] = {
     },
     opts = {
         options = {
+            theme = "gruvbox_dark",
             component_separators = " ",
             section_separators = " "
         },
         sections = {
+            lualine_b = { "branch", "diagnostics" },
             lualine_x = { "filetype" },
-            lualine_y = { "searchcount", "selectioncount", "tabs" }
+            lualine_y = { "diff" },
+            lualine_z = { "searchcount", "selectioncount", "location" }
         }
     }
 }
