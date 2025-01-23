@@ -108,13 +108,6 @@ export ptmp="$HOME/Projects/temp"
 
 export PATH="$PATH:$HOME/.local/share/bin:$HOME/Projects/scripts"
 
-autoload() {
-    local func_name=$1
-    shift
-    local func_body="$@"
-    eval "$func_name() { $func_body; unset -f $func_name; $func_name \"\$@\"; }"
-}
-
 # Go
 export GOPATH="$HOME/.local/share/go"
 export PATH="$PATH:$GOPATH/bin"
@@ -124,15 +117,19 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PATH:$PNPM_HOME"
 
 # nvm
-autoload nvm 'export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
+nvm_cmd() {
+    [ -z "$NVM_DIR" ] && {
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    }
+}
+
+alias nvm="nvm_cmd; nvm"
+alias node="nvm_cmd; node"
+alias npm="nvm_cmd; npm"
 
 #emsdk
-autoload emsdk 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload em++ 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload emcc 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload emcmake 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload emconfigure 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload emmake 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
-autoload emrun 'EMSDK_QUIET=1 source "/home/sakithb/.emsdk/emsdk_env.sh"'
+export EMSDK="$HOME/.emsdk"
+export EMSDK_NODE=$(which node)
+export PATH="$PATH:$HOME/.emsdk:$HOME/.emsdk/upstream/emscripten"

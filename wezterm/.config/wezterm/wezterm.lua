@@ -44,6 +44,11 @@ config.keys = {
         mods = "LEADER|CTRL",
         action = action.SendKey({ key = "b", mods = "CTRL" }),
     },
+    {   
+        key = "x",
+        mods = "LEADER", 
+        action = wezterm.action.ActivateCopyMode 
+    },
     {
         key = "c",
         mods = "LEADER",
