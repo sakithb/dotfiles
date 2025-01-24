@@ -104,30 +104,40 @@ config.keys = {
         action = action.ActivatePaneDirection("Down"),
     },
     {
-        key = "s",
+        key = "d",
         mods = "LEADER",
         action = wezterm.action_callback(function (window, pane)
-            local from = window:active_workspace()
-            local to = "default"
-
-            for _, ws_name in ipairs(mux.get_workspace_names()) do
-                if (last_workspace == ws_name and last_workspace ~= from) then
-                    to = last_workspace
-                    break
-                end
-            end
-
-            last_workspace = from
-
+            last_workspace = window:active_workspace()
             window:perform_action(
                 action.SwitchToWorkspace({
-                    name = to,
+                    name = "default",
                     spawn = {
-                        cwd = config.default_cwd
+                        cwd = config.default_cwd,
                     }
                 }),
                 pane
             )
+        end)
+    },
+    {
+        key = "s",
+        mods = "LEADER",
+        action = wezterm.action_callback(function (window, pane)
+            local from = window:active_workspace()
+            local to = last_workspace
+
+            for _, ws_name in ipairs(mux.get_workspace_names()) do
+                if (to == ws_name) then
+                    window:perform_action(
+                        action.SwitchToWorkspace({
+                            name = to,
+                        }),
+                        pane
+                    )
+                    last_workspace = from
+                    break
+                end
+            end
         end)
     },
     {
@@ -244,6 +254,7 @@ config.keys = {
                                 :gsub("\x1b%[%d+;%d+m","")
                                 :gsub("\x1b%[%d+m","")
 
+                            last_workspace = window:active_workspace()
                             window:perform_action(
                                 action.SwitchToWorkspace({
                                     name = label,
