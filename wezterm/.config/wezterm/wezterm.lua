@@ -9,7 +9,7 @@ local last_workspace = "default"
 -- Options
 
 config.default_prog = { "bash" }
-config.default_cwd = "\\\\wsl.localhost\\Arch\\home\\sakithb"
+config.default_cwd = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb"
 config.color_scheme = "Gruvbox dark, medium (base16)"
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 13.5
@@ -47,7 +47,16 @@ config.keys = {
     {   
         key = "x",
         mods = "LEADER", 
-        action = wezterm.action.ActivateCopyMode 
+        action = action.ActivateCopyMode 
+    },
+    {
+        key = "u",
+        mods = "CTRL|ALT",
+        action = action.ScrollByPage(-0.5)
+    },
+    {   key = "d",
+        mods = "CTRL|ALT", 
+        action = action.ScrollByPage(0.5)
     },
     {
         key = "c",
@@ -95,19 +104,27 @@ config.keys = {
         action = action.ActivatePaneDirection("Down"),
     },
     {
-        key = "q",
-        mods = "LEADER",
-        action = action.CloseCurrentPane({ confirm = false }),
-    },
-    {
         key = "s",
         mods = "LEADER",
         action = wezterm.action_callback(function (window, pane)
-            local w = last_workspace
-            last_workspace = window:active_workspace()
+            local from = window:active_workspace()
+            local to = "default"
+
+            for _, ws_name in ipairs(mux.get_workspace_names()) do
+                if (last_workspace == ws_name and last_workspace ~= from) then
+                    to = last_workspace
+                    break
+                end
+            end
+
+            last_workspace = from
+
             window:perform_action(
                 action.SwitchToWorkspace({
-                    name = w
+                    name = to,
+                    spawn = {
+                        cwd = config.default_cwd
+                    }
                 }),
                 pane
             )
@@ -139,18 +156,28 @@ config.keys = {
         action = wezterm.action.ShowDebugOverlay
     },
     {
+        key = "q",
+        mods = "LEADER",
+        action = action.CloseCurrentPane({ confirm = false }),
+    },
+    {
         key = 'D',
-        mods = 'CTRL|SHIFT',
+        mods = 'LEADER|SHIFT',
         action = action.DetachDomain("CurrentPaneDomain"),
+    },
+    {
+        key = "Q",
+        mods = "LEADER|SHIFT",
+        action = action.QuitApplication,
     },
     {
         key = "w",
         mods = "LEADER",
         action = wezterm.action_callback(function(window, pane)
             local dirs = {
-                "\\\\wsl.localhost\\Arch\\home\\sakithb\\Projects\\personal",
-                "\\\\wsl.localhost\\Arch\\home\\sakithb\\Projects\\work",
-                "\\\\wsl.localhost\\Arch\\home\\sakithb\\Projects\\temp",
+                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\personal",
+                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\work",
+                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\temp",
             }
 
             local choices = {
@@ -159,7 +186,7 @@ config.keys = {
                     label = "default"
                 },
                 {
-                    id = "\\\\wsl.localhost\\Arch\\home\\sakithb\\Projects\\scripts",
+                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\scripts",
                     label = "scripts"
                 }
             }
@@ -185,9 +212,13 @@ config.keys = {
                 local a_exists = ws_names[a.label] ~= nil
                 local b_exists = ws_names[b.label] ~= nil
 
-                return
-                    (a_exists and not b_exists) or
-                    (a_exists and b_exists)
+                if (a_exists and not b_exists) then 
+                    return true
+                elseif (not a_exists and b_exists) then 
+                    return false
+                else
+                    return a.label < b.label
+                end
             end)
 
             for _, choice in ipairs(choices) do
