@@ -143,12 +143,22 @@ config.keys = {
     {
         key = "|",
         mods = "LEADER|SHIFT",
-        action = action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+        action = wezterm.action_callback(function(window, pane)
+            window:perform_action(
+                action.SplitHorizontal({ cwd = "\\" .. pane:get_current_working_dir().file_path }),
+                pane
+            )
+        end)
     },
     {
         key = "_",
         mods = "LEADER|SHIFT",
-        action = action.SplitVertical({ domain = "CurrentPaneDomain" }),
+        action = wezterm.action_callback(function(window, pane)
+            window:perform_action(
+                action.SplitVertical({ cwd = "\\" .. pane:get_current_working_dir().file_path }),
+                pane
+            )
+        end)
     },
     {
         key = "C",
