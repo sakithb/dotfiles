@@ -39,11 +39,26 @@ M[2] = {
             mapping = keymaps.getCmpMappings(),
             completion = { autocomplete = false },
             window = {
-                documentation = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered({
+                    winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+                }),
                 completion = cmp.config.window.bordered({
                     winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
                 }),
             },
+            formatting = {
+                format = function(_, vim_item)
+                    local abbr = vim_item.abbr
+                    vim_item.abbr = vim.fn.strcharpart(abbr, 0, 15)
+                    if abbr ~= vim_item.abbr then
+                        vim_item.abbr = vim_item.abbr .. "…"
+                    end
+
+                    vim_item.menu = ""
+
+                    return vim_item
+                end
+            }
         })
     end,
 }
