@@ -45,6 +45,7 @@ M[1] = {
 				no_ignore = true,
 				cwd_to_path = true,
 				hidden = true,
+                grouped = true,
 			},
 		},
 		pickers = {

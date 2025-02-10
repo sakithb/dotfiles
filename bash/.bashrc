@@ -129,7 +129,7 @@ alias nvm="nvm_cmd; nvm"
 alias node="nvm_cmd; node"
 alias npm="nvm_cmd; npm"
 
-#emsdk
+# emsdk
 export EMSDK="$HOME/.emsdk"
 export EMSDK_NODE=$(which node)
 export PATH="$PATH:$HOME/.emsdk:$HOME/.emsdk/upstream/emscripten"
