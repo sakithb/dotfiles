@@ -13,7 +13,9 @@ config.default_cwd = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb"
 config.color_scheme = "Gruvbox dark, medium (base16)"
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 13.5
+config.harfbuzz_features = {"calt=0", "clig=0", "liga=0"}
 
+config.canonicalize_pasted_newlines = "LineFeed"
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
 config.disable_default_key_bindings = true

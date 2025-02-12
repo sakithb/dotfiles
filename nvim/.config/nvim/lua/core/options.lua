@@ -27,6 +27,5 @@ vim.opt.undofile = true
 vim.opt.backupdir = vim.fn.stdpath("data") .. "/backup"
 vim.opt.backup = true
 
-vim.opt.lazyredraw = true
 vim.opt.updatetime = 600
 vim.opt.timeoutlen = 300
