@@ -199,7 +199,7 @@ config.keys = {
             local dirs = {
                 "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\personal",
                 "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\work",
-                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\temp",
+                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\other",
             }
 
             local choices = {
@@ -208,7 +208,11 @@ config.keys = {
                     label = "default"
                 },
                 {
-                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\scripts",
+                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\temp",
+                    label = "temp"
+                },
+                {
+                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\personal\\dotfiles\\scripts",
                     label = "scripts"
                 }
             }

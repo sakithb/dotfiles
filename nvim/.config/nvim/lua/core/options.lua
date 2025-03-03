@@ -29,3 +29,10 @@ vim.opt.backup = true
 
 vim.opt.updatetime = 600
 vim.opt.timeoutlen = 300
+
+vim.filetype.add({
+  extension = {
+    vert = "glsl",
+    frag  = "glsl"
+  },
+})

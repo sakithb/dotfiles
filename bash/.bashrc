@@ -104,6 +104,7 @@ export EDITOR="vim"
 
 export ppsn="$HOME/Projects/personal"
 export pwrk="$HOME/Projects/work"
+export poth="$HOME/Projects/other"
 export ptmp="$HOME/Projects/temp"
 
 export PATH="$PATH:$HOME/.local/share/bin:$HOME/Projects/scripts"

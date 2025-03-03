@@ -20,7 +20,9 @@ M[2] = {
         auto_session_allowed_dirs = {
             "~/Projects/personal/*",
             "~/Projects/work/*",
-            "~/Projects/temp/*"
+            "~/Projects/other/*",
+            "~/Projects/temp",
+            "~/Projects/scripts",
         },
     }
 }
@@ -38,7 +40,7 @@ M[3] = {
         },
         sections = {
             lualine_b = { "branch", "diagnostics" },
-            lualine_x = { "filetype" },
+            lualine_x = { "require(\"dap\").status()" ,"filetype" },
             lualine_y = { "diff" },
             lualine_z = { "searchcount", "selectioncount", "location" }
         }

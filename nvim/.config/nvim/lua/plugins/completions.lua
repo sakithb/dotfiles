@@ -49,12 +49,18 @@ M[2] = {
             formatting = {
                 format = function(_, vim_item)
                     local abbr = vim_item.abbr
-                    vim_item.abbr = vim.fn.strcharpart(abbr, 0, 15)
+                    vim_item.abbr = vim.fn.strcharpart(abbr, 0, 30)
                     if abbr ~= vim_item.abbr then
                         vim_item.abbr = vim_item.abbr .. "…"
                     end
 
-                    vim_item.menu = ""
+                    if vim_item.menu then
+                        local menu = vim_item.menu
+                        vim_item.menu = vim.fn.strcharpart(menu, 0, 20)
+                        if menu ~= vim_item.menu then
+                            vim_item.menu = vim_item.menu .. "…"
+                        end
+                    end
 
                     return vim_item
                 end

@@ -111,4 +111,57 @@ function M.getCmpMappings()
     })
 end
 
+function M.setupDapKeymaps()
+    local dap = require("dap")
+    local widgets = require("dap.ui.widgets")
+
+    local function logpoint()
+        dap.set_breakpoint(nil, nil, vim.fn.input("Log: "))
+    end
+
+    local function frames()
+        widgets.centered_float(widgets.frames)
+    end
+
+    local function scopes()
+        widgets.centered_float(widgets.scopes)
+    end
+
+    local function threads()
+        widgets.centered_float(widgets.threads)
+    end
+
+    local function expression()
+        widgets.cursor_float(widgets.expression)
+    end
+
+    vim.keymap.set("n", "<leader>dd", dap.continue, { desc = "Debug: continue or start session" })
+    vim.keymap.set("n", "<leader>ddr", dap.restart, { desc = "Debug: restart session" })
+    vim.keymap.set("n", "<leader>ddp", dap.pause, { desc = "Debug: pause session" })
+    vim.keymap.set("n", "<leader>ddl", dap.run_last, { desc = "Debug: start last session" })
+    vim.keymap.set("n", "<leader>ddt", dap.terminate, { desc = "Debug: terminate session" })
+
+    vim.keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Debug: open repl" })
+    vim.keymap.set("n", "<leader>dc", dap.run_to_cursor, { desc = "Debug: run to cursor" })
+
+    vim.keymap.set("n", "<leader>dn", dap.step_over, { desc = "Debug: step over" })
+    vim.keymap.set("n", "<leader>dni", dap.step_into, { desc = "Debug: step into" })
+    vim.keymap.set("n", "<leader>dno", dap.step_out, { desc = "Debug: step out" })
+
+    vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug: toggle breakpoint" })
+    vim.keymap.set("n", "<leader>dbl", logpoint, { desc = "Debug: set logpoint" })
+    vim.keymap.set("n", "<leader>dbs", dap.list_breakpoints, { desc = "Debug: list breakpoints" })
+    vim.keymap.set("n", "<leader>dbc", dap.clear_breakpoints, { desc = "Debug: clear breakpoints" })
+
+
+    vim.keymap.set({"n", "v"}, "<C-S-k>", widgets.hover, { desc = "Debug: show expression" })
+    vim.keymap.set("n", "<leader>df", frames, { desc = "Debug: show stackframes" })
+    vim.keymap.set("n", "<leader>dfu", dap.up, { desc = "Debug: goto frame above" })
+    vim.keymap.set("n", "<leader>dfd", dap.down, { desc = "Debug: goto frame below" })
+    vim.keymap.set("n", "<leader>dff", dap.down, { desc = "Debug: focus current frame" })
+    vim.keymap.set("n", "<leader>ds", scopes, { desc = "Debug: show scopes" })
+    vim.keymap.set("n", "<leader>de", expression, { desc = "Debug: show expression" })
+    vim.keymap.set("n", "<leader>dt", threads, { desc = "Debug: show threads" })
+end
+
 return M
