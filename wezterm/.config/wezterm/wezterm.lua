@@ -9,7 +9,7 @@ local last_workspace = "default"
 -- Options
 
 config.default_prog = { "bash" }
-config.default_cwd = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb"
+config.default_cwd = "/home/sakithb"
 config.color_scheme = "Gruvbox dark, medium (base16)"
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 13.5
@@ -65,7 +65,7 @@ config.keys = {
         mods = "LEADER",
         action = wezterm.action_callback(function(window, pane)
             window:perform_action(
-                action.SpawnCommandInNewTab({ cwd = "\\" .. pane:get_current_working_dir().file_path }),
+                action.SpawnCommandInNewTab({ cwd = "/" .. pane:get_current_working_dir().file_path }),
                 pane
             )
         end)
@@ -147,7 +147,7 @@ config.keys = {
         mods = "LEADER|SHIFT",
         action = wezterm.action_callback(function(window, pane)
             window:perform_action(
-                action.SplitHorizontal({ cwd = "\\" .. pane:get_current_working_dir().file_path }),
+                action.SplitHorizontal({ cwd = "/" .. pane:get_current_working_dir().file_path }),
                 pane
             )
         end)
@@ -157,7 +157,7 @@ config.keys = {
         mods = "LEADER|SHIFT",
         action = wezterm.action_callback(function(window, pane)
             window:perform_action(
-                action.SplitVertical({ cwd = "\\" .. pane:get_current_working_dir().file_path }),
+                action.SplitVertical({ cwd = "/" .. pane:get_current_working_dir().file_path }),
                 pane
             )
         end)
@@ -197,9 +197,9 @@ config.keys = {
         mods = "LEADER",
         action = wezterm.action_callback(function(window, pane)
             local dirs = {
-                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\personal",
-                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\work",
-                "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\other",
+                "/home/sakithb/Projects/personal",
+                "/home/sakithb/Projects/work",
+                "/home/sakithb/Projects/other",
             }
 
             local choices = {
@@ -208,11 +208,11 @@ config.keys = {
                     label = "default"
                 },
                 {
-                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\temp",
+                    id = "/home/sakithb/Projects/temp",
                     label = "temp"
                 },
                 {
-                    id = "\\\\wsl.localhost\\Ubuntu\\home\\sakithb\\Projects\\personal\\dotfiles\\scripts",
+                    id = "/home/sakithb/Projects/personal/dotfiles/scripts",
                     label = "scripts"
                 }
             }
@@ -221,7 +221,7 @@ config.keys = {
                 for _, entry in ipairs(wezterm.read_dir(dir)) do
                     table.insert(choices, {
                         id = entry,
-                        label = string.gsub(entry, "(.*\\)(.*)", "%2")
+                        label = string.gsub(entry, "(.*/)(.*)", "%2")
                     })
                 end
             end

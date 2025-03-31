@@ -134,3 +134,32 @@ alias npm="nvm_cmd; npm"
 export EMSDK="$HOME/.emsdk"
 export EMSDK_NODE=$(which node)
 export PATH="$PATH:$HOME/.emsdk:$HOME/.emsdk/upstream/emscripten"
+
+# turso
+export PATH="$PATH:/home/sakithb/.turso"
+####################
+# Added by sway-wsl2
+####################
+
+# Set environment variables when running sway
+if [[ $XDG_SESSION_DESKTOP == "sway" ]]; then
+  # Default browser is "wslview"
+  export BROWSER=firefox
+
+  # Allows xdg-open to open programs within the VM, instead of windows
+  export DE=generic
+
+  # Allow VSCode to open within the VM instead of telling you to install it on windows
+  export DONT_PROMPT_WSL_INSTALL=1
+
+  # Uncomment to get kitty working. GTK_USE_PORTAL may break some other things so I left it disabled for now
+  # Kitty is low resolution in WSL2 though for some reason? Would stick to xfce4-terminal or another terminal emulator
+  # export GTK_USE_PORTAL=1
+  # export LIBGL_ALWAYS_INDIRECT=0
+  # export GALLIUM_DRIVER=llvmpipe
+fi
+
+if [[ -d $HOME/.local/bin ]]; then
+  export PATH=$HOME/.local/bin:$PATH
+fi
+

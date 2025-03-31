@@ -34,7 +34,7 @@ M[1] = {
 M[2] = {
 	"nvim-treesitter/nvim-treesitter-context",
 	opts = {
-		max_lines = 8,
+		max_lines = 4,
 	}
 }
 
