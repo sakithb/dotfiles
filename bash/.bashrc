@@ -107,7 +107,7 @@ export pwrk="$HOME/Projects/work"
 export poth="$HOME/Projects/other"
 export ptmp="$HOME/Projects/temp"
 
-export PATH="$PATH:$HOME/.local/share/bin:$HOME/Projects/scripts"
+export PATH="$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/Projects/scripts"
 
 # Go
 export GOPATH="$HOME/.local/share/go"
@@ -157,9 +157,5 @@ if [[ $XDG_SESSION_DESKTOP == "sway" ]]; then
   # export GTK_USE_PORTAL=1
   # export LIBGL_ALWAYS_INDIRECT=0
   # export GALLIUM_DRIVER=llvmpipe
-fi
-
-if [[ -d $HOME/.local/bin ]]; then
-  export PATH=$HOME/.local/bin:$PATH
 fi
 

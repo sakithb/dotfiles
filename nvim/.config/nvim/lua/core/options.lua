@@ -36,3 +36,7 @@ vim.filetype.add({
     frag  = "glsl"
   },
 })
+
+vim.diagnostic.config({
+    virtual_text = true
+})

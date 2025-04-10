@@ -18,6 +18,9 @@ M[1] = {
                     capabilities,
                     require("cmp_nvim_lsp").default_capabilities()
                 )
+            end,
+            config = function ()
+                require("lspconfig").ols.setup({})
             end
         },
         {
