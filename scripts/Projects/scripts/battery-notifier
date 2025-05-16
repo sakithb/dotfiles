@@ -1,0 +1,9 @@
+#!/bin/bash
+
+THRESHOLD=20
+BATTERY_PATH=$(upower -e | grep BAT)
+BATTERY_LEVEL=$(upower -i $BATTERY_PATH | awk '/percentage/ {print $2}' | tr -d '%')
+
+if [ "$BATTERY_LEVEL" -le "$THRESHOLD" ]; then
+  notify-send "Low Battery" "Battery level is at ${BATTERY_LEVEL}%." -u critical
+fi
