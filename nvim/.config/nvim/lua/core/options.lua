@@ -29,6 +29,7 @@ vim.opt.backup = true
 
 vim.opt.updatetime = 600
 vim.opt.timeoutlen = 300
+vim.opt.termsync = false
 
 vim.filetype.add({
   extension = {

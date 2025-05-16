@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+prev_expr=""
+
+while true; do
+  expr=$(printf "" \
+    | tofi \
+        --prompt-text="Calculate:" \
+        --placeholder-text="$prev_expr" \
+        --require-match="false" \
+        --height="100") \
+    || exit
+
+  if [[ -z "$expr" ]]; then 
+    break
+  fi
+
+  result=$(
+    python3 -c "
+import math
+print(eval('${expr}', {'__builtins__':None, 'math':math}))
+"
+  )
+
+  prev_expr="$expr = $result"
+done

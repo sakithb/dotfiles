@@ -4,15 +4,14 @@
 }
 
 window#waybar {
-    background-color: rgba(20, 20, 20, 1);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    background-color: rgba(20, 20, 20, 0.5);
     color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 window#waybar.hidden {
-    opacity: 0.2;
+    opacity: 0.9;
 }
 
 /*
@@ -142,10 +141,6 @@ button:hover {
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
-}
-
-#power-profiles-daemon {
-    padding-right: 15px;
 }
 
 #power-profiles-daemon.performance {

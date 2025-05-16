@@ -13,12 +13,16 @@
 	"modules-right": [
 		"cpu",
 		"memory",
-		"wireplumber",
+        "disk",
+        "backlight",
+		"wireplumber#sink",
+		"wireplumber#source",
 		"network",
-		"gamemode",
 		"idle_inhibitor",
 		"tray",
 		"privacy",
+        "battery",
+        "power-profiles-daemon",
 		"clock"
 	],
 
@@ -38,22 +42,34 @@
 	"memory": {
 		"format": "RAM {percentage}%"
 	},
-	"wireplumber": {
+    "disk": {
+        "format": "DISK {percentage_used}%",
+        "tooltip-format": "{used} used out of {total} / {free} free"
+    },
+    "backlight": {
+        "format": "BR {percent}%",
+        "tooltip-format": "Brightness {percent}%"
+    },
+	"wireplumber#sink": {
+        "node-type": "Audio/Sink",
 		"format": "VOL {volume}%",
 		"max-volume": 150,
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "pavucontrol"
+	},
+	"wireplumber#source": {
+        "node-type": "Audio/Source",
+		"format": "MIC {volume}%",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-right": "pavucontrol"
 	},
 	"network": {
-		"format-wifi": "Wifi",
-		"format-ethernet": "Ethernet",
-		"format-disconnected": "No network",
-		"tooltip-format": "Down:{bandwidthDownBytes} Up:{bandwidthUpBytes}",
-	},
-	"gamemode": {
-		"format": " GM ",
-		"format-alt": " GM {count} ",
-		"icon-spacing": 0,
-		"icon-size": 0,
-		"use-icon": false,
+		"format-wifi": "WIFI {signalStrength}%",
+		"format-ethernet": "ETH",
+		"format-disconnected": "NONE",
+		"tooltip-format-wifi": "{essid}",
+		"tooltip-format-ethernet": "{ifname}",
+        "on-click": "wezterm-launch nmtui"
 	},
 	"idle_inhibitor": {
 		"format": "{icon}",
@@ -65,11 +81,29 @@
 	"privacy": {
 		"icon-size": 16
 	},
+    "battery": {
+        "format": "BAT {capacity}%",
+        "format-plugged": "BAT +{capacity}%",
+        "format-charging": "BAT +{capacity}%",
+        "interval": 30
+    },
+    "power-profiles-daemon": {
+        "tooltip-format": "{profile}",
+        "format": "{icon}",
+        "format-icons": {
+            "default": "DF",
+            "performance": "PF",
+            "balanced": "BL",
+            "power-saver": "PS"
+        }
+    },
 	"clock": {
 		"interval": 60,
 		"tooltip": true,
 		"format": "{:%H.%M}",
 		"tooltip-format": "{:%a, %d of %b}",
 		"timezone": "Asia/Colombo",
+        "on-click": "powermenu",
+        "on-click-right": "notifications"
 	},
 }

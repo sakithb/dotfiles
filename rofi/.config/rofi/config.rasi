@@ -1,6 +1,0 @@
-configuration {
-  show-icons: true;
-  icon-theme: "Papirus";
-}
-
-@theme "theme.rasi"

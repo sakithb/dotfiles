@@ -1,0 +1,24 @@
+#!/bin/bash
+
+options="Shutdown\nReboot\nLock\nSuspend\nLogout"
+chosen=$(echo -e "$options" | tofi)
+
+case "$chosen" in
+  Shutdown)
+    systemctl poweroff
+    ;;
+  Reboot)
+    systemctl reboot
+    ;;
+  Lock)
+    loginctl lock-session
+    ;;
+  Suspend)
+    systemctl suspend
+    ;;
+  Logout)
+    loginctl terminate-user $USER
+    ;;
+  *)
+    ;;
+esac

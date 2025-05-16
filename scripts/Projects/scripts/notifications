@@ -1,0 +1,11 @@
+#!/bin/bash
+
+items=$(dunstctl history | jq -r '.data[][] | "\(.id.data) \(.summary.data) [\(.urgency.data)] (\(.appname.data))"')
+selected=$(echo "$items" | tofi)
+
+if [[ -n "$selected" ]]; then
+  id="${selected%%$'\t'*}"
+  msg="${selected#*$'\t'}"
+  
+  dunstctl history-pop "$id"
+fi

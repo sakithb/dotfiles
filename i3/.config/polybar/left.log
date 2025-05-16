@@ -1,6 +1,0 @@
-polybar|notice:  Parsing config file: /home/cliffniff/.config/polybar/config
-polybar|warn:  No monitor specified, using "HDMI-0"
-polybar|notice:  Loaded font "Fira Code:style=Regular:size=11" (name=Fira Code, offset=3, file=/usr/share/fonts/TTF/FiraCode-Regular.ttf)
-polybar|notice:  Loaded font "Font Awesome 5 Brands Regular:style=Regular:size=11" (name=Font Awesome 5 Brands, offset=3, file=/usr/share/fonts/TTF/fa-brands-400.ttf)
-polybar|notice:  Loaded font "Font Awesome 5 Free Solid:style=Solid:size=11" (name=Font Awesome 5 Free, offset=3, file=/usr/share/fonts/TTF/fa-solid-900.ttf)
-polybar|notice:  Loaded font "Font Awesome 5 Free Regular:style=Regular:size=11" (name=Font Awesome 5 Free, offset=3, file=/usr/share/fonts/TTF/fa-regular-400.ttf)

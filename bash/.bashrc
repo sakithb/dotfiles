@@ -100,62 +100,9 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
 
-export EDITOR="vim"
-
 export ppsn="$HOME/Projects/personal"
 export pwrk="$HOME/Projects/work"
 export poth="$HOME/Projects/other"
 export ptmp="$HOME/Projects/temp"
 
-export PATH="$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/Projects/scripts"
-
-# Go
-export GOPATH="$HOME/.local/share/go"
-export PATH="$PATH:$GOPATH/bin"
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PATH:$PNPM_HOME"
-
-# nvm
-nvm_cmd() {
-    [ -z "$NVM_DIR" ] && {
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    }
-}
-
-alias nvm="nvm_cmd; nvm"
-alias node="nvm_cmd; node"
-alias npm="nvm_cmd; npm"
-
-# emsdk
-export EMSDK="$HOME/.emsdk"
-export EMSDK_NODE=$(which node)
-export PATH="$PATH:$HOME/.emsdk:$HOME/.emsdk/upstream/emscripten"
-
-# turso
-export PATH="$PATH:/home/sakithb/.turso"
-####################
-# Added by sway-wsl2
-####################
-
-# Set environment variables when running sway
-if [[ $XDG_SESSION_DESKTOP == "sway" ]]; then
-  # Default browser is "wslview"
-  export BROWSER=firefox
-
-  # Allows xdg-open to open programs within the VM, instead of windows
-  export DE=generic
-
-  # Allow VSCode to open within the VM instead of telling you to install it on windows
-  export DONT_PROMPT_WSL_INSTALL=1
-
-  # Uncomment to get kitty working. GTK_USE_PORTAL may break some other things so I left it disabled for now
-  # Kitty is low resolution in WSL2 though for some reason? Would stick to xfce4-terminal or another terminal emulator
-  # export GTK_USE_PORTAL=1
-  # export LIBGL_ALWAYS_INDIRECT=0
-  # export GALLIUM_DRIVER=llvmpipe
-fi
-
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"

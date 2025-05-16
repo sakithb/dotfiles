@@ -1,0 +1,7 @@
+#!/bin/bash
+
+wezterm start \
+    --no-auto-connect \
+    --always-new-process \
+    --class "$1" \
+    -- $1

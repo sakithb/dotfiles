@@ -1,0 +1,29 @@
+[global]
+font = Sans 10
+frame_width = 1
+frame_color = "#bbbbbb"
+padding = 10
+transparency = 0
+corner_radius = 0
+origin = top-right
+offset = 20x20
+width = 300
+height = 100
+format = "%s\n%b"
+timeout = 5
+
+[urgency_low]
+background = "#000000"
+foreground = "#dddddd"
+timeout = 4
+
+[urgency_normal]
+background = "#000000"
+foreground = "#eeeeee"
+timeout = 6
+
+[urgency_critical]
+background = "#000000"
+foreground = "#ff5555"
+frame_color = "#ff4444"
+timeout = 0
