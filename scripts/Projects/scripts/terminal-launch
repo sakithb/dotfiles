@@ -1,0 +1,11 @@
+#!/bin/bash
+
+wezterm \
+    --config "enable_tab_bar=false" \
+    --config "keys={}" \
+    -e \
+    --always-new-process \
+    --workspace $1-$$ \
+    --class "$1" -- $1
+
+wezterm cli kill-pane --pane-id $(wezterm cli list | grep $1-$$ | awk '{print $3}')

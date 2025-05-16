@@ -29,15 +29,14 @@ config.window_padding = {
     bottom = 0,
 }
 
-config.enable_wayland = false
-
+config.default_domain = "default"
 config.unix_domains = {
     {
-        name = "unix",
+        name = "default",
     },
 }
 
-config.default_domain = "unix"
+config.enable_wayland = false
 
 -- Keymaps
 

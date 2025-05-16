@@ -1,43 +1,42 @@
-// -*- mode: json -*-
-
 {
 	"layer": "top",
 	"position": "top",
 
 	"modules-left": [
-		"hyprland/workspaces",
+		"tray",
+		"clock",
+        "mpris",
 	],
 	"modules-center": [
-		"mpris",
+		"hyprland/workspaces",
 	],
 	"modules-right": [
-		"cpu",
-		"memory",
-        "disk",
+        "group/hardware",
         "backlight",
-		"wireplumber#sink",
-		"wireplumber#source",
+        "group/audio",
 		"network",
-		"idle_inhibitor",
-		"tray",
 		"privacy",
-        "battery",
-        "power-profiles-daemon",
-		"clock"
+		"battery",
+        "group/power",
 	],
 
+    "group/hardware" : {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "disk"
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
+    },
 	"mpris": {
-		"format": "{status_icon} | {title} - {artist}",
-		"title-len": 40,
-		"artist-len": 20,
-		"status-icons": {
-			"paused": "",
-			"playing": "",
-		},
+		"format": "PAUSE | {player}",
+		"format-paused": "PLAY | {player}",
 	},
-
 	"cpu": {
-		"format": "CPU {usage}%"
+		"format": "CPU {usage}%",
 	},
 	"memory": {
 		"format": "RAM {percentage}%"
@@ -49,6 +48,21 @@
     "backlight": {
         "format": "BR {percent}%",
         "tooltip-format": "Brightness {percent}%"
+    },
+	"hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": 9
+        },
+    },
+    "group/audio": {
+        "orientation": "horizontal",
+        "modules": [
+            "wireplumber#sink",
+            "wireplumber#source",
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
     },
 	"wireplumber#sink": {
         "node-type": "Audio/Sink",
@@ -69,14 +83,7 @@
 		"format-disconnected": "NONE",
 		"tooltip-format-wifi": "{essid}",
 		"tooltip-format-ethernet": "{ifname}",
-        "on-click": "wezterm-launch nmtui"
-	},
-	"idle_inhibitor": {
-		"format": "{icon}",
-		"format-icons": {
-			"activated": "IH O",
-			"deactivated": "IH .",
-		}
+        "on-click": "terminal-launch nmtui"
 	},
 	"privacy": {
 		"icon-size": 16
@@ -86,6 +93,22 @@
         "format-plugged": "BAT +{capacity}%",
         "format-charging": "BAT +{capacity}%",
         "interval": 30
+    },
+    "group/power": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/power",
+            "power-profiles-daemon",
+		    "idle_inhibitor",
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
+    },
+    "custom/power": {
+        "format": "POW",
+        "on-click": "powermenu",
+        "on-click-right": "notifications"
     },
     "power-profiles-daemon": {
         "tooltip-format": "{profile}",
@@ -97,13 +120,18 @@
             "power-saver": "PS"
         }
     },
+	"idle_inhibitor": {
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "IH",
+			"deactivated": "IH",
+		}
+	},
 	"clock": {
 		"interval": 60,
 		"tooltip": true,
 		"format": "{:%H.%M}",
 		"tooltip-format": "{:%a, %d of %b}",
 		"timezone": "Asia/Colombo",
-        "on-click": "powermenu",
-        "on-click-right": "notifications"
 	},
 }
