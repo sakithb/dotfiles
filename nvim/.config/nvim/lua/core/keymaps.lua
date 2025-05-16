@@ -21,7 +21,7 @@ vim.keymap.set("n", "<leader>rr", ":%s///gc<left><left><left><left>", { desc = "
 vim.keymap.set("v", "<leader>rr", ":s///gc<left><left><left><left>", { desc = "Replace in selection" })
 
 vim.keymap.set({ "n", "v" }, "<M-y>", "\"+y", { desc = "Copy to system clipboard" })
-vim.keymap.set({ "n", "v" }, "<M-p>", ":let @+ = substitute(@+, '\\r\\n', '\\n', 'g')<CR>\"+p", { desc = "Paste to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboard" })
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Discard search highlights:" })
 

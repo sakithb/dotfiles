@@ -9,9 +9,21 @@ window#waybar {
     background: transparent;
 }
 
+menu,
 tooltip {
+    padding: 5px;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
+}
+
+menu menuitem,
+button {
+    padding: 5px 10px;
+}
+
+menu menuitem:hover,
+button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .module {
@@ -27,21 +39,13 @@ tooltip {
 .modules-center {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0px 0px 0px;
 }
 
 .modules-right {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
     margin: 5px 5px 0px 0px;
-}
-
-#workspaces button {
-    padding: 5px 10px;
-}
-
-#workspaces button:hover {
-    background: rgba(255, 255, 255, 0.1);
 }
 
 #workspaces button.active {
@@ -83,4 +87,8 @@ tooltip {
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+#privacy-item {
+    padding: 0 5px;
 }

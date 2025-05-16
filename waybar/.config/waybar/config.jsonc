@@ -3,8 +3,9 @@
 	"position": "top",
 
 	"modules-left": [
-		"tray",
-		"clock",
+        "clock",
+        "privacy",
+        "tray",
         "mpris",
 	],
 	"modules-center": [
@@ -15,7 +16,6 @@
         "backlight",
         "group/audio",
 		"network",
-		"privacy",
 		"battery",
         "group/power",
 	],
@@ -86,8 +86,13 @@
         "on-click": "terminal-launch nmtui"
 	},
 	"privacy": {
-		"icon-size": 16
+		"icon-size": 15
 	},
+    "tray": {
+        "icon-size": 15,
+        "show-passive-items": true,
+        "spacing": 5,
+    },
     "battery": {
         "format": "BAT {capacity}%",
         "format-plugged": "BAT +{capacity}%",
