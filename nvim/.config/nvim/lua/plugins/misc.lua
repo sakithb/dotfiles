@@ -40,6 +40,7 @@ M[3] = {
         },
         sections = {
             lualine_b = { "branch", "diagnostics" },
+            lualine_c = { { "filename", path = 1 } },
             lualine_x = { "require(\"dap\").status()" ,"filetype" },
             lualine_y = { "diff" },
             lualine_z = { "searchcount", "selectioncount", "location" }

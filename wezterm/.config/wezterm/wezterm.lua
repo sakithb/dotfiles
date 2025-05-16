@@ -37,7 +37,7 @@ config.unix_domains = {
     },
 }
 
-config.default_gui_startup_args = { 'connect', 'unix' }
+config.default_domain = "unix"
 
 -- Keymaps
 
@@ -52,6 +52,11 @@ config.keys = {
         key = "x",
         mods = "LEADER", 
         action = action.ActivateCopyMode 
+    },
+    {   
+        key = "z",
+        mods = "LEADER", 
+        action = action.QuickSelect 
     },
     {
         key = "u",
@@ -185,8 +190,8 @@ config.keys = {
         action = action.CloseCurrentPane({ confirm = false }),
     },
     {
-        key = 'D',
-        mods = 'LEADER|SHIFT',
+        key = "D",
+        mods = "LEADER|SHIFT",
         action = action.DetachDomain("CurrentPaneDomain"),
     },
     {
