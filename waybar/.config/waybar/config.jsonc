@@ -112,7 +112,7 @@
     },
     "custom/power": {
         "format": "POW",
-        "on-click": "powermenu",
+        "on-click": "power-menu",
         "on-click-right": "notifications"
     },
     "power-profiles-daemon": {
