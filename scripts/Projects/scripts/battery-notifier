@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-THRESHOLD=40
+THRESHOLD=20
 BATTERY_PATH=$(upower -e | grep -E 'BAT|battery')
 BATTERY_LEVEL=$(upower -i "$BATTERY_PATH" | awk '/percentage/ {gsub(/%/,""); print $2}')
 BATTERY_STATE=$(upower -i "$BATTERY_PATH" | awk '/state/ {print $2}')

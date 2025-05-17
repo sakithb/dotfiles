@@ -1,13 +1,13 @@
-config.load_autoconfig()
-config.source('gruvbox.py')
+config.load_autoconfig(False)
 
-#config.bind()
-
+c.bindings.default = {}
 c.colors.webpage.preferred_color_scheme = "dark"
+c.completion.quick = False
 c.confirm_quit = ["multiple-tabs", "downloads"]
 c.content.autoplay = False
 c.content.pdfjs = True
 c.downloads.position = "bottom"
+c.editor.command = ["nvim", "-c", "normal {line}G{column0}l", "--", "{file}"]
 c.fileselect.folder.command = ["terminal-launch", "ranger", "--choosedir={}"]
 c.fileselect.multiple_files.command = ["terminal-launch", "ranger", "--choosefiles={}"]
 c.fileselect.single_file.command = ["terminal-launch", "ranger", "--choosefile={}"]
@@ -23,3 +23,6 @@ c.scrolling.smooth = True
 c.tabs.position = "left"
 c.tabs.width = "30%"
 c.tabs.show = "switching"
+
+config.source('gruvbox.py')
+config.source('bindings.py')

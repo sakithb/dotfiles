@@ -1,29 +1,36 @@
 [global]
-font = Sans 10
-frame_width = 1
-frame_color = "#bbbbbb"
-padding = 10
+font = "JetBrainsMono Nerd Font 12"
+corner_radius   = 6
+corners         = all
+
+frame_width = 0
 transparency = 0
-corner_radius = 0
+
+separator_height = 1
+padding = 5
+horizontal_padding = 10
+text_icon_padding = 6
+
 origin = top-right
-offset = 20x20
+offset = 10x10
 width = 300
-height = 100
-format = "%s\n%b"
-timeout = 5
+
+notification_limit = 0
 
 [urgency_low]
-background = "#000000"
-foreground = "#dddddd"
-timeout = 4
+background = "#0000007F"
+foreground = "#FFFFFF"
+frame_color = "#0000007F"
+timeout = 10
 
 [urgency_normal]
-background = "#000000"
-foreground = "#eeeeee"
-timeout = 6
+background = "#0000007F"
+foreground = "#FFFFFF"
+frame_color = "#0000007F"
+timeout = 10
 
 [urgency_critical]
-background = "#000000"
-foreground = "#ff5555"
-frame_color = "#ff4444"
+background = "#eb4d4b7F"
+foreground = "#FFFFFF"
+frame_color = "#eb4d4b7F"
 timeout = 0
