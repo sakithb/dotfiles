@@ -1,7 +1,7 @@
 #!/bin/bash
 
 options="Shutdown\nReboot\nLock\nSuspend\nLogout"
-chosen=$(echo -e "$options" | tofi)
+chosen=$(echo -e "$options" | fuzzel -d)
 
 case "$chosen" in
   Shutdown)

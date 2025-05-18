@@ -1,7 +1,7 @@
 #!/bin/bash
 
 items=$(dunstctl history | jq -r '.data[][] | "\(.id.data) \(.summary.data) [\(.urgency.data)] (\(.appname.data))"')
-selected=$(echo "$items" | tofi)
+selected=$(echo "$items" | fuzzel -d)
 
 if [[ -n "$selected" ]]; then
   id="${selected%%$'\t'*}"

@@ -2,11 +2,11 @@
     all: unset;
     font-family: JetBrainsMono Nerd Font;
     font-size: 15px;
-    color: #ffffff;
 }
 
 window#waybar {
     background: transparent;
+    color: #ffffff;
 }
 
 menu,
@@ -48,8 +48,13 @@ button:hover {
     margin: 5px 5px 0px 0px;
 }
 
+#workspaces button.empty {
+    color: #999999;
+}
+
 #workspaces button.active {
     box-shadow: inset 0 -3px #ffffff;
+    color: #ffffff;
 }
 
 #workspaces button.urgent,

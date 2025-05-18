@@ -4,11 +4,11 @@ prev_expr=""
 
 while true; do
   expr=$(printf "" \
-    | tofi \
-        --prompt-text="Calculate:" \
-        --placeholder-text="$prev_expr" \
-        --require-match="false" \
-        --height="100") \
+    | fuzzel \
+        -d \
+        -p "= " \
+        -l 0 \
+        --placeholder="$prev_expr" ) \
     || exit
 
   if [[ -z "$expr" ]]; then 

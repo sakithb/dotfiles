@@ -1,0 +1,13 @@
+[Unit]
+Description=Cliphist
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecCondition=/lib/systemd/systemd-xdg-autostart-condition "Hyprland" ""
+ExecStart=wl-paste --watch cliphist store
+Restart=on-failure
+Slice=background-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

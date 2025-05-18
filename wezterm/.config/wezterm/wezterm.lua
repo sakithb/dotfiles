@@ -8,8 +8,8 @@ local last_workspace = "default"
 
 -- Options
 
-config.default_prog = { "bash" }
-config.default_cwd = "/home/sakithb"
+config.default_prog = { "/usr/bin/env", "bash" }
+config.default_cwd = wezterm.home_dir
 config.color_scheme = "Gruvbox dark, medium (base16)"
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 15
@@ -21,7 +21,7 @@ config.use_fancy_tab_bar = false
 config.disable_default_key_bindings = true
 config.show_new_tab_button_in_tab_bar = false
 config.window_close_confirmation = "NeverPrompt"
-config.window_decorations = "RESIZE"
+config.window_decorations = "NONE"
 config.window_padding = {
     left = 0,
     right = 0,
@@ -36,7 +36,7 @@ config.unix_domains = {
     },
 }
 
-config.enable_wayland = false
+-- config.enable_wayland = false
 
 -- Keymaps
 
@@ -71,7 +71,7 @@ config.keys = {
         mods = "LEADER",
         action = wezterm.action_callback(function(window, pane)
             window:perform_action(
-                action.SpawnCommandInNewTab({ cwd = "/" .. pane:get_current_working_dir().file_path }),
+                action.SpawnCommandInNewTab({ cwd = "/" .. pane:get_current_working_dir().file_path, }),
                 pane
             )
         end)
@@ -121,6 +121,7 @@ config.keys = {
                     name = "default",
                     spawn = {
                         cwd = config.default_cwd,
+                        args = config.default_prog
                     }
                 }),
                 pane
@@ -139,6 +140,10 @@ config.keys = {
                     window:perform_action(
                         action.SwitchToWorkspace({
                             name = to,
+                            spawn = {
+                                cwd = config.default_cwd,
+                                args = config.default_prog
+                            }
                         }),
                         pane
                     )
@@ -281,7 +286,8 @@ config.keys = {
                                 action.SwitchToWorkspace({
                                     name = label,
                                     spawn = {
-                                        cwd = (entry == "default" and config.default_cwd) or entry
+                                        cwd = (entry == "default" and config.default_cwd) or entry,
+                                        domain = "DefaultDomain",
                                     }
                                 }),
                                 pane

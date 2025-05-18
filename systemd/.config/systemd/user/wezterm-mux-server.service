@@ -1,0 +1,12 @@
+[Unit]
+Description=WezTerm Mux Server
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env wezterm-mux-server
+Restart=on-failure
+Slice=background-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Battery Notifier Service
+Wants=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env battery-notifier
+Slice=background-graphical.slice

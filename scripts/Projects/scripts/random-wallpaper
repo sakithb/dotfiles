@@ -1,0 +1,5 @@
+#!/bin/bash
+
+wallpaper=$(find "$HOME/Pictures/Wallpapers/" -type f | shuf -n 1)
+ln -sf $wallpaper "$HOME/Pictures/Wallpapers/current"
+hyprctl hyprpaper reload ",$wallpaper"

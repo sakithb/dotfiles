@@ -1,5 +1,3 @@
-[[ $- != *i* ]] && return
-
 #==============================================================================
 
 # Sensible Bash - An attempt at saner Bash defaults

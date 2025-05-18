@@ -1,4 +1,4 @@
-if uwsm check may-start; then
+if uwsm check may-start -q; then
     exec uwsm start hyprland.desktop
 fi
 
