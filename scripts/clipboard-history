@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
 cliphist list \
-    | $dmenu \
+    | fuzzel -d \
     | cliphist decode \
     | wl-copy

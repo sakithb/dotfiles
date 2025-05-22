@@ -1,4 +1,4 @@
-pass = """spawn --userscript qute-pass -d 'fuzzel -d'"""
+pass_cmd = """spawn --userscript qute-pass -d 'fuzzel -d'"""
 
 # caret
 
@@ -64,7 +64,7 @@ config.bind("<Escape>", "mode-leave", mode="hint")
 # insert
 
 config.bind("<Ctrl-E>", "edit-text", mode="insert")
-config.bind("<Ctrl-P>", pass, mode="insert")
+config.bind("<Ctrl-P>", pass_cmd, mode="insert")
 config.bind("<Escape>", "mode-leave", mode="insert")
 config.bind("<Shift-Escape>", "fake-key <Escape>", mode="insert")
 
@@ -172,7 +172,7 @@ config.bind("bq", "quickmark-save", mode="normal")
 config.bind("sb", "cmd-set-text -s :bookmark-load", mode="normal")
 config.bind("sq", "cmd-set-text -s :quickmark-load", mode="normal")
 config.bind("st", "cmd-set-text -s :tab-select", mode="normal")
-config.bind(",p", pass, mode="normal")
+config.bind(",p", pass_cmd, mode="normal")
 
 # passthrough
 
