@@ -1,0 +1,9 @@
+[Unit]
+Description=Wallpaper Slideshow
+Wants=hyprpaper.service graphical-session.target
+After=hyprpaper.service graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env set-random-wallpaper
+Slice=background-graphical.slice

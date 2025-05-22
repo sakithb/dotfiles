@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+cliphist list \
+    | $dmenu \
+    | cliphist decode \
+    | wl-copy

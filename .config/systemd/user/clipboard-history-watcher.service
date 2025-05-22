@@ -1,0 +1,12 @@
+[Unit]
+Description=Clipboard History Watcher
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=wl-paste --watch cliphist store
+Restart=on-failure
+Slice=background-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

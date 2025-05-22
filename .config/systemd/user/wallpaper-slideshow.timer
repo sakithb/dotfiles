@@ -1,0 +1,10 @@
+[Unit]
+Description=Wallpaper Slideshow
+Wants=wallpaper-slideshow.service
+
+[Timer]
+OnActiveSec=0
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=graphical-session.target

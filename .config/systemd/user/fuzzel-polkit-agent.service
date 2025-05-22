@@ -1,0 +1,12 @@
+[Unit]
+Description=Fuzzel Polkit Agent
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env fuzzel-polkit-agent
+Restart=on-failure
+Slice=background-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,6 +1,6 @@
 export TERMINAL=alacritty
 export EDITOR=nvim
-export PATH=$PATH:/home/sakithb/Projects/scripts:/home/sakithb/.local/share/bin
+export PATH=$PATH:$HOME/scripts:$XDG_DATA_HOME/bin
 
 # Wayland
 
@@ -13,7 +13,7 @@ export XCURSOR_SIZE=16
 
 export GTK_THEME="Materia-dark"
 export GTK_ICON_THEME="Papirus"
-export GTK_FONT_NAME="NotoSans Nerd Font 12"
+export GTK_FONT_NAME="Noto Sans 12"
 export GTK_MONOSPACE_FONT_NAME="JetBrainsMono Nerd Font 12"
 
 export QT_QPA_PLATFORMTHEME=qt5ct

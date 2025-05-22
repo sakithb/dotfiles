@@ -83,7 +83,7 @@
 		"format-disconnected": "NONE",
 		"tooltip-format-wifi": "{essid}",
 		"tooltip-format-ethernet": "{ifname}",
-        "on-click": "/usr/bin/env $TERMINAL -e nmtui"
+        "on-click": "$TERMINAL -e nmtui"
 	},
 	"privacy": {
 		"icon-size": 15
@@ -113,7 +113,7 @@
     "custom/power": {
         "format": "POW",
         "on-click": "power-menu",
-        "on-click-right": "notifications"
+        "on-click-right": "notification-history"
     },
     "power-profiles-daemon": {
         "tooltip-format": "{profile}",

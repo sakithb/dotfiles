@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+placeholder=""
+
+while true; do
+    expr=$(printf "" \
+        | fuzzel \
+        -d \
+        -p "= " \
+        -l 0 \
+        --placeholder="$placeholder" ) \
+        || exit
+
+    if [[ -z "$expr" ]]; then 
+        break
+    fi
+
+    result=$(
+        python3 -c "
+import math
+print(eval('${expr}', {'__builtins__':None, 'math':math}))
+        "
+    )
+
+    placeholder="$expr = $result"
+done
