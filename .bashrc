@@ -98,9 +98,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
 
-export ppsn="$HOME/Projects/personal"
-export pwrk="$HOME/Projects/work"
-export poth="$HOME/Projects/other"
-export ptmp="$HOME/Projects/temp"
-
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+export ppsn="$HOME/projects/personal"
+export pwrk="$HOME/projects/work"
+export poth="$HOME/projects/other"
+export pscr="$HOME/projects/scripts"
