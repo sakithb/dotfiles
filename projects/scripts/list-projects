@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+projs=$(find ~/Projects/{personal,work,other} -maxdepth 1 -mindepth 1 -type d)
+sel=$(printf "%s\n" ${projs[@]} "$HOME/Projects/scripts" "$HOME/Projects/temp" | fzf)
+
+cd $sel && bash

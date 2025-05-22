@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/abducto-workspaces"
+mkdir -p "$STATE_DIR"
+
+PROJECT_DIRS="~/projects/{personal,work,other}"
+CURRENT_WS_FILE="$STATE_DIR/current_workspace"
+
+usage() {
+  cat <<EOF
+Usage: $0 <command>
+Commands:
+  list-workspaces        Pick a workspace (fzf), set it current, & attach last tab or create base
+  list-tabs              List tabs of current workspace (fzf) & attach
+  create-tab             Create a new tab in current workspace & attach it
+  next-tab               Cycle to the next tab in current workspace
+  prev-tab               Cycle to the previous tab in current workspace
+  delete-tab             Pick and delete a tab in current workspace
+  delete-workspace       Delete current workspace and all its tabs
+EOF
+  exit 1
+}
+
+pick_workspace() {
+    find ~/Projects/{personal,work,other} -maxdepth 1 -mindepth 1 -type d
+    find "$PROJECTS_ROOT" -maxdepth 1 -mindepth 1 -type d \
+        | xargs -r basename \
+        | fzf --prompt="Workspace> " || exit 1
+}
+
+tab_list() {
+  abduco -l | grep -E "^${WS}(-[0-9]+)?$" | sort -V
+}
+
+ensure_base() {
+  if ! abduco -l | grep -qx "$WS"; then
+    echo "→ Creating base tab '$WS'…"
+    abduco -n "$WS" bash
+  fi
+}
+
+attach_session() {
+  abduco -a "$1"
+}
+
+do_list_workspaces() {
+  WS=$(pick_workspace)
+  echo "$WS" > "$CURRENT_WS_FILE"
+  ensure_base
+  mapfile -t tabs < <(tab_list)
+  idx=0
+  [[ -r "$STATE_DIR/$WS.current" ]] && idx=$(<"$STATE_DIR/$WS.current")
+  (( idx >= ${#tabs[@]} )) && idx=0
+  echo "→ Attaching to '${tabs[$idx]}'…"
+  attach_session "${tabs[$idx]}"
+}
+
+do_list_tabs() {
+  check_current_ws
+  mapfile -t tabs < <(tab_list)
+  tab=$(printf "%s\n" "${tabs[@]}" \
+        | fzf --prompt="Tab in '$WS'> ") || exit 1
+  attach_session "$tab"
+}
+
+do_create_tab() {
+  check_current_ws
+  ensure_base
+  # find next suffix
+  mapfile -t tabs < <(tab_list)
+  max=$(printf "%s\n" "${tabs[@]}" \
+        | sed -n "s/^${WS}-\([0-9]\+\)$/\1/p" \
+        | sort -n | tail -1)
+  idx=${max:-0}
+  idx=$(( idx + 1 ))
+  name="${WS}-${idx}"
+  echo "→ Creating new tab '$name'…"
+  abduco -n "$name" bash
+  echo $idx > "$STATE_DIR/$WS.current"
+  attach_session "$name"
+}
+
+do_cycle_tab() {
+  mode=$1
+  check_current_ws
+  mapfile -t tabs < <(tab_list)
+  (( ${#tabs[@]} )) || { echo "No tabs for '$WS'." >&2; exit 1; }
+  idx=0
+  [[ -r "$STATE_DIR/$WS.current" ]] && idx=$(<"$STATE_DIR/$WS.current")
+  if [[ $mode == next ]]; then
+    idx=$(( (idx + 1) % ${#tabs[@]} ))
+  else
+    idx=$(( (idx - 1 + ${#tabs[@]}) % ${#tabs[@]} ))
+  fi
+  echo $idx > "$STATE_DIR/$WS.current"
+  attach_session "${tabs[$idx]}"
+}
+
+do_delete_tab() {
+  check_current_ws
+  mapfile -t tabs < <(tab_list)
+  tab=$(printf "%s\n" "${tabs[@]}" \
+        | fzf --prompt="Delete tab in '$WS'> ") || exit 1
+  echo "→ Deleting tab '$tab'…"
+  abduco -k "$tab"
+  mapfile -t remaining < <(tab_list)
+  if (( ${#remaining[@]} == 0 )); then
+    echo "→ No tabs left: deleting workspace '$WS'."
+    rm -f "$STATE_DIR/$WS.current"
+    rm -f "$CURRENT_WS_FILE"
+  else
+    echo 0 > "$STATE_DIR/$WS.current"
+  fi
+}
+
+do_delete_workspace() {
+  check_current_ws
+  mapfile -t tabs < <(tab_list)
+  echo "→ Deleting workspace '$WS' and tabs: ${tabs[*]}"
+  for t in "${tabs[@]}"; do
+    abduco -k "$t"
+  done
+  rm -f "$STATE_DIR/$WS.current"
+  rm -f "$CURRENT_WS_FILE"
+}
+
+check_current_ws() {
+  if [[ ! -r "$CURRENT_WS_FILE" ]]; then
+    echo "No current workspace set. Run 'list-workspaces' first." >&2
+    exit 1
+  fi
+  WS=$(<"$CURRENT_WS_FILE")
+}
+
+# ————— MAIN —————
+(( $# == 1 )) || usage
+case $1 in
+  list-workspaces)    do_list_workspaces   ;;
+  list-tabs)          do_list_tabs         ;;
+  create-tab)         do_create_tab        ;;
+  next-tab)           do_cycle_tab next    ;;
+  prev-tab)           do_cycle_tab prev    ;;
+  delete-tab)         do_delete_tab        ;;
+  delete-workspace)   do_delete_workspace  ;;
+  *)                  usage                ;;
+esac

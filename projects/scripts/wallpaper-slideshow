@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# wallpaper=$(find "$HOME/Pictures/wallpapers/" -type f | shuf -n 1)
+# ln -sf $wallpaper "$XDG_STATE_HOME/current-wallpaper"
