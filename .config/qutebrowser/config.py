@@ -8,10 +8,13 @@ c.content.autoplay = False
 c.content.pdfjs = True
 c.content.unknown_url_scheme_policy = "allow-all"
 c.downloads.position = "bottom"
+c.downloads.location.directoy = "~/downloads"
+c.downloads.location.suggestion = "both"
+c.downloads.remove_finished = 10000
 c.editor.command = ["nvim", "-c", "normal {line}G{column0}l", "--", "{file}"]
-c.fileselect.folder.command = ["terminal-launch", "yazi", "--choosefile={}"]
-c.fileselect.multiple_files.command = ["terminal-launch", "yazi", "--choosefile={}"]
-c.fileselect.single_file.command = ["terminal-launch", "yazi", "--choosefile={}"]
+c.fileselect.folder.command = ["alacritty", "-e", "nnn", "-p", "-"]
+c.fileselect.multiple_files.command = ["alacritty", "-e", "nnn", "-p", "-"]
+c.fileselect.single_file.command = ["alacritty", "-e", "nnn", "-p", "-"]
 c.fonts.default_family = "JetBrainsMono Nerd Font"
 c.fonts.default_size = "16pt"
 c.fonts.web.family.sans_serif = "Noto Sans"
