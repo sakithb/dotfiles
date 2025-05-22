@@ -1,9 +1,0 @@
-[Unit]
-Description=Wallpaper Slideshow
-Wants=hyprpaper.service graphical-session.target
-After=hyprpaper.service graphical-session.target
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/env wallpaper-slideshow
-Slice=background-graphical.slice
