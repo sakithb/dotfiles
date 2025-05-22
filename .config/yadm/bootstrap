@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+cd "$HOME"
+yadm submodule update --init --recursive
+
+ln -sf "$HOME/.secrets/.password-store" "$HOME/.password-store"
+ln -sf "$HOME/.secrets/.ssh"            "$HOME/.ssh"
+
+chmod 700 "$HOME/.ssh"
+chmod 600 "$HOME/.ssh"/id_*
+chmod 644 "$HOME/.ssh"/*.pub
+
+PUB="$HOME/.secrets/gpg-keys/pubkey.asc"
+SEC="$HOME/.secrets/gpg-keys/secret-keys.asc.gpg"
+
+if [ -f "$PUB" ] && ! gpg --list-keys pvsakith@gmail.com >/dev/null 2>&1; then
+  echo "Importing GPG public key…"
+  gpg --import "$PUB"
+fi
+
+if [ -f "$SEC" ] && ! gpg --list-secret-keys pvsakith@gmail.com >/dev/null 2>&1; then
+  echo "Importing GPG private key…"
+  gpg --decrypt "$SEC" | gpg --import
+fi
+
+mkdir -p $HOME/projects/{personal,work,other}
+
+echo "Bootstrap completed"
