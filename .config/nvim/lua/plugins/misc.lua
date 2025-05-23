@@ -18,11 +18,10 @@ M[2] = {
     lazy = false,
     opts = {
         auto_session_allowed_dirs = {
-            "~/Projects/personal/*",
-            "~/Projects/work/*",
-            "~/Projects/other/*",
-            "~/Projects/temp",
-            "~/Projects/scripts",
+            "~/projects/personal/*",
+            "~/projects/work/*",
+            "~/projects/other/*",
+            "~/scripts",
         },
     }
 }

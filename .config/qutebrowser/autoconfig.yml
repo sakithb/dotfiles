@@ -10,12 +10,18 @@ settings:
     https://meet.google.com: true
   content.javascript.clipboard:
     http://localhost:3000: access-paste
+    https://chat.deepseek.com: access-paste
+    https://chat.qwen.ai: access-paste
     https://chatgpt.com: access-paste
+    https://claude.ai: access-paste
     https://codeberg.org: access-paste
     https://github.com: access-paste
   content.media.audio_capture:
     https://meet.google.com: true
   content.media.video_capture:
     https://meet.google.com: true
+  content.notifications.enabled:
+    https://www.youtube.com: true
   content.register_protocol_handler:
+    https://mail.google.com?extsrc=mailto&url=%25s: true
     https://outlook.live.com?mailtouri=%25s: true
