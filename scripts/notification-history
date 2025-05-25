@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+notifications=$(makoctl history | awk '
+  /^Notification [0-9]+:/ {
+    match($0, /Notification ([0-9]+): (.*)/, m)
+    id      = m[1]
+    summary = m[2]
+  }
+  /^\s*App name:/ {
+    match($0, /App name: (.*)/, m)
+    app = m[1]
+  }
+  /^\s*Urgency:/ {
+    match($0, /Urgency: (.*)/, m)
+    urg = m[1]
+    # use TAB to separate id (field 1) from the display text
+    printf "%s\t%s [%s] (%s)\n", id, summary, urg, app
+  }
+')
+
+printf "%s\n" "$notifications" | fuzzel -d

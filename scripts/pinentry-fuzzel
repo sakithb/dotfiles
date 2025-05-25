@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+echo "OK"
+
+DESC=""
+PROMPT=""
+
+while read cmd rest; do
+    case $cmd in
+        GETINFO)
+            case "$rest" in
+                flavor)   echo "D fuzzel"; echo "OK" ;;
+                version)  echo "D 0.1"; echo "OK" ;;
+                ttyinfo)
+                    tty=$(tty 2>/dev/null)
+                    echo "D ${tty:-/dev/tty}"
+                    echo "OK"
+                    ;;
+                pid)      echo "D $$"; echo "OK" ;;
+            esac
+            ;;
+        SETDESC)    DESC=$rest; echo "OK" ;;
+        SETPROMPT)  PROMPT=$rest; echo "OK" ;;
+        SETERROR)
+            fuzzel --prompt-only "$rest" --cache /dev/null --password --dmenu
+            echo "OK"; exit 1
+            ;;
+        GETPIN|getpin)
+            echo "D $(fuzzel --prompt-only "$PROMPT" --placeholder="${DESC}: " --cache /dev/null --password --dmenu)"
+            echo "OK"
+            ;;
+        BYE|bye)    echo "OK"; exit 0 ;;
+        *)          echo "OK" ;;
+    esac
+done

@@ -1,0 +1,177 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+LOG_FILE="/tmp/yadm-bootstrap.log"
+SECRETS_REPO="sakithb/dotsecrets"
+EMAIL="pvsakith@gmail.com"
+NAME="Sakith B."
+
+echo "Bootstrap started at $(date)" > "$LOG_FILE"
+
+log_error() {
+    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1"
+    echo "$msg" | tee -a "$LOG_FILE"
+}
+
+log_info() {
+    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] INFO: $1"
+    echo "$msg" | tee -a "$LOG_FILE"
+}
+
+error_exit() {
+    log_error "$1"
+    exit 1
+}
+
+run_cmd() {
+    local error_msg="$1"
+    shift
+    if ! "$@" >>"$LOG_FILE" 2>&1; then
+        error_exit "$error_msg"
+    fi
+}
+
+curl_fetch() {
+    local url="$1"
+    local output="$2"
+    local error_msg="$3"
+    
+    if ! curl -f -v -H "Authorization: token $GITHUB_TOKEN" \
+         -H "Accept: application/vnd.github.raw" \
+         -o "$output" \
+         "$url" 2>>"$LOG_FILE"; then
+        error_exit "$error_msg"
+    fi
+}
+
+log_info "=== Setting up secrets ==="
+
+echo -n "Enter GitHub fine-grained token: "
+read -s GITHUB_TOKEN
+echo
+
+curl_fetch "https://api.github.com/repos/$SECRETS_REPO/contents/gpg-public-key.asc" \
+           "gpg-public-key.asc" \
+           "Failed to fetch GPG public key"
+
+curl_fetch "https://api.github.com/repos/$SECRETS_REPO/contents/gpg-private-key.asc" \
+           "gpg-private-key.asc" \
+           "Failed to fetch GPG private key"
+
+if [ -f "gpg-public-key.asc" ] && ! gpg --list-keys "$EMAIL" >/dev/null 2>&1; then
+    run_cmd "Failed to import GPG public key" gpg --import gpg-public-key.asc
+    log_info "Imported GPG public key"
+fi
+
+if [ -f "gpg-private-key.asc" ] && ! gpg --list-secret-keys "$EMAIL" >/dev/null 2>&1; then
+    run_cmd "Failed to import GPG private key" gpg --import gpg-private-key.asc
+    log_info "Imported GPG private key"
+fi
+
+if [ -d "$HOME/.gnupg" ] || [ -d "$HOME/.ssh" ] || [ -d "$HOME/.password-store" ]; then
+    error_exit ".gnupg or .ssh or .password-store already exists"
+fi
+
+mkdir -p "$HOME/.gnupg" "$HOME/.ssh"
+
+curl_fetch "https://api.github.com/repos/$SECRETS_REPO/contents/.gnupg/gpg-agent.conf" \
+           "$HOME/.gnupg/gpg-agent.conf" \
+           "Failed to fetch GPG agent config"
+
+curl_fetch "https://api.github.com/repos/$SECRETS_REPO/contents/.gnupg/sshcontrol" \
+           "$HOME/.gnupg/sshcontrol" \
+           "Failed to fetch GPG agent sshcontrol"
+
+curl_fetch "https://api.github.com/repos/$SECRETS_REPO/contents/.ssh/config" \
+           "$HOME/.ssh/config" \
+           "Failed to fetch SSH config"
+
+chmod 600 "$HOME/.ssh/config"
+
+export GPG_TTY=$(tty)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+run_cmd "Failed to kill gpg-agent" gpgconf --kill gpg-agent
+run_cmd "Failed to launch gpg-agent" gpgconf --launch gpg-agent
+run_cmd "Failed to update submodules" yadm submodule update --init --recursive
+
+rm -rf "$HOME/.ssh" "$HOME/.gnupg"
+
+ln -sf "$HOME/.secrets/.password-store" "$HOME/.password-store"
+ln -sf "$HOME/.secrets/.ssh" "$HOME/.ssh"
+ln -sf "$HOME/.secrets/.gnupg" "$HOME/.gnupg"
+
+chmod 700 "$HOME/.secrets/.ssh"
+chmod 600 "$HOME/.secrets/.ssh/config"
+
+rm -f gpg-public-key.asc gpg-private-key.asc
+unset GITHUB_TOKEN
+
+log_info "=== Installing yay ==="
+
+run_cmd "Failed to clone yay repository" git clone https://aur.archlinux.org/yay.git "$HOME/yay"
+
+pushd "$HOME/yay"
+run_cmd "Failed to build and install yay" makepkg -si --noconfirm --clean --rmdeps
+popd
+
+rm -rf "$HOME/yay"
+
+log_info "=== Installing packages ==="
+
+run_cmd "Failed to install packages" \
+    yay -S --needed --noconfirm --nodiffmenu --noeditmenu --nocleanmenu --noupgrademenu --removemake - < "$HOME/.config/yadm/packages.list"
+
+log_info "=== Installing custom packages ==="
+
+run_cmd "Failed to get cmd-polkit-git PKGBUILD" yay -G cmd-polkit-git
+
+pushd "$HOME/.cache/yay/cmd-polkit-git"
+run_cmd "Failed to patch cmd-polkit-git PKGBUILD" \
+    patch -u "PKGBUILD" -i "$HOME/.config/yadm/cmd-polkit-git-PKGBUILD.patch"
+run_cmd "Failed to build and install cmd-polkit-git" makepkg -si --noconfirm
+popd
+
+log_info "=== Setting up keyd ==="
+
+run_cmd "Failed to create /etc/keyd directory" sudo mkdir -p /etc/keyd
+run_cmd "Failed to install keyd config" \
+    sudo install -Dm644 "$HOME/.config/yadm/keyd.conf" /etc/keyd/default.conf
+
+log_info "=== Creating Project Directories ==="
+
+mkdir -p "$HOME/projects"/{personal,work,other}
+
+log_info "=== Configuring git ==="
+
+run_cmd "Failed to set git email" git config --global user.email "$EMAIL"
+run_cmd "Failed to set git name" git config --global user.name "$NAME"
+
+log_info "=== Enabling services ==="
+
+run_cmd "Failed to systemd services" systemctl --user enable \
+    waybar.service mako.service swww.service swayidle.service \
+    clipboard-history-watcher.service fuzzel-polkit-agent.service udiskie.service \
+    battery-level-watcher.timer wallpaper-slideshow.timer
+
+log_info "=== Setting up secure boot ==="
+
+if command -v jq >/dev/null 2>&1 && command -v sbctl >/dev/null 2>&1; then
+    if [[ "$(sbctl status --json | jq '.setup_mode')" = "true" ]]; then
+        run_cmd "Failed to create secure boot keys" sudo sbctl create-keys
+        run_cmd "Failed to enroll secure boot keys" sudo sbctl enroll-keys -m
+
+        run_cmd "Failed to sign files" sudo sbctl verify --json \
+                | jq '.[].file_name | select(. != "/boot/EFI/systemd/systemd-bootx64.efi")' \
+                | xargs sudo sbctl sign -s
+
+        run_cmd "Failed to sign systemd-bootx64.efi" sudo sbctl sign -s \
+            -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed \
+            /usr/lib/systemd/boot/efi/systemd-bootx64.efi
+    else
+        error_exit "Failed to setup secure boot! Please enable setup mode"
+    fi
+fi
+
+log_info "Bootstrap completed successfully"

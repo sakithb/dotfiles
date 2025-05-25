@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import subprocess
+import math
+
+SAFE_GLOBALS = {name: getattr(math, name) for name in dir(math) if not name.startswith('_')}
+SAFE_GLOBALS['__builtins__'] = None
+
+placeholder = ""
+
+while True:
+    fuzzel_cmd = [
+        "fuzzel",
+        "-d",
+        "-p", "= ",
+        "-l", "0",
+        "--placeholder", placeholder
+    ]
+
+    try:
+        expr = subprocess.run(
+            fuzzel_cmd,
+            input=b"",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=True
+        ).stdout.decode().strip()
+    except subprocess.CalledProcessError:
+        break
+
+    if not expr:
+        break
+
+    try:
+        result = eval(expr, SAFE_GLOBALS)
+        placeholder = f"{expr} = {result}"
+    except Exception as e:
+        placeholder = f"{expr} = Error: {e}"

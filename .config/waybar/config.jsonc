@@ -1,0 +1,149 @@
+{
+	"layer": "top",
+	"position": "top",
+
+	"modules-left": [
+        "clock",
+        "privacy",
+        "tray",
+        "mpris",
+	],
+	"modules-center": [
+		"niri/workspaces",
+	],
+	"modules-right": [
+        "group/hardware",
+        "backlight",
+        "group/audio",
+		"network",
+		"battery",
+        "group/power",
+	],
+
+    "group/hardware" : {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "disk"
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
+    },
+	"mpris": {
+		"format": "{status_icon} | {title}",
+        "status-icons": {
+            "playing": "PAUSE",
+            "paused": "PLAY",
+        }
+	},
+	"cpu": {
+		"format": "CPU {usage}%",
+	},
+	"memory": {
+		"format": "RAM {percentage}%"
+	},
+    "disk": {
+        "format": "DISK {percentage_used}%",
+        "tooltip-format": "{used} used out of {total} / {free} free"
+    },
+    "backlight": {
+        "format": "BR {percent}%",
+        "tooltip-format": "Brightness {percent}%"
+    },
+	"niri/workspaces": {
+        "format": "{index}/{icon}",
+        "format-icons": {
+            "browser": "BW",
+            "code": "CD",
+            "chat": "CH",
+            "default": "--",
+        }
+    },
+    "group/audio": {
+        "orientation": "horizontal",
+        "modules": [
+            "wireplumber#sink",
+            "wireplumber#source",
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
+    },
+	"wireplumber#sink": {
+        "node-type": "Audio/Sink",
+		"format": "VOL {volume}%",
+		"max-volume": 150,
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "pavucontrol"
+	},
+	"wireplumber#source": {
+        "node-type": "Audio/Source",
+		"format": "MIC {volume}%",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-right": "pavucontrol"
+	},
+	"network": {
+		"format-wifi": "WIFI {signalStrength}%",
+		"format-ethernet": "ETH",
+		"format-disconnected": "NONE",
+		"tooltip-format-wifi": "{essid}",
+		"tooltip-format-ethernet": "{ifname}",
+        "on-click": "$NMTUI"
+	},
+	"privacy": {
+		"icon-size": 15
+	},
+    "tray": {
+        "icon-size": 15,
+        "show-passive-items": true,
+        "spacing": 5,
+    },
+    "battery": {
+        "format": "BAT {capacity}%",
+        "format-plugged": "BAT +{capacity}%",
+        "format-charging": "BAT +{capacity}%",
+        "interval": 30
+    },
+    "group/power": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/power",
+            "power-profiles-daemon",
+		    "idle_inhibitor",
+        ],
+        "drawer": {
+            "transition-left-to-right": false
+        }
+    },
+    "custom/power": {
+        "format": "POW",
+        "on-click": "power-menu",
+        "on-click-right": "notification-history"
+    },
+    "power-profiles-daemon": {
+        "tooltip-format": "{profile}",
+        "format": "{icon}",
+        "format-icons": {
+            "default": "DF",
+            "performance": "PF",
+            "balanced": "BL",
+            "power-saver": "PS"
+        }
+    },
+	"idle_inhibitor": {
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "IH",
+			"deactivated": "IH",
+		}
+	},
+	"clock": {
+		"interval": 60,
+		"tooltip": true,
+		"format": "{:%H.%M}",
+		"tooltip-format": "{:%a, %d of %b}",
+		"timezone": "Asia/Colombo",
+	},
+}

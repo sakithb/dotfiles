@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+LOW_THRESHOLD=20
+HIGH_THRESHOLD=80
+BATTERY_PATH=$(upower -e | grep -E 'BAT|battery')
+BATTERY_LEVEL=$(upower -i "$BATTERY_PATH" | awk '/percentage/ {gsub(/%/,""); print $2}')
+BATTERY_STATE=$(upower -i "$BATTERY_PATH" | awk '/state/ {print $2}')
+
+if [[ "$BATTERY_STATE" == "discharging" && "$BATTERY_LEVEL" -le "$LOW_THRESHOLD" ]]; then
+    notify-send -u critical -p "Low Battery" "Battery is ${BATTERY_LEVEL}%."
+elif [[ "$BATTERY_STATE" == "charging" && "$BATTERY_LEVEL" -ge "$HIGH_THRESHOLD" ]]; then
+    notify-send -p "Battery almost fully charged" "Battery is ${BATTERY_LEVEL}%."
+elif [[ "$BATTERY_STATE" == "fully-charged" ]]; then
+    notify-send -p "Battery fully charged" "Battery is ${BATTERY_LEVEL}%."
+fi

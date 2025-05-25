@@ -1,0 +1,20 @@
+3c3
+< pkgver=r132.be964ed
+---
+> pkgver=r250.71852e7
+11c11
+< source=("${pkgname}-${pkgver}::git+https://github.com/OmarCastro/cmd-polkit.git")
+---
+> source=("${pkgname}::git+https://github.com/OmarCastro/cmd-polkit.git")
+15c15
+<   cd "${pkgname}-${pkgver}"
+---
+>   cd "${pkgname}"
+20c20
+<   arch-meson $pkgname-$pkgver build
+---
+>   arch-meson $pkgname build
+26c26
+<   install -Dm644 "$pkgname-$pkgver/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+---
+>   install -Dm644 "$pkgname/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"

@@ -1,0 +1,11 @@
+timeout 120 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
+
+timeout 300 'swaylock -f'
+
+timeout 600 'systemctl suspend'
+
+before-sleep 'swaylock -f'
+
+lock 'swaylock -f'
+
+idlehint 120
