@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ -z "$WAYLAND_DISPLAY" ]]; then
+    exec /usr/bin/pinentry
+fi
+
 echo "OK"
 
 DESC=""
