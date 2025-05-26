@@ -24,11 +24,13 @@ echo "=== Setup ==="
 
 # Install yay
 
-git clone https://aur.archlinux.org/yay.git "/tmp/yay"
-pushd /tmp/yay
-makepkg -si --noconfirm --clean --cleanbuild --rmdeps
-popd
-rm -rf /tmp/yay
+if ! command -v yay > /dev/null; then
+    git clone https://aur.archlinux.org/yay.git "/tmp/yay"
+    pushd /tmp/yay
+    makepkg -si --noconfirm --clean --cleanbuild --rmdeps
+    popd
+    rm -rf /tmp/yay
+fi
 
 # Install packages
 
@@ -37,27 +39,37 @@ yay -S --needed \
     --cleanafter --removemake \
     - < "$HOME/.config/yadm/packages.list"
 
-# Install enable services
+# Setup services
 
 systemctl --user enable \
     waybar.service mako.service swww.service swayidle.service \
     clipboard-history-watcher.service fuzzel-polkit-agent.service udiskie.service \
     battery-level-watcher.timer wallpaper-slideshow.timer
 
+systemctl --user disable \
+    gcr-ssh-agent
+
+sudo systemctl enable \
+    keyd
+
 # System level config files
 
-sudo mkdir -p /etc/keyd
-sudo ln -sf "$HOME/.config/yadm/etc-keyd-default.conf" /etc/keyd/default.conf
+if [ ! -L "/etc/keyd/default.conf" ]; then
+    sudo mkdir -p /etc/keyd
+    sudo ln -sf "$HOME/.config/yadm/etc-keyd-default.conf" /etc/keyd/default.conf
+fi
 
 # Install packages needing manual intervention
 
-pushd /tmp/
-yay -G cmd-polkit-git
-pushd /tmp/cmd-polkit-git
-patch -u "PKGBUILD" -i "$HOME/.config/yadm/cmd-polkit-git-PKGBUILD.patch"
-makepkg -si --noconfirm --clean --cleanbuild --rmdeps
-popd
-popd
+if ! yay -Q cmd-polkit-git > /dev/null; then
+    pushd /tmp/
+    yay -G cmd-polkit-git
+    pushd /tmp/cmd-polkit-git
+    patch "PKGBUILD" "$HOME/.config/yadm/cmd-polkit-git-PKGBUILD.patch"
+    makepkg -si --noconfirm --clean --cleanbuild --rmdeps
+    popd
+    popd
+fi
 
 # Setup environment
 
@@ -107,7 +119,7 @@ if ask "Setup secure boot"; then
 
         sudo sbctl verify --json \
                 | jq '.[].file_name | select(. != "/boot/EFI/systemd/systemd-bootx64.efi")' \
-                | xargs sudo sbctl sign -s
+                | xargs -n 1 sudo sbctl sign -s
 
         sudo sbctl sign -s \
             -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed \
