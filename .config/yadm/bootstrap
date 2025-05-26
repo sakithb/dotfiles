@@ -16,79 +16,34 @@ ask() {
     [[ "$ANSWER" == "y" ]]
 }
 
+if [ "$EUID" -eq 0 ] && ! ask "Was running this script as root intentional"; then
+  exit
+fi
+
+yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
+
 if ask "Setup secrets"; then
     read -p "Enter github token: " TOKEN
 
-    run_or_fail "Failed to import gpg public key" gpg --batch --yes \
+    run_or_fail "Failed to import gpg public key" gpg --quiet --batch --yes \
         --keyserver hkps://keys.openpgp.org \
         --recv-keys 1B9C83430CA29B0B07680C0FBCF3B451C3CA33C2
 
-    run_or_fail "Failed to import gpg private key" curl -f \
+    run_or_fail "Failed to import gpg private key" curl -s -f \
         -H "Authorization: token $TOKEN" \
         -H "Accept: application/vnd.github.raw" \
-        "https://api.github.com/repos/sakithb/dotsecrets/contents/gpg-public-key.asc.gpg" \
-        | gpg -d | gpg --import
+        "https://api.github.com/repos/sakithb/dotsecrets/contents/gpg-private-keys.asc.gpg" \
+        | gpg --quiet --decrypt | gpg --quiet --import
+
+    echo "GPG keys imported successfully"
+
+    sudo pacman -S openssh --needed --noconfirm
 fi
 
-# curl_fetch() {
-#     local url="$1"
-#     local output="$2"
-#     local error_msg="$3"
-#     
-#     if ! curl -f -v -H "Authorization: token $GITHUB_TOKEN" \
-#          -H "Accept: application/vnd.github.raw" \
-#          -o "$output" \
-#          "$url" 2>>"$LOG_FILE"; then
-#         error_exit "$error_msg"
-#     fi
-# }
-
 # 
-# LOG_FILE="/tmp/yadm-bootstrap.log"
-# 
-# echo "Bootstrap started at $(date)" > "$LOG_FILE"
-# 
-# log_error() {
-#     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1"
-#     echo "$msg" | tee -a "$LOG_FILE"
-# }
-# 
-# log_info() {
-#     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] INFO: $1"
-#     echo "$msg" | tee -a "$LOG_FILE"
-# }
-# 
-# error_exit() {
-#     log_error "$1"
-#     exit 1
-# }
-# 
-# run_cmd() {
-#     local error_msg="$1"
-#     shift
-#     if ! "$@" >>"$LOG_FILE" 2>&1; then
-#         error_exit "$error_msg"
-#     fi
-# }
-# 
-# curl_fetch() {
-#     local url="$1"
-#     local output="$2"
-#     local error_msg="$3"
-#     
-#     if ! curl -f -v -H "Authorization: token $GITHUB_TOKEN" \
-#          -H "Accept: application/vnd.github.raw" \
-#          -o "$output" \
-#          "$url" 2>>"$LOG_FILE"; then
-#         error_exit "$error_msg"
-#     fi
-# }
-# 
-# yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
 # 
 # log_info "=== Setting up secrets ==="
 # 
-# sudo pacman -S openssh --noconfirm
 # 
 # echo -n "Enter GitHub fine-grained token: "
 # read -s GITHUB_TOKEN
