@@ -45,6 +45,8 @@ curl_fetch() {
     fi
 }
 
+yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
+
 log_info "=== Setting up secrets ==="
 
 sudo pacmac -S openssh --noconfirm
