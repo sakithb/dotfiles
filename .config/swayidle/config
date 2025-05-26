@@ -1,4 +1,4 @@
-timeout 120 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
+timeout 120 'niri msg actions power-off-monitors' resume 'niri msg actions power-on-monitors'
 
 timeout 300 'swaylock -f'
 
