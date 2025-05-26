@@ -118,7 +118,7 @@ if ask "Setup secure boot"; then
         sudo sbctl enroll-keys -m
 
         sudo sbctl verify --json \
-                | jq '.[].file_name | select(. != "/boot/EFI/systemd/systemd-bootx64.efi")' \
+                | jq '.[].file_name' \
                 | xargs -n 1 sudo sbctl sign -s
 
         sudo sbctl sign -s \
