@@ -1,0 +1,6 @@
+4a5,6
+> auth       optional     pam_gnome_keyring.so
+> auth       optional     pam_gnupg.so store-only
+6a9,10
+> session    optional     pam_gnome_keyring.so auto_start
+> session    optional     pam_gnupg.so

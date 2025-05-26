@@ -1,11 +1,50 @@
 #!/usr/bin/env bash
 
-# set -euo pipefail
+set -euo pipefail
+
+run_or_fail() {
+    local error_msg="$1"
+    shift
+    if ! "$@" ; then
+        echo "$error_msg"
+        exit 1
+    fi
+}
+
+ask() {
+    read -p "$1 (y/n)? " ANSWER
+    [[ "$ANSWER" == "y" ]]
+}
+
+if ask "Setup secrets"; then
+    read -p "Enter github token: " TOKEN
+
+    run_or_fail "Failed to import gpg public key" gpg --batch --yes \
+        --keyserver hkps://keys.openpgp.org \
+        --recv-keys 1B9C83430CA29B0B07680C0FBCF3B451C3CA33C2
+
+    run_or_fail "Failed to import gpg private key" curl -f \
+        -H "Authorization: token $TOKEN" \
+        -H "Accept: application/vnd.github.raw" \
+        "https://api.github.com/repos/sakithb/dotsecrets/contents/gpg-public-key.asc.gpg" \
+        | gpg -d | gpg --import
+fi
+
+# curl_fetch() {
+#     local url="$1"
+#     local output="$2"
+#     local error_msg="$3"
+#     
+#     if ! curl -f -v -H "Authorization: token $GITHUB_TOKEN" \
+#          -H "Accept: application/vnd.github.raw" \
+#          -o "$output" \
+#          "$url" 2>>"$LOG_FILE"; then
+#         error_exit "$error_msg"
+#     fi
+# }
+
 # 
 # LOG_FILE="/tmp/yadm-bootstrap.log"
-# SECRETS_REPO="sakithb/dotsecrets"
-# EMAIL="pvsakith@gmail.com"
-# NAME="Sakith B."
 # 
 # echo "Bootstrap started at $(date)" > "$LOG_FILE"
 # 
