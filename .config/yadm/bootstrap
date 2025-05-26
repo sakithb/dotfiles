@@ -49,7 +49,7 @@ yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
 
 log_info "=== Setting up secrets ==="
 
-sudo pacmac -S openssh --noconfirm
+sudo pacman -S openssh --noconfirm
 
 echo -n "Enter GitHub fine-grained token: "
 read -s GITHUB_TOKEN
