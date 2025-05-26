@@ -47,6 +47,8 @@ curl_fetch() {
 
 log_info "=== Setting up secrets ==="
 
+sudo pacmac -S openssh --noconfirm
+
 echo -n "Enter GitHub fine-grained token: "
 read -s GITHUB_TOKEN
 echo
