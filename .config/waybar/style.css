@@ -58,7 +58,7 @@ tooltip {
     color: #999999;
 }
 
-#workspaces button.focused {
+#workspaces button.active {
     box-shadow: inset 0 -3px #ffffff;
     color: #ffffff;
 }

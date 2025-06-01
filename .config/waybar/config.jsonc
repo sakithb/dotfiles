@@ -9,12 +9,12 @@
         "mpris",
 	],
 	"modules-center": [
-		"niri/workspaces",
+		"hyprland/workspaces",
 	],
 	"modules-right": [
         "group/hardware",
         "backlight",
-        "wireplumber#sink",
+        "group/audio",
 		"network",
 		"battery",
         "group/power",
@@ -53,14 +53,10 @@
         "format": "BR {percent}%",
         "tooltip-format": "Brightness {percent}%"
     },
-	"niri/workspaces": {
-        "format": "{index}/{icon}",
-        "format-icons": {
-            "browser": "BW",
-            "code": "CD",
-            "chat": "CH",
-            "default": "--",
-        }
+	"hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": 9,
+        },
     },
     "group/audio": {
         "orientation": "horizontal",
@@ -79,12 +75,12 @@
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-click-right": "pavucontrol",
 	},
-	// "wireplumber#source": {
-    //     "node-type": "Audio/Source",
-	// 	"format": "MIC {volume}%",
-    //     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    //     "on-click-right": "pavucontrol",
-	// },
+	"wireplumber#source": {
+        "node-type": "Audio/Source",
+		"format": "MIC {volume}%",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-right": "pavucontrol",
+	},
 	"network": {
 		"format-wifi": "WIFI {signalStrength}%",
 		"format-ethernet": "ETH",
