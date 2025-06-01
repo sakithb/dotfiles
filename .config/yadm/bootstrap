@@ -42,9 +42,10 @@ yay -S --needed \
 # Setup services
 
 systemctl --user enable \
-    waybar.service mako.service swww.service swayidle.service \
+    waybar.service mako.service hyprpaper.service hypridle.service \
     clipboard-history-watcher.service fuzzel-polkit-agent.service udiskie.service \
-    battery-level-watcher.timer wallpaper-slideshow.timer
+    battery-level-watcher.timer wallpaper-slideshow.timer power-profiles-daemon.service \
+    udisks2.service
 
 systemctl --user disable \
     gcr-ssh-agent
@@ -54,10 +55,28 @@ sudo systemctl enable \
 
 # System level config files
 
-if [ ! -L "/etc/keyd/default.conf" ]; then
-    sudo mkdir -p /etc/keyd
-    sudo ln -sf "$HOME/.config/yadm/etc-keyd-default.conf" /etc/keyd/default.conf
-fi
+find "$HOME/.config/yadm/root" -type f | while read -r src_file; do
+  rel_path="${src_file#$SOURCE_DIR/}"
+  dest_path="/$rel_path"
+
+  dest_dir="$(dirname "$dest_path")"
+  if [[ ! -d "$dest_dir" ]]; then
+    mkdir -p "$dest_dir"
+  fi
+
+  if [[ -e "$dest_path" || -L "$dest_path" ]]; then
+    if [[ ask "$dest_path exists. Backup and overwrite" ]]; then
+      mv "$dest_path" "$dest_path.bk"
+      ln -s "$src_file" "$dest_path"
+      echo "Backed up and linked: '$dest_path' -> '$src_file'"
+    else
+      echo "Skipped: '$dest_path'"
+    fi
+  else
+    ln -s "$src_file" "$dest_path"
+    echo "Linked: '$dest_path' -> '$src_file'"
+  fi
+done
 
 # Install packages needing manual intervention
 
@@ -73,8 +92,8 @@ fi
 
 # Setup environment
 
-mkdir -p "$HOME/projects"/{personal,work,other}
-mkdir -p "$HOME"/{downloads,videos}
+xdg-user-dirs-update
+mkdir -p "$HOME/Projects"/{personal,work,other}
 
 git config --global user.email "pvsakith@gmail.com"
 git config --global user.name "Sakith B."
@@ -100,12 +119,15 @@ if ask "Setup GPG and SSH"; then
 
     export GPG_TTY=$(tty)
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --kill gpg-agent
+
+    gpg-connect-agent reloadagent /bye
 
     sudo pacman -S openssh --needed --noconfirm
 
     yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
     yadm submodule update --init --remote "$HOME/.secrets"
+
+    ln -s "$HOME/.secrets/.password-store" "$HOME/.password-store"
 
     echo "=== SSH and GPG complete ==="
 fi

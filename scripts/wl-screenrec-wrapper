@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dir="$HOME/videos/screen-recordings"
+dir="$HOME/Videos/screen-recordings"
 mkdir -p "$dir"
 
 path="$dir/$(date +"%d-%m-%Y-%H-%M-%S").mp4"

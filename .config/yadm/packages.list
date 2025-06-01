@@ -9,6 +9,7 @@ git
 gnome-keyring
 imv
 intel-media-driver
+vulkan-intel
 jq
 keyd
 kvantum
@@ -19,7 +20,10 @@ man-db
 materia-gtk-theme
 mpv
 neovim
-niri
+hyprland
+hyprpaper
+hypridle
+hyprlock
 noto-fonts-cjk
 noto-fonts-emoji
 papirus-icon-theme
@@ -28,13 +32,11 @@ pavucontrol
 power-profiles-daemon
 python-tldextract
 qt6ct
-qutebrowser
+luakit
 ripgrep
 sbctl
+grim
 slurp
-swayidle
-swaylock-effects
-swww
 tmux
 ttf-jetbrains-mono-nerd
 udiskie
@@ -45,6 +47,6 @@ wireplumber
 wl-clipboard
 wl-screenrec
 xdg-desktop-portal-gtk
-xdg-desktop-portal-wlr
+xdg-desktop-portal-hyprland
 xdg-utils
 zip

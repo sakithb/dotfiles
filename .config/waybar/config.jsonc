@@ -14,7 +14,7 @@
 	"modules-right": [
         "group/hardware",
         "backlight",
-        "group/audio",
+        "wireplumber#sink",
 		"network",
 		"battery",
         "group/power",
@@ -36,7 +36,8 @@
         "status-icons": {
             "playing": "PAUSE",
             "paused": "PLAY",
-        }
+        },
+        "title-len": 50
 	},
 	"cpu": {
 		"format": "CPU {usage}%",
@@ -76,14 +77,14 @@
 		"format": "VOL {volume}%",
 		"max-volume": 150,
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-right": "pavucontrol"
+        "on-click-right": "pavucontrol",
 	},
-	"wireplumber#source": {
-        "node-type": "Audio/Source",
-		"format": "MIC {volume}%",
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-        "on-click-right": "pavucontrol"
-	},
+	// "wireplumber#source": {
+    //     "node-type": "Audio/Source",
+	// 	"format": "MIC {volume}%",
+    //     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    //     "on-click-right": "pavucontrol",
+	// },
 	"network": {
 		"format-wifi": "WIFI {signalStrength}%",
 		"format-ethernet": "ETH",

@@ -1,30 +1,5 @@
-export TERMINAL=alacritty
-export EDITOR=nvim
-export NMTUI="$TERMINAL --class nmtui -e nmtui"
-export LF="$TERMINAL --class lf -e lf"
-export PATH=$PATH:$HOME/scripts:$XDG_DATA_HOME/bin
-
-export GPG_TTY=$(tty)
-export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh
-
-# Wayland
-
-export ELECTRON_OZONE_PLATFORM_HINT=wayland
-export OZONE_PLATFORM=wayland
-
-# Theming
-
-export XCURSOR_SIZE=16
-
-export GTK_THEME="Materia-dark"
-export GTK_ICON_THEME="Papirus"
-export GTK_FONT_NAME="Noto Sans 12"
-export GTK_MONOSPACE_FONT_NAME="JetBrainsMono Nerd Font 12"
-
-export QT_QPA_PLATFORMTHEME=qt6ct
-
-if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-    exec niri-session -l
+if uwsm check may-start && uwsm select; then
+	exec uwsm start hyprland.desktop
 fi
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
