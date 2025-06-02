@@ -29,7 +29,6 @@ noto-fonts-emoji
 papirus-icon-theme
 pass
 pavucontrol
-power-profiles-daemon
 python-tldextract
 qt6ct
 qutebrowser
@@ -52,3 +51,4 @@ xdg-utils
 zip
 uwsm
 pam-gnupg
+tlp

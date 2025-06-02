@@ -107,7 +107,6 @@
         "orientation": "horizontal",
         "modules": [
             "custom/power",
-            "power-profiles-daemon",
 		    "idle_inhibitor",
         ],
         "drawer": {

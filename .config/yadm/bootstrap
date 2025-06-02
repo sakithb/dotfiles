@@ -50,7 +50,7 @@ systemctl --user disable \
     gcr-ssh-agent
 
 sudo systemctl enable \
-    keyd power-profiles-daemon udisks2
+    keyd tlp udisks2
 
 # System level config files
 
