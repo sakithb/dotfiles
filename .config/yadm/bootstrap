@@ -77,6 +77,8 @@ while read -r src_file; do
     fi
 done < <(find "$HOME/.config/yadm/root/" -type f)
 
+sudo mkinitcpio -P
+
 # Install packages needing manual intervention
 
 if ! yay -Q cmd-polkit-git 2> /dev/null; then

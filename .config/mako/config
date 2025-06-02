@@ -1,5 +1,6 @@
 max-history=20
 default-timeout=10000
+layer=overlay
 
 font=JetBrainsMono Nerd Font 12
 background-color=#0000007F
