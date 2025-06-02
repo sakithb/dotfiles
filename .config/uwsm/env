@@ -5,7 +5,7 @@ export LF="$TERMINAL --class lf -e lf"
 export PATH=$PATH:$HOME/scripts:$XDG_DATA_HOME/bin
 
 export GPG_TTY=$(tty)
-export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Wayland
 
