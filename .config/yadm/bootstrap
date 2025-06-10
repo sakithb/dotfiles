@@ -32,74 +32,76 @@ if ! command -v yay > /dev/null; then
     rm -rf /tmp/yay
 fi
 
-# Install packages
+if ask "Legacy setup"; then
+    # Install packages
 
-yay -S --needed \
-    --noconfirm --sudoloop \
-    --cleanafter --removemake \
-    - < "$HOME/.config/yadm/packages.list"
+    yay -S --needed \
+        --noconfirm --sudoloop \
+        --cleanafter --removemake \
+        - < "$HOME/.config/yadm/packages.list"
 
-# Setup services
+    # Setup services
 
-systemctl --user enable \
-    waybar.service mako.service hyprpaper.service hypridle.service \
-    clipboard-history-watcher.service fuzzel-polkit-agent.service udiskie.service \
-    battery-level-watcher.timer wallpaper-slideshow.timer
+    systemctl --user enable \
+        waybar.service mako.service hyprpaper.service hypridle.service \
+        clipboard-history-watcher.service fuzzel-polkit-agent.service udiskie.service \
+        battery-level-watcher.timer wallpaper-slideshow.timer
 
-systemctl --user disable \
-    gcr-ssh-agent
+    systemctl --user disable \
+        gcr-ssh-agent
 
-sudo systemctl enable \
-    keyd tlp udisks2
+    sudo systemctl enable \
+        keyd tlp udisks2
 
-# System level config files
+    # System level config files
 
-while read -r src_file; do
-    rel_path="${src_file#$HOME/.config/yadm/root/}"
-    dest_path="/$rel_path"
+    while read -r src_file; do
+        rel_path="${src_file#$HOME/.config/yadm/root/}"
+        dest_path="/$rel_path"
 
-    dest_dir="$(dirname "$dest_path")"
-    if [[ ! -d "$dest_dir" ]]; then
-        mkdir -p "$dest_dir"
-    fi
-
-    if [[ -e "$dest_path" || -L "$dest_path" ]]; then
-        if ask "$dest_path exists. Backup and overwrite"; then
-            sudo mv "$dest_path" "$dest_path.bk"
-            sudo ln -s "$src_file" "$dest_path"
-            echo "Backed up and linked: '$dest_path' -> '$src_file'"
-        else
-            echo "Skipped: '$dest_path'"
+        dest_dir="$(dirname "$dest_path")"
+        if [[ ! -d "$dest_dir" ]]; then
+            mkdir -p "$dest_dir"
         fi
-    else
-        sudo ln -s "$src_file" "$dest_path"
-        echo "Linked: '$dest_path' -> '$src_file'"
+
+        if [[ -e "$dest_path" || -L "$dest_path" ]]; then
+            if ask "$dest_path exists. Backup and overwrite"; then
+                sudo mv "$dest_path" "$dest_path.bk"
+                sudo ln -s "$src_file" "$dest_path"
+                echo "Backed up and linked: '$dest_path' -> '$src_file'"
+            else
+                echo "Skipped: '$dest_path'"
+            fi
+        else
+            sudo ln -s "$src_file" "$dest_path"
+            echo "Linked: '$dest_path' -> '$src_file'"
+        fi
+    done < <(find "$HOME/.config/yadm/root/" -type f)
+
+    sudo mkinitcpio -P
+
+    # Install packages needing manual intervention
+
+    if ! yay -Q cmd-polkit-git 2> /dev/null; then
+        pushd /tmp/
+        yay -G cmd-polkit-git
+        pushd /tmp/cmd-polkit-git
+        patch "PKGBUILD" "$HOME/.config/yadm/cmd-polkit-git-PKGBUILD.patch"
+        makepkg -si --noconfirm --clean --cleanbuild --rmdeps
+        popd
+        popd
     fi
-done < <(find "$HOME/.config/yadm/root/" -type f)
 
-sudo mkinitcpio -P
+    # Setup environment
 
-# Install packages needing manual intervention
+    mkdir -p "$HOME"/{Videos,Pictures}
+    mkdir -p "$HOME/projects"/{personal,work,other}
 
-if ! yay -Q cmd-polkit-git 2> /dev/null; then
-    pushd /tmp/
-    yay -G cmd-polkit-git
-    pushd /tmp/cmd-polkit-git
-    patch "PKGBUILD" "$HOME/.config/yadm/cmd-polkit-git-PKGBUILD.patch"
-    makepkg -si --noconfirm --clean --cleanbuild --rmdeps
-    popd
-    popd
+    git config --global user.email "pvsakith@gmail.com"
+    git config --global user.name "Sakith B."
+
+    echo "=== Setup complete ==="
 fi
-
-# Setup environment
-
-mkdir -p "$HOME"/{Videos,Pictures}
-mkdir -p "$HOME/projects"/{personal,work,other}
-
-git config --global user.email "pvsakith@gmail.com"
-git config --global user.name "Sakith B."
-
-echo "=== Setup complete ==="
 
 if ask "Setup GPG and SSH"; then
     echo "=== SSH and GPG ==="
