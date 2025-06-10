@@ -104,3 +104,11 @@ export ppsn="$HOME/projects/personal"
 export pwrk="$HOME/projects/work"
 export poth="$HOME/projects/other"
 export pscr="$HOME/projects/scripts"
+
+# Go
+export GOPATH="$HOME/.local/share/go"
+export PATH="$PATH:$GOPATH/bin"
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PATH:$PNPM_HOME"

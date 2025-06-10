@@ -87,7 +87,8 @@
 		"format-disconnected": "NONE",
 		"tooltip-format-wifi": "{essid}",
 		"tooltip-format-ethernet": "{ifname}",
-        "on-click": "$NMTUI"
+        "on-click": "$NMTUI",
+        "on-click-right": "nmcli d wifi rescan"
 	},
 	"privacy": {
 		"icon-size": 15
@@ -117,16 +118,6 @@
         "format": "POW",
         "on-click": "power-menu",
         "on-click-right": "notification-history"
-    },
-    "power-profiles-daemon": {
-        "tooltip-format": "{profile}",
-        "format": "{icon}",
-        "format-icons": {
-            "default": "DF",
-            "performance": "PF",
-            "balanced": "BL",
-            "power-saver": "PS"
-        }
     },
 	"idle_inhibitor": {
 		"format": "{icon}",
