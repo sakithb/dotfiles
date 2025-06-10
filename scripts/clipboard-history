@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-cliphist list \
-    | fuzzel -d \
-    | cliphist decode \
-    | wl-copy
