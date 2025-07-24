@@ -42,4 +42,25 @@ M[1] = {
     },
 }
 
+M[2] = {
+    "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+        "williamboman/mason.nvim",
+        "nvimtools/none-ls.nvim",
+    },
+    config = function()
+        require("mason").setup()
+
+        local null_ls = require("null-ls")
+        null_ls.setup({})
+
+        require("mason-null-ls").setup({
+            ensure_installed = { "stylua", "eslint_d" },
+            automatic_installation = true,
+            handlers = {},
+        })
+    end
+}
+
 return M

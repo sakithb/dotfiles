@@ -21,6 +21,7 @@ M[2] = {
             "~/projects/personal/*",
             "~/projects/work/*",
             "~/projects/other/*",
+            "~/projects/work/hyvor-dev/*",
             "~/scripts/",
         },
     }

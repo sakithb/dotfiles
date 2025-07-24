@@ -96,6 +96,8 @@ shopt -s cdable_vars
 
 PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
 
+export PATH="$PATH:$HOME/scripts:$HOME/.local/share/bin"
+
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias ts='tmux-sessionizer'
@@ -105,10 +107,22 @@ export pwrk="$HOME/projects/work"
 export poth="$HOME/projects/other"
 export pscr="$HOME/projects/scripts"
 
-# Go
+# go
 export GOPATH="$HOME/.local/share/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PATH:$PNPM_HOME"
+
+# pnpm
+export PNPM_HOME="/home/sakithb/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
