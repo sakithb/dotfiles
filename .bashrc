@@ -97,6 +97,7 @@ shopt -s cdable_vars
 PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
 
 export PATH="$PATH:$HOME/scripts:$HOME/.local/share/bin"
+export EDITOR='nvim'
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -126,3 +127,6 @@ esac
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# opencode
+export PATH=/home/sakithb/.opencode/bin:$PATH

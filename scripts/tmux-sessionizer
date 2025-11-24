@@ -5,7 +5,7 @@ if [[ $# -eq 1 ]]; then
 else
     selected=$(
       {
-        find ~/projects/personal ~/projects/work ~/projects/other -mindepth 1 -maxdepth 1 -type d
+        find ~/projects/personal ~/projects/work ~/projects/other ~/projects/hyvor -mindepth 1 -maxdepth 1 -type d
         echo ~/scripts
       } | fzf
     )
