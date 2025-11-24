@@ -11,6 +11,19 @@ local function get_session_name()
 	return session_dir .. name .. ".vim"
 end
 
+local function scroll_preview_docs()
+	if vim.fn.pumvisible() == 1 then
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			if vim.wo[win].previewwindow then
+				vim.api.nvim_win_call(win, function()
+					vim.cmd("normal! 4j")
+				end)
+				return
+			end
+		end
+	end
+end
+
 -- Options
 
 vim.opt.number = true
@@ -49,6 +62,10 @@ vim.opt.listchars = "tab:  ,trail:.,nbsp:+,extends:>"
 vim.diagnostic.config({ virtual_text = true })
 
 vim.api.nvim_set_hl(0, "Whitespace", { fg = "#505050" })
+vim.api.nvim_set_hl(0, 'Pmenu', { link = 'NormalFloat', default = true })
+vim.api.nvim_set_hl(0, 'PmenuSel', { link = 'Visual', default = true })
+vim.api.nvim_set_hl(0, 'PmenuExtra', { link = 'Comment', default = true })
+vim.api.nvim_set_hl(0, 'PmenuKind', { link = 'Type', default = true })
 
 -- Keymaps
 
@@ -98,6 +115,9 @@ vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboar
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlights:" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+vim.keymap.set("i", "<C-f>", scroll_preview_docs, { desc = "Scroll preview docs" })
+vim.keymap.set("i", "<C-space>","<C-x><C-o>", { desc = "Trigger completion" })
+
 function setupLspKeymaps(buf)
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { buffer = buf, desc = "Rename symbol" })
 	vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { buffer = buf, desc = "Format" })
@@ -116,12 +136,12 @@ function setupLspKeymaps(buf)
 end
 
 function setupFilesKeymaps()
-	vim.keymap.set("n", "<leader>fb", MiniFiles.open, { desc = "Open oil.nvim" })
+	vim.keymap.set("n", "<leader><CR>", MiniFiles.open, { desc = "Open file browser" })
 end
 
 function setupPickKeymaps()
 	vim.keymap.set("n", "<leader>ff", ":Pick files<CR>", { desc = "Pick files" })
-	vim.keymap.set("n", "<leader><CR>", ":Pick buffers<CR>", { desc = "Pick buffers" })
+	vim.keymap.set("n", "<leader>fb", ":Pick buffers<CR>", { desc = "Pick buffers" })
 
 	vim.keymap.set("n", "<leader>ss", ":Pick grep_live<CR>", { desc = "Search across files" })
 	vim.keymap.set("n", "<leader>sh", ":Pick help<CR>", { desc = "Search help" })
@@ -199,7 +219,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		if client and client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, args.buf, {
-				autotrigger = true,
 				convert = function(item)
 					local abbr = item.label
 					local menu = item.detail or ""
@@ -327,15 +346,29 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 				vim.bo[buf].bufhidden = 'wipe'
 
 				local contents = vim.lsp.util.convert_input_to_markdown_lines(docs)
-				vim.api.nvim_buf_set_lines(buf, 0, -1, false, contents)
+
+				local padded_contents = {}
+				local max_content_width = 0
+
+				for _, line in ipairs(contents) do
+					local new_line = " " .. line .. " "
+					table.insert(padded_contents, new_line)
+					if #new_line > max_content_width then
+						max_content_width = #new_line
+					end
+				end
+
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, padded_contents)
 				vim.treesitter.start(buf, "markdown")
 
+				local dw = math.min(max_content_width, 60)
+				local dh = math.min(#padded_contents, ch)
+
 				local dx = cx + cw + 1
-				local dw = 60
 				local anchor = "NW"
 
 				if dx + dw > vim.o.columns then
-					dw = vim.o.columns - dx
+					dx = cx - 1
 					anchor = "NE"
 				end
 
@@ -344,7 +377,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 					row = cy,
 					col = dx,
 					width = dw,
-					height = ch,
+					height = dh,
 					anchor = anchor,
 					border = "none",
 					style = "minimal",
@@ -352,7 +385,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 				})
 
 				vim.wo[win].conceallevel = 2
-				vim.wo[win].wrap = true
+				vim.wo[win].wrap = false
 				vim.wo[win].previewwindow = true
 			end
 		end)
@@ -381,7 +414,7 @@ vim.pack.add({
 })
 
 -- Setup lsp
-vim.lsp.enable({ "lua_ls" })
+vim.lsp.enable({ "lua_ls", "ts_ls", "svelte" })
 require("mason").setup()
 
 -- Setup treesitter
