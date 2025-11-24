@@ -11,6 +11,60 @@ local function get_session_name()
 	return session_dir .. name .. ".vim"
 end
 
+local function fetch_git_info(bufnr)
+	if vim.bo[bufnr].buftype ~= "" then
+		vim.b[bufnr].git_status = ""
+		return
+	end
+
+	local file = vim.api.nvim_buf_get_name(bufnr)
+	if file == "" then return end
+	local cwd = vim.fs.dirname(file)
+
+	vim.system({ 'git', 'status', '--porcelain', '-b' }, { text = true, cwd = cwd }, function(obj)
+		if obj.code == 0 then
+			local output = obj.stdout
+			local branch = output:match("^##%s+([^%.%s]+)") or "DETACHED"
+			local is_dirty = output:match("\n.")
+			local icon = is_dirty and "*" or ""
+			vim.b[bufnr].git_status = " " .. branch .. icon .. " "
+		else
+			vim.b[bufnr].git_status = ""
+		end
+	end)
+end
+
+local function get_diag()
+	if not vim.diagnostic then return "" end
+	local c = vim.diagnostic.count(0)
+	local e, w = c[1] or 0, c[2] or 0
+	if e + w == 0 then return "" end
+	return " E:" .. e .. " W:" .. w .. " "
+end
+
+local function get_size()
+	local size = vim.fn.getfsize(vim.fn.expand('%'))
+	if size <= 0 then return "" end
+	return size < 1024 and size .. "b" or string.format("%.1fk", size / 1024)
+end
+
+local function get_search()
+	if vim.v.hlsearch == 0 then return "" end
+	local ok, count = pcall(vim.fn.searchcount, { maxcount = 999, timeout = 500 })
+	if not ok or next(count) == nil or count.total == 0 then return "" end
+	return string.format(" [%d/%d] ", count.current, count.total)
+end
+
+local mode_map = {
+	['n'] = { 'StModeNormal', 'NORMAL' },
+	['i'] = { 'StModeInsert', 'INSERT' },
+	['v'] = { 'StModeVisual', 'VISUAL' },
+	['V'] = { 'StModeVisual', 'V-LINE' },
+	['\22'] = { 'StModeVisual', 'V-BLOCK' },
+	['R'] = { 'StModeReplace', 'REPLACE' },
+	['c'] = { 'StModeCmd', 'COMMAND' },
+}
+
 local function scroll_preview_docs()
 	if vim.fn.pumvisible() == 1 then
 		for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -24,6 +78,20 @@ local function scroll_preview_docs()
 	end
 end
 
+function CustomStatusline()
+	local m = mode_map[vim.api.nvim_get_mode().mode] or mode_map['n']
+	local mode_hl, mode_text = m[1], m[2]
+
+	return table.concat({
+		"%#" .. mode_hl .. "#  " .. mode_text .. "  ",
+		"%#StInfo#", vim.b.git_status or "", get_diag(),
+		"%#StBody# %f %m %r",
+		"%=",
+		"%#StInfo# %y ", get_size(), " ",
+		"%#" .. mode_hl .. "#", get_search(), " %l:%c "
+	})
+end
+
 -- Options
 
 vim.opt.number = true
@@ -32,6 +100,7 @@ vim.opt.colorcolumn = "100"
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.laststatus = 3
+vim.opt.statusline = "%!v:lua.CustomStatusline()"
 vim.opt.signcolumn = "yes"
 vim.opt.scrolloff = 10
 vim.opt.pumheight = 10
@@ -67,6 +136,14 @@ vim.api.nvim_set_hl(0, 'PmenuSel', { link = 'Visual', default = true })
 vim.api.nvim_set_hl(0, 'PmenuExtra', { link = 'Comment', default = true })
 vim.api.nvim_set_hl(0, 'PmenuKind', { link = 'Type', default = true })
 
+vim.api.nvim_set_hl(0, 'StModeNormal', { bg = '#a89984', fg = '#282828', bold = true })
+vim.api.nvim_set_hl(0, 'StModeInsert', { bg = '#83a598', fg = '#282828', bold = true })
+vim.api.nvim_set_hl(0, 'StModeVisual', { bg = '#fe8019', fg = '#282828', bold = true })
+vim.api.nvim_set_hl(0, 'StModeReplace', { bg = '#fb4934', fg = '#282828', bold = true })
+vim.api.nvim_set_hl(0, 'StModeCmd', { bg = '#b8bb26', fg = '#282828', bold = true })
+vim.api.nvim_set_hl(0, 'StInfo', { bg = '#504945', fg = '#ebdbb2' })
+vim.api.nvim_set_hl(0, 'StBody', { bg = '#3c3836', fg = '#a89984' })
+
 -- Keymaps
 
 vim.g.mapleader = " "
@@ -100,8 +177,8 @@ vim.keymap.set("n", "<leader>wH", ":vertical resize -2<CR>", { desc = "Decrease 
 vim.keymap.set("n", "<leader>wJ", ":resize -2<CR>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<leader>wK", ":resize +2<CR>", { desc = "Increase window height" })
 vim.keymap.set("n", "<leader>wL", ":vertical resize +2<CR>", { desc = "Increase window width" })
-vim.keymap.set("n", "<leader>w-", ":split<CR>", { desc = "Split horizontally" })
-vim.keymap.set("n", "<leader>w/", ":vsplit<CR>", { desc = "Split vertically" })
+vim.keymap.set("n", "<leader>wd", ":split<CR>", { desc = "Split horizontally" })
+vim.keymap.set("n", "<leader>wr", ":vsplit<CR>", { desc = "Split vertically" })
 
 -- editing
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
@@ -116,7 +193,7 @@ vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlig
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 vim.keymap.set("i", "<C-f>", scroll_preview_docs, { desc = "Scroll preview docs" })
-vim.keymap.set("i", "<C-space>","<C-x><C-o>", { desc = "Trigger completion" })
+vim.keymap.set("i", "<C-space>", "<C-x><C-o>", { desc = "Trigger completion" })
 
 function setupLspKeymaps(buf)
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { buffer = buf, desc = "Rename symbol" })
@@ -319,6 +396,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 vim.api.nvim_create_autocmd("CompleteChanged", {
+	group = augroup,
 	callback = function()
 		local event = vim.v.event
 		if not event or not event.completed_item then return end
@@ -393,8 +471,16 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 })
 
 vim.api.nvim_create_autocmd("CompleteDone", {
+	group = augroup,
 	callback = function()
 		vim.cmd("pclose")
+	end
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
+	group = augroup,
+	callback = function(args)
+		fetch_git_info(args.buf)
 	end
 })
 
@@ -407,7 +493,6 @@ vim.pack.add({
 
 	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.icons" },
-	{ src = "https://github.com/nvim-mini/mini.statusline" },
 
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.pick" }
@@ -427,7 +512,6 @@ require("nvim-treesitter.configs").setup({
 -- Appearance
 vim.cmd("colorscheme gruvbox")
 require("mini.icons").setup()
-require("mini.statusline").setup()
 
 -- Functional
 require("mini.files").setup()
