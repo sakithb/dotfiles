@@ -36,11 +36,14 @@ end
 
 local function get_diag()
 	local s = vim.diagnostic.status()
-	if s == "" then
-		return ""
-	else
-		return " " .. s .. " "
+
+	if s ~= "" then
+		s = s:gsub("%%#Diagnostic", "%%#StDiagnostic")
+		s = s:gsub("^(%%#.-#)", "%1  ")
+		s = s:gsub("(%%##)$", "  %1")
 	end
+
+	return s
 end
 
 local function get_size()
@@ -252,6 +255,92 @@ local function open_mini_pick_lsp_diagnostics()
 	})
 end
 
+
+--- @param sort_method "id" | "lastused"
+local function list_terminals(sort_method)
+	local terms = {}
+	local all_bufs = vim.fn.getbufinfo({ buflisted = 0 })
+
+	for _, b in ipairs(all_bufs) do
+		if vim.api.nvim_buf_is_valid(b.bufnr) and vim.bo[b.bufnr].buftype == "terminal" then
+			table.insert(terms, {
+				bufnr = b.bufnr,
+				text = vim.b[b.bufnr].term_title or b.name,
+				lastused = b.lastused
+			})
+		end
+	end
+
+	if sort_method == "lastused" then
+		table.sort(terms, function(a, b) return a.lastused > b.lastused end)
+	else
+		table.sort(terms, function(a, b) return a.bufnr < b.bufnr end)
+	end
+
+	return terms
+end
+
+local function cycle_terminal(direction)
+	local terms = list_terminals("id")
+	if #terms == 0 then return end
+
+	local current_buf = vim.api.nvim_get_current_buf()
+	local current_idx = 0
+
+	for i, t in ipairs(terms) do
+		if t.bufnr == current_buf then
+			current_idx = i
+			break
+		end
+	end
+
+	local target_idx
+	if direction == "next" then
+		target_idx = (current_idx % #terms) + 1
+	else
+		target_idx = ((current_idx - 2) % #terms) + 1
+	end
+
+	vim.api.nvim_set_current_buf(terms[target_idx].bufnr)
+end
+
+local function goto_last_terminal()
+	local terms = list_terminals("lastused")
+	if #terms == 0 then return end
+
+	local target = terms[1].bufnr
+	if target == vim.api.nvim_get_current_buf() and #terms > 1 then
+		target = terms[2].bufnr
+	end
+
+	vim.api.nvim_set_current_buf(target)
+end
+
+local function goto_next_terminal()
+	cycle_terminal("next")
+end
+
+local function goto_prev_terminal()
+	cycle_terminal("prev")
+end
+
+local function open_mini_pick_terminals()
+	local pick = require("mini.pick")
+	local target_win = vim.api.nvim_get_current_win()
+
+	pick.start({
+		source = {
+			name = "Terminals",
+			items = list_terminals("lastused"),
+			choose = function(item)
+				if vim.api.nvim_win_is_valid(target_win) then
+					vim.api.nvim_win_set_buf(target_win, item.bufnr)
+				end
+			end,
+		},
+	})
+end
+
 -- Options
 
 vim.opt.number = true
@@ -291,21 +380,6 @@ vim.opt.listchars = "tab:  ,trail:.,nbsp:+,extends:>"
 
 vim.diagnostic.config({ virtual_text = true })
 
-vim.api.nvim_set_hl(0, "Whitespace", { fg = "#505050" })
-vim.api.nvim_set_hl(0, "Pmenu", { link = "NormalFloat", default = true })
-vim.api.nvim_set_hl(0, "PmenuSel", { link = "Visual", default = true })
-vim.api.nvim_set_hl(0, "PmenuExtra", { link = "Comment", default = true })
-vim.api.nvim_set_hl(0, "PmenuKind", { link = "Type", default = true })
-
-vim.api.nvim_set_hl(0, "StModeNormal", { bg = "#a89984", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StModeInsert", { bg = "#83a598", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StModeVisual", { bg = "#fe8019", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StModeReplace", { bg = "#fb4934", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StModeTerminal", { bg = "#b8bb26", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StModeCmd", { bg = "#b8bb26", fg = "#282828", bold = true })
-vim.api.nvim_set_hl(0, "StInfo", { bg = "#504945", fg = "#ebdbb2" })
-vim.api.nvim_set_hl(0, "StBody", { bg = "#3c3836", fg = "#a89984" })
-
 -- Keymaps
 
 vim.g.mapleader = " "
@@ -320,15 +394,13 @@ vim.keymap.set("n", "<leader>bp", ":bprev<CR>", { desc = "Goto previous buffer" 
 vim.keymap.set("n", "<leader>bd", ":bdel<CR>", { desc = "Delete buffer" })
 vim.keymap.set("n", "<leader>ba", ":enew<CR>", { desc = "New buffer" })
 vim.keymap.set("n", "<leader>bb", ":e#<CR>", { desc = "Switch to last buffer" })
-vim.keymap.set("n", "<leader>bt", ":term<CR>", { desc = "Create terminal buffer" })
 
--- tabs
-vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { desc = "Goto next tab" })
-vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { desc = "Goto previous tab" })
-vim.keymap.set("n", "<leader>td", ":tabclose<CR>", { desc = "Close tab" })
-vim.keymap.set("n", "<leader>ta", ":tabnew<CR>", { desc = "New tab" })
-vim.keymap.set("n", "<leader>t>", ":tabmove +1<CR>", { desc = "Move tab right" })
-vim.keymap.set("n", "<leader>t<", ":tabmove -1<CR>", { desc = "Move tab left" })
+-- terminals
+vim.keymap.set("n", "<leader>tn", goto_next_terminal, { desc = "Goto next terminal" })
+vim.keymap.set("n", "<leader>tp", goto_prev_terminal, { desc = "Goto previous terminal" })
+vim.keymap.set("n", "<leader>td", ":bdel!<CR>", { desc = "Delete terminal" })
+vim.keymap.set("n", "<leader>ta", ":term<CR>", { desc = "Create terminal" })
+vim.keymap.set("n", "<leader>tt", goto_last_terminal, { desc = "Switch to last terminal" })
 
 -- windows
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Move to left window" })
@@ -383,6 +455,7 @@ end
 function setupPickKeymaps()
 	vim.keymap.set("n", "<leader>ff", MiniPick.builtin.files, { desc = "Pick files" })
 	vim.keymap.set("n", "<leader>fb", MiniPick.builtin.buffers, { desc = "Pick buffers" })
+	vim.keymap.set("n", "<leader>ft", open_mini_pick_terminals, { desc = "Pick terminals" })
 
 	vim.keymap.set("n", "<leader>ss", MiniPick.builtin.grep_live, { desc = "Search across files" })
 
@@ -504,21 +577,13 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("TermClose", {
-	group = augroup,
-	callback = function()
-		if vim.v.event.status == 0 then
-			vim.api.nvim_buf_delete(0, {})
-		end
-	end,
-})
-
 vim.api.nvim_create_autocmd("TermOpen", {
 	group = augroup,
 	callback = function()
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
-		vim.opt_local.signcolumn = "no"
+		vim.opt_local.buflisted = false
+		vim.cmd("startinsert")
 	end,
 })
 
@@ -681,6 +746,39 @@ require("nvim-treesitter.configs").setup({
 
 -- Appearance
 vim.cmd("colorscheme gruvbox")
+
+vim.api.nvim_set_hl(0, "Whitespace", { fg = "#505050" })
+vim.api.nvim_set_hl(0, "Pmenu", { link = "NormalFloat", default = true })
+vim.api.nvim_set_hl(0, "PmenuSel", { link = "Visual", default = true })
+vim.api.nvim_set_hl(0, "PmenuExtra", { link = "Comment", default = true })
+vim.api.nvim_set_hl(0, "PmenuKind", { link = "Type", default = true })
+
+vim.api.nvim_set_hl(0, "StModeNormal", { bg = "#a89984", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeInsert", { bg = "#83a598", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeVisual", { bg = "#fe8019", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeReplace", { bg = "#fb4934", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeTerminal", { bg = "#b8bb26", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeCmd", { bg = "#b8bb26", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StInfo", { bg = "#504945", fg = "#ebdbb2" })
+vim.api.nvim_set_hl(0, "StBody", { bg = "#3c3836", fg = "#a89984" })
+
+local diag_highlights = {
+	"DiagnosticSignError",
+	"DiagnosticSignWarn",
+	"DiagnosticSignInfo",
+	"DiagnosticSignHint",
+}
+
+for _, hl in ipairs(diag_highlights) do
+	local existing = vim.api.nvim_get_hl(0, { name = hl, link = false })
+	local new_hl = "St" .. hl
+	vim.api.nvim_set_hl(0, new_hl, {
+		fg = existing.fg,
+		bg = "#504945",
+		bold = existing.bold
+	})
+end
+
 require("mini.icons").setup()
 
 -- Functional
