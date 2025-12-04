@@ -44,26 +44,25 @@ fi
 if ask "Setup GPG and SSH"; then
     echo "=== SSH and GPG ==="
 
-    read -p "Enter github token: " TOKEN
+    sudo pacman -S openssh opengpg --needed --noconfirm
 
-    run_or_fail "Failed to import gpg public key" gpg --quiet --batch --yes \
-        --keyserver hkps://keys.openpgp.org \
-        --recv-keys 1B9C83430CA29B0B07680C0FBCF3B451C3CA33C2
+	echo "--------------------------------------------------------"
+    echo "PASTE ED25519 PRIVATE KEY BELOW"
+    echo "(Press Enter, paste the key, press Enter, then Ctrl+D)"
+    echo "--------------------------------------------------------"
 
-    run_or_fail "Failed to import gpg private key" curl -s -f \
-        -H "Authorization: token $TOKEN" \
-        -H "Accept: application/vnd.github.raw" \
-        "https://api.github.com/repos/sakithb/dotsecrets/contents/gpg-private-keys.asc.gpg" \
-        | gpg --quiet --decrypt | gpg --quiet --import
+    cat > ~/.ssh/id_ed25519
+    chmod 600 ~/.ssh/id_ed25519
 
-    echo "GPG keys imported successfully"
+	ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
 
-    export GPG_TTY=$(tty)
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+	echo ""
+    echo "--------------------------------------------------------"
+    echo "PASTE GPG PRIVATE KEY BLOCK BELOW"
+    echo "(Press Enter, paste the key, press Enter, then Ctrl+D)"
+    echo "--------------------------------------------------------"
 
-    gpg-connect-agent reloadagent /bye
-
-    sudo pacman -S openssh --needed --noconfirm
+	gpg --batch --import
 
     yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
 

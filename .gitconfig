@@ -1,0 +1,10 @@
+[user]
+	email = pvsakith@gmail.com
+	name = Sakith B.
+	signingkey = 50B0A43582B80A6E
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
+[pull]
+	rebase = true
