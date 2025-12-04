@@ -101,12 +101,6 @@ export EDITOR='nvim'
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias ts='tmux-sessionizer'
-
-export ppsn="$HOME/projects/personal"
-export pwrk="$HOME/projects/work"
-export poth="$HOME/projects/other"
-export pscr="$HOME/projects/scripts"
 
 # go
 export GOPATH="$HOME/.local/share/go"
@@ -116,17 +110,7 @@ export PATH="$PATH:$GOPATH/bin"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PATH:$PNPM_HOME"
 
-# pnpm
-export PNPM_HOME="/home/sakithb/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
+# nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# opencode
-export PATH=/home/sakithb/.opencode/bin:$PATH
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"

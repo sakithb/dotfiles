@@ -21,7 +21,7 @@ local function fetch_git_info(bufnr)
 	if file == "" then return end
 	local cwd = vim.fs.dirname(file)
 
-	vim.system({ 'git', 'status', '--porcelain', '-b' }, { text = true, cwd = cwd }, function(obj)
+	vim.system({ "git", "status", "--porcelain", "-b" }, { text = true, cwd = cwd }, function(obj)
 		if obj.code == 0 then
 			local output = obj.stdout
 			local branch = output:match("^##%s+([^%.%s]+)") or "DETACHED"
@@ -35,15 +35,16 @@ local function fetch_git_info(bufnr)
 end
 
 local function get_diag()
-	if not vim.diagnostic then return "" end
-	local c = vim.diagnostic.count(0)
-	local e, w = c[1] or 0, c[2] or 0
-	if e + w == 0 then return "" end
-	return " E:" .. e .. " W:" .. w .. " "
+	local s = vim.diagnostic.status()
+	if s == "" then
+		return ""
+	else
+		return " " .. s .. " "
+	end
 end
 
 local function get_size()
-	local size = vim.fn.getfsize(vim.fn.expand('%'))
+	local size = vim.fn.getfsize(vim.fn.expand("%"))
 	if size <= 0 then return "" end
 	return size < 1024 and size .. "b" or string.format("%.1fk", size / 1024)
 end
@@ -56,14 +57,30 @@ local function get_search()
 end
 
 local mode_map = {
-	['n'] = { 'StModeNormal', 'NORMAL' },
-	['i'] = { 'StModeInsert', 'INSERT' },
-	['v'] = { 'StModeVisual', 'VISUAL' },
-	['V'] = { 'StModeVisual', 'V-LINE' },
-	['\22'] = { 'StModeVisual', 'V-BLOCK' },
-	['R'] = { 'StModeReplace', 'REPLACE' },
-	['c'] = { 'StModeCmd', 'COMMAND' },
+	["n"] = { "StModeNormal", "NORMAL" },
+	["i"] = { "StModeInsert", "INSERT" },
+	["v"] = { "StModeVisual", "VISUAL" },
+	["V"] = { "StModeVisual", "V-LINE" },
+	["\22"] = { "StModeVisual", "V-BLOCK" },
+	["R"] = { "StModeReplace", "REPLACE" },
+	["c"] = { "StModeCmd", "COMMAND" },
+	["t"] = { "StModeTerminal", "TERMINAL" },
+	["nt"] = { "StModeTerminal", "TERM-N" },
 }
+
+function CustomStatusline()
+	local m = mode_map[vim.api.nvim_get_mode().mode] or mode_map["n"]
+	local mode_hl, mode_text = m[1], m[2]
+
+	return table.concat({
+		"%#" .. mode_hl .. "#  " .. mode_text .. "  ",
+		"%#StInfo#", vim.b.git_status or "", get_diag(),
+		"%#StBody# %f %m %r",
+		"%=",
+		"%#StInfo# %y ", get_size(), " ",
+		"%#" .. mode_hl .. "#", get_search(), " %l:%c "
+	})
+end
 
 local function scroll_preview_docs()
 	if vim.fn.pumvisible() == 1 then
@@ -78,17 +95,160 @@ local function scroll_preview_docs()
 	end
 end
 
-function CustomStatusline()
-	local m = mode_map[vim.api.nvim_get_mode().mode] or mode_map['n']
-	local mode_hl, mode_text = m[1], m[2]
+local function open_mini_files()
+	local buf = vim.api.nvim_get_current_buf()
+	local bo = vim.bo[buf]
 
-	return table.concat({
-		"%#" .. mode_hl .. "#  " .. mode_text .. "  ",
-		"%#StInfo#", vim.b.git_status or "", get_diag(),
-		"%#StBody# %f %m %r",
-		"%=",
-		"%#StInfo# %y ", get_size(), " ",
-		"%#" .. mode_hl .. "#", get_search(), " %l:%c "
+	if bo.buftype == "" and bo.modifiable and bo.buflisted then
+		MiniFiles.open(vim.api.nvim_buf_get_name(buf))
+	else
+		MiniFiles.open(MiniFiles.get_latest_path())
+	end
+end
+
+local function open_mini_pick_lsp_references()
+	local pick = require("mini.pick")
+
+	vim.lsp.buf.references(nil, {
+		on_list = function(data)
+			local items = data.items
+			local max_len = 0
+
+			for _, item in ipairs(items) do
+				local path = item.filename or (item.bufnr and vim.api.nvim_buf_get_name(item.bufnr)) or ""
+				path = vim.fn.fnamemodify(path, ":p:.")
+				local lnum = item.lnum or 1
+				local col = item.col or 1
+
+				item.loc_header = string.format("%s:%d:%d", path, lnum, col)
+
+				if #item.loc_header > max_len then
+					max_len = #item.loc_header
+				end
+
+				item.content = vim.trim(item.text or "")
+			end
+
+			for _, item in ipairs(items) do
+				local padding = string.rep(" ", max_len - #item.loc_header)
+				item.text = string.format("%s%s │ %s", item.loc_header, padding, item.content)
+			end
+
+			table.sort(items, function(a, b)
+				local pa, pb = a.filename or "", b.filename or ""
+				if pa ~= pb then return pa < pb end
+				return (a.lnum or 0) < (b.lnum or 0)
+			end)
+
+			pick.start({
+				source = {
+					name = "LSP References",
+					items = items,
+					choose = function(item)
+						local target_win = pick.get_picker_state().windows.target
+
+						if vim.api.nvim_win_is_valid(target_win) then
+							vim.api.nvim_set_current_win(target_win)
+						end
+
+						if item.bufnr and vim.api.nvim_buf_is_valid(item.bufnr) then
+							vim.api.nvim_win_set_buf(target_win, item.bufnr)
+						elseif item.filename then
+							vim.cmd("edit " .. vim.fn.fnameescape(item.filename))
+						end
+
+						vim.api.nvim_win_set_cursor(target_win, { item.lnum or 1, (item.col or 1) - 1 })
+					end,
+					show = function(buf_id, items_to_show, query)
+						pick.default_show(buf_id, items_to_show, query, { show_icons = false })
+
+						local ns = vim.api.nvim_create_namespace("MiniPickReferences")
+						vim.api.nvim_buf_clear_namespace(buf_id, ns, 0, -1)
+
+						for i, item in ipairs(items_to_show) do
+							local sep_start = item.text:find("│")
+							if sep_start then
+								vim.api.nvim_buf_set_extmark(buf_id, ns, i - 1, 0, {
+									end_col = sep_start - 1,
+									hl_group = "Comment",
+									priority = 199,
+								})
+							end
+						end
+					end
+				}
+			})
+		end
+	})
+end
+
+local function open_mini_pick_lsp_diagnostics()
+	local pick = require("mini.pick")
+	local raw_diagnostics = vim.diagnostic.get(nil)
+	local items = {}
+
+	for _, diag in ipairs(raw_diagnostics) do
+		local buf_name = vim.api.nvim_buf_get_name(diag.bufnr)
+		local path = vim.fn.fnamemodify(buf_name, ":p:.")
+		local severity_map = { [1] = "E", [2] = "W", [3] = "I", [4] = "H" }
+
+		table.insert(items, {
+			text = string.format("[%s] %s │ %s", severity_map[diag.severity] or "?", path, diag.message),
+			bufnr = diag.bufnr,
+			lnum = diag.lnum + 1,
+			col = diag.col,
+			severity = diag.severity
+		})
+	end
+
+	table.sort(items, function(a, b)
+		if a.severity ~= b.severity then return a.severity < b.severity end
+		return a.text < b.text
+	end)
+
+	pick.start({
+		source = {
+			name = "LSP Diagnostics",
+			items = items,
+			choose = function(item)
+				local target_win = pick.get_picker_state().windows.target
+
+				if vim.api.nvim_win_is_valid(target_win) then
+					vim.api.nvim_set_current_win(target_win)
+				end
+
+				if item.bufnr and vim.api.nvim_buf_is_valid(item.bufnr) then
+					vim.api.nvim_win_set_buf(target_win, item.bufnr)
+				elseif item.filename then
+					vim.cmd("edit " .. vim.fn.fnameescape(item.filename))
+				end
+
+				vim.api.nvim_win_set_cursor(target_win, { item.lnum or 1, (item.col or 1) - 1 })
+			end,
+			show = function(buf_id, items_to_show, query)
+				pick.default_show(buf_id, items_to_show, query, { show_icons = false })
+
+				local ns = vim.api.nvim_create_namespace("MiniPickDiagnostics")
+				vim.api.nvim_buf_clear_namespace(buf_id, ns, 0, -1)
+
+				local hl_map = {
+					[1] = "DiagnosticError",
+					[2] = "DiagnosticWarn",
+					[3] = "DiagnosticInfo",
+					[4] = "DiagnosticHint"
+				}
+
+				for i, item in ipairs(items_to_show) do
+					if hl_map[item.severity] then
+						vim.api.nvim_buf_set_extmark(buf_id, ns, i - 1, 0, {
+							end_row = i,
+							hl_group = hl_map[item.severity],
+							priority = 199
+						})
+					end
+				end
+			end
+		}
 	})
 end
 
@@ -101,6 +261,7 @@ vim.opt.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.laststatus = 3
 vim.opt.statusline = "%!v:lua.CustomStatusline()"
+vim.opt.showmode = false
 vim.opt.signcolumn = "yes"
 vim.opt.scrolloff = 10
 vim.opt.pumheight = 10
@@ -131,18 +292,19 @@ vim.opt.listchars = "tab:  ,trail:.,nbsp:+,extends:>"
 vim.diagnostic.config({ virtual_text = true })
 
 vim.api.nvim_set_hl(0, "Whitespace", { fg = "#505050" })
-vim.api.nvim_set_hl(0, 'Pmenu', { link = 'NormalFloat', default = true })
-vim.api.nvim_set_hl(0, 'PmenuSel', { link = 'Visual', default = true })
-vim.api.nvim_set_hl(0, 'PmenuExtra', { link = 'Comment', default = true })
-vim.api.nvim_set_hl(0, 'PmenuKind', { link = 'Type', default = true })
+vim.api.nvim_set_hl(0, "Pmenu", { link = "NormalFloat", default = true })
+vim.api.nvim_set_hl(0, "PmenuSel", { link = "Visual", default = true })
+vim.api.nvim_set_hl(0, "PmenuExtra", { link = "Comment", default = true })
+vim.api.nvim_set_hl(0, "PmenuKind", { link = "Type", default = true })
 
-vim.api.nvim_set_hl(0, 'StModeNormal', { bg = '#a89984', fg = '#282828', bold = true })
-vim.api.nvim_set_hl(0, 'StModeInsert', { bg = '#83a598', fg = '#282828', bold = true })
-vim.api.nvim_set_hl(0, 'StModeVisual', { bg = '#fe8019', fg = '#282828', bold = true })
-vim.api.nvim_set_hl(0, 'StModeReplace', { bg = '#fb4934', fg = '#282828', bold = true })
-vim.api.nvim_set_hl(0, 'StModeCmd', { bg = '#b8bb26', fg = '#282828', bold = true })
-vim.api.nvim_set_hl(0, 'StInfo', { bg = '#504945', fg = '#ebdbb2' })
-vim.api.nvim_set_hl(0, 'StBody', { bg = '#3c3836', fg = '#a89984' })
+vim.api.nvim_set_hl(0, "StModeNormal", { bg = "#a89984", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeInsert", { bg = "#83a598", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeVisual", { bg = "#fe8019", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeReplace", { bg = "#fb4934", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeTerminal", { bg = "#b8bb26", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StModeCmd", { bg = "#b8bb26", fg = "#282828", bold = true })
+vim.api.nvim_set_hl(0, "StInfo", { bg = "#504945", fg = "#ebdbb2" })
+vim.api.nvim_set_hl(0, "StBody", { bg = "#3c3836", fg = "#a89984" })
 
 -- Keymaps
 
@@ -161,12 +323,12 @@ vim.keymap.set("n", "<leader>bb", ":e#<CR>", { desc = "Switch to last buffer" })
 vim.keymap.set("n", "<leader>bt", ":term<CR>", { desc = "Create terminal buffer" })
 
 -- tabs
-vim.keymap.set('n', '<leader>tn', ':tabnext<CR>', { desc = 'Goto next tab' })
-vim.keymap.set('n', '<leader>tp', ':tabprevious<CR>', { desc = 'Goto previous tab' })
-vim.keymap.set('n', '<leader>td', ':tabclose<CR>', { desc = 'Close tab' })
-vim.keymap.set('n', '<leader>ta', ':tabnew<CR>', { desc = 'New tab' })
-vim.keymap.set('n', '<leader>t>', ':tabmove +1<CR>', { desc = 'Move tab right' })
-vim.keymap.set('n', '<leader>t<', ':tabmove -1<CR>', { desc = 'Move tab left' })
+vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { desc = "Goto next tab" })
+vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { desc = "Goto previous tab" })
+vim.keymap.set("n", "<leader>td", ":tabclose<CR>", { desc = "Close tab" })
+vim.keymap.set("n", "<leader>ta", ":tabnew<CR>", { desc = "New tab" })
+vim.keymap.set("n", "<leader>t>", ":tabmove +1<CR>", { desc = "Move tab right" })
+vim.keymap.set("n", "<leader>t<", ":tabmove -1<CR>", { desc = "Move tab left" })
 
 -- windows
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Move to left window" })
@@ -185,8 +347,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
-vim.keymap.set("n", "r", ":%s///gc<left><left><left><left>", { desc = "Replace in file" })
-vim.keymap.set("v", "r", ":s///gc<left><left><left><left>", { desc = "Replace in selection" })
+vim.keymap.set("n", "rr", ":%s///gc<left><left><left><left>", { desc = "Replace in file" })
+vim.keymap.set("v", "rr", ":s///gc<left><left><left><left>", { desc = "Replace in selection" })
 vim.keymap.set({ "n", "v" }, "<M-y>", "\"+y", { desc = "Copy to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboard" })
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlights:" })
@@ -208,20 +370,24 @@ function setupLspKeymaps(buf)
 	vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = buf, desc = "Show signature help" })
 	vim.keymap.set("n", "<A-k>", vim.diagnostic.open_float, { buffer = buf, desc = "Show diagnostics in the line" })
 
-	vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, { buffer = buf, desc = "Goto next diagnostic" })
-	vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, { buffer = buf, desc = "Goto previous diagnostic" })
+	vim.keymap.set("n", "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end,
+		{ buffer = buf, desc = "Goto next diagnostic" })
+	vim.keymap.set("n", "<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end,
+		{ buffer = buf, desc = "Goto previous diagnostic" })
 end
 
 function setupFilesKeymaps()
-	vim.keymap.set("n", "<leader><CR>", MiniFiles.open, { desc = "Open file browser" })
+	vim.keymap.set("n", "<leader><CR>", open_mini_files, { desc = "Open file browser" })
 end
 
 function setupPickKeymaps()
-	vim.keymap.set("n", "<leader>ff", ":Pick files<CR>", { desc = "Pick files" })
-	vim.keymap.set("n", "<leader>fb", ":Pick buffers<CR>", { desc = "Pick buffers" })
+	vim.keymap.set("n", "<leader>ff", MiniPick.builtin.files, { desc = "Pick files" })
+	vim.keymap.set("n", "<leader>fb", MiniPick.builtin.buffers, { desc = "Pick buffers" })
 
-	vim.keymap.set("n", "<leader>ss", ":Pick grep_live<CR>", { desc = "Search across files" })
-	vim.keymap.set("n", "<leader>sh", ":Pick help<CR>", { desc = "Search help" })
+	vim.keymap.set("n", "<leader>ss", MiniPick.builtin.grep_live, { desc = "Search across files" })
+
+	vim.keymap.set("n", "<leader>llr", open_mini_pick_lsp_references, { desc = "Pick LSP references" })
+	vim.keymap.set("n", "<leader>lld", open_mini_pick_lsp_diagnostics, { desc = "Pick LSP diagnostics" })
 end
 
 -- function setupDapKeymaps()
@@ -330,7 +496,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = augroup,
 	callback = function()
-		local mark = vim.api.nvim_buf_get_mark(0, '"')
+		local mark = vim.api.nvim_buf_get_mark(0, "\"")
 		local lcount = vim.api.nvim_buf_line_count(0)
 		if mark[1] > 0 and mark[1] <= lcount then
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
@@ -366,9 +532,9 @@ vim.api.nvim_create_autocmd("VimResized", {
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup,
 	callback = function()
-		local dir = vim.fn.expand('<afile>:p:h')
+		local dir = vim.fn.expand("<afile>:p:h")
 		if vim.fn.isdirectory(dir) == 0 then
-			vim.fn.mkdir(dir, 'p')
+			vim.fn.mkdir(dir, "p")
 		end
 	end,
 })
@@ -412,7 +578,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 
 		if not client or not lsp_item then return end
 
-		client:request('completionItem/resolve', lsp_item, function(_, result)
+		client:request("completionItem/resolve", lsp_item, function(_, result)
 			vim.cmd("pclose")
 
 			if result and result.documentation then
@@ -421,7 +587,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 				if not docs or docs == "" then return end
 
 				local buf = vim.api.nvim_create_buf(false, true)
-				vim.bo[buf].bufhidden = 'wipe'
+				vim.bo[buf].bufhidden = "wipe"
 
 				local contents = vim.lsp.util.convert_input_to_markdown_lines(docs)
 
@@ -495,11 +661,15 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.icons" },
 
 	{ src = "https://github.com/nvim-mini/mini.files" },
-	{ src = "https://github.com/nvim-mini/mini.pick" }
+	{ src = "https://github.com/nvim-mini/mini.pick" },
 })
 
 -- Setup lsp
-vim.lsp.enable({ "lua_ls", "ts_ls", "svelte" })
+vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor" })
+vim.lsp.config("phpactor", {
+	root_markers = { "composer.json", ".phpactor.json", ".phpactor.yml", ".git" },
+})
+
 require("mason").setup()
 
 -- Setup treesitter
@@ -514,7 +684,12 @@ vim.cmd("colorscheme gruvbox")
 require("mini.icons").setup()
 
 -- Functional
-require("mini.files").setup()
+require("mini.files").setup({
+	mappings = {
+		close = "<Esc>",
+		synchronize = "<CR>"
+	}
+})
 setupFilesKeymaps()
 require("mini.pick").setup()
 setupPickKeymaps()
