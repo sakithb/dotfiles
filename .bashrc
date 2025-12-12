@@ -96,7 +96,7 @@ shopt -s cdable_vars
 
 PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
 
-export PATH="$PATH:$HOME/scripts:$HOME/.local/share/bin"
+export PATH="$HOME/.local/share/bin:$PATH"
 export EDITOR='nvim'
 
 alias ls='ls --color=auto'
@@ -110,7 +110,11 @@ export PATH="$PATH:$GOPATH/bin"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PATH:$PNPM_HOME"
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# rg
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+# phpenv
+eval "$(phpenv init -)"
+
+# nodenv
+eval "$(nodenv init -)"

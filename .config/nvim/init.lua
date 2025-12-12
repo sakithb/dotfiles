@@ -1,9 +1,7 @@
 -- Utils
 
 local session_dir = vim.fn.stdpath("state") .. "/sessions/"
-if vim.fn.isdirectory(session_dir) == 0 then
-	vim.fn.mkdir(session_dir, "p")
-end
+vim.fn.mkdir(session_dir, "p")
 
 local function get_session_name()
 	local cwd = vim.fn.getcwd()
@@ -85,15 +83,17 @@ function CustomStatusline()
 	})
 end
 
-local function scroll_preview_docs()
-	if vim.fn.pumvisible() == 1 then
-		for _, win in ipairs(vim.api.nvim_list_wins()) do
-			if vim.wo[win].previewwindow then
-				vim.api.nvim_win_call(win, function()
+local function scroll_preview_docs(dir)
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		if vim.wo[win].previewwindow then
+			vim.api.nvim_win_call(win, function()
+				if dir == "up" then
+					vim.cmd("normal! 4k")
+				elseif dir == "down" then
 					vim.cmd("normal! 4j")
-				end)
-				return
-			end
+				end
+			end)
+			return
 		end
 	end
 end
@@ -115,7 +115,6 @@ local function open_mini_pick_lsp_references()
 	vim.lsp.buf.references(nil, {
 		on_list = function(data)
 			local items = data.items
-			local max_len = 0
 
 			for _, item in ipairs(items) do
 				local path = item.filename or (item.bufnr and vim.api.nvim_buf_get_name(item.bufnr)) or ""
@@ -124,17 +123,11 @@ local function open_mini_pick_lsp_references()
 				local col = item.col or 1
 
 				item.loc_header = string.format("%s:%d:%d", path, lnum, col)
-
-				if #item.loc_header > max_len then
-					max_len = #item.loc_header
-				end
-
 				item.content = vim.trim(item.text or "")
 			end
 
 			for _, item in ipairs(items) do
-				local padding = string.rep(" ", max_len - #item.loc_header)
-				item.text = string.format("%s%s │ %s", item.loc_header, padding, item.content)
+				item.text = string.format("%s │ %s", item.loc_header, item.content)
 			end
 
 			table.sort(items, function(a, b)
@@ -255,6 +248,29 @@ local function open_mini_pick_lsp_diagnostics()
 	})
 end
 
+local function delete_buffer_from_picker(force)
+	local pick = require("mini.pick")
+	local matches = pick.get_picker_matches()
+
+	if matches.marked_inds ~= nil and #matches.marked_inds > 0 then
+		for _, idx in ipairs(matches.marked_inds) do
+			vim.api.nvim_buf_delete(matches.all[idx].bufnr, { force = force })
+			matches.all[idx] = nil
+		end
+	else
+		vim.api.nvim_buf_delete(matches.current.bufnr, { force = force })
+		matches.all[matches.current_ind] = nil
+	end
+
+	local items = {}
+	for _, item in pairs(matches.all) do
+		if item ~= nil then
+			table.insert(items, item)
+		end
+	end
+
+	pick.set_picker_items(items, nil)
+end
 
 --- @param sort_method "id" | "lastused"
 local function list_terminals(sort_method)
@@ -329,6 +345,12 @@ local function open_mini_pick_terminals()
 	local target_win = vim.api.nvim_get_current_win()
 
 	pick.start({
+		mappings = {
+			wipeout = {
+				char = "<C-d>",
+				func = function() delete_buffer_from_picker(true) end
+			},
+		},
 		source = {
 			name = "Terminals",
 			items = list_terminals("lastused"),
@@ -340,6 +362,42 @@ local function open_mini_pick_terminals()
 		},
 	})
 end
+
+local function open_mini_pick_buffers()
+	local pick = require("mini.pick")
+
+	pick.builtin.buffers(nil, {
+		mappings = {
+			wipeout = {
+				char = "<C-d>",
+				func = function() delete_buffer_from_picker(false) end
+			},
+		},
+		source = {
+			show = function(buf_id, items_arr, query)
+				for _, item in ipairs(items_arr) do
+					if vim.api.nvim_get_option_value("modified", { buf = item.bufnr }) then
+						if not item.text:match("^%[%+%]") then
+							item.text = "[+] " .. item.text
+						end
+					end
+				end
+
+				pick.default_show(buf_id, items_arr, query, {
+					show_icons = true,
+				})
+			end
+		}
+	})
+end
+
+local function create_session()
+	local session_file = get_session_name()
+	vim.cmd("mksession! " .. session_file)
+	vim.t.session_path = session_file
+	vim.print("Session created!")
+end
+
 
 -- Options
 
@@ -373,10 +431,10 @@ vim.opt.swapfile = false
 vim.opt.updatetime = 250
 vim.opt.lazyredraw = true
 vim.opt.winborder = "single"
-vim.opt.sessionoptions = { "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "terminal",
-	"localoptions" }
+vim.opt.sessionoptions = { "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "localoptions" }
 vim.opt.list = true
 vim.opt.listchars = "tab:  ,trail:.,nbsp:+,extends:>"
+vim.opt.shortmess:append("s")
 
 vim.diagnostic.config({ virtual_text = true })
 
@@ -390,7 +448,7 @@ vim.keymap.set("n", "<leader>cr", ":so $MYVIMRC<CR>", { desc = "Reload config" }
 
 -- buffers
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Goto next buffer" })
-vim.keymap.set("n", "<leader>bp", ":bprev<CR>", { desc = "Goto previous buffer" })
+vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Goto previous buffer" })
 vim.keymap.set("n", "<leader>bd", ":bdel<CR>", { desc = "Delete buffer" })
 vim.keymap.set("n", "<leader>ba", ":enew<CR>", { desc = "New buffer" })
 vim.keymap.set("n", "<leader>bb", ":e#<CR>", { desc = "Switch to last buffer" })
@@ -426,10 +484,14 @@ vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboar
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlights:" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
-vim.keymap.set("i", "<C-f>", scroll_preview_docs, { desc = "Scroll preview docs" })
+vim.keymap.set("i", "<C-f>", function() scroll_preview_docs("down") end, { desc = "Scroll preview docs" })
+vim.keymap.set("i", "<C-b>", function() scroll_preview_docs("up") end, { desc = "Scroll preview docs" })
 vim.keymap.set("i", "<C-space>", "<C-x><C-o>", { desc = "Trigger completion" })
 
-function setupLspKeymaps(buf)
+-- sessions
+vim.keymap.set("n", "sc", create_session, { desc = "Create session" })
+
+local function setupLspKeymaps(buf)
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { buffer = buf, desc = "Rename symbol" })
 	vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { buffer = buf, desc = "Format" })
 	vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { buffer = buf, desc = "List code actions" })
@@ -448,16 +510,17 @@ function setupLspKeymaps(buf)
 		{ buffer = buf, desc = "Goto previous diagnostic" })
 end
 
-function setupFilesKeymaps()
+local function setupFilesKeymaps()
 	vim.keymap.set("n", "<leader><CR>", open_mini_files, { desc = "Open file browser" })
 end
 
-function setupPickKeymaps()
-	vim.keymap.set("n", "<leader>ff", MiniPick.builtin.files, { desc = "Pick files" })
-	vim.keymap.set("n", "<leader>fb", MiniPick.builtin.buffers, { desc = "Pick buffers" })
-	vim.keymap.set("n", "<leader>ft", open_mini_pick_terminals, { desc = "Pick terminals" })
+local function setupPickKeymaps()
+	local pick = require("mini.pick")
 
-	vim.keymap.set("n", "<leader>ss", MiniPick.builtin.grep_live, { desc = "Search across files" })
+	vim.keymap.set("n", "<leader>ff", pick.builtin.files, { desc = "Pick files" })
+	vim.keymap.set("n", "<leader>fb", open_mini_pick_buffers, { desc = "Pick buffers" })
+	vim.keymap.set("n", "<leader>ft", open_mini_pick_terminals, { desc = "Pick terminals" })
+	vim.keymap.set("n", "<leader>fg", pick.builtin.grep_live, { desc = "Search across files" })
 
 	vim.keymap.set("n", "<leader>llr", open_mini_pick_lsp_references, { desc = "Pick LSP references" })
 	vim.keymap.set("n", "<leader>lld", open_mini_pick_lsp_diagnostics, { desc = "Pick LSP diagnostics" })
@@ -608,7 +671,10 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = augroup,
 	callback = function()
 		if vim.fn.argc() == 0 then
-			vim.cmd("mksession! " .. get_session_name())
+			local session_file = get_session_name()
+			if vim.fn.filereadable(session_file) == 1 then
+				vim.cmd("mksession! " .. session_file)
+			end
 		end
 	end,
 })
@@ -621,6 +687,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 			local session_file = get_session_name()
 			if vim.fn.filereadable(session_file) == 1 then
 				vim.cmd("source " .. session_file)
+				vim.t.session_path = session_file
 			end
 		end
 	end,
@@ -630,7 +697,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 	group = augroup,
 	callback = function()
 		local event = vim.v.event
-		if not event or not event.completed_item then return end
+		if not event then return end
 
 		local cy = event.row
 		local cx = event.col
@@ -638,10 +705,13 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 		local ch = event.height
 
 		local item = event.completed_item
-		local lsp_item = item.user_data and item.user_data.nvim and item.user_data.nvim.lsp.completion_item
-		local client = vim.lsp.get_clients({ bufnr = 0 })[1]
+		if not item then return end
 
-		if not client or not lsp_item then return end
+		local lsp_item = item.user_data and item.user_data.nvim and item.user_data.nvim.lsp.completion_item
+		if not lsp_item then return end
+
+		local client = vim.lsp.get_clients({ bufnr = 0 })[1]
+		if not client then return end
 
 		client:request("completionItem/resolve", lsp_item, function(_, result)
 			vim.cmd("pclose")
@@ -671,7 +741,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 				vim.treesitter.start(buf, "markdown")
 
 				local dw = math.min(max_content_width, 60)
-				local dh = math.min(#padded_contents, ch)
+				local dh = math.min(#padded_contents, math.max(vim.o.scrolloff, ch))
 
 				local dx = cx + cw + 1
 				local anchor = "NW"
@@ -694,7 +764,7 @@ vim.api.nvim_create_autocmd("CompleteChanged", {
 				})
 
 				vim.wo[win].conceallevel = 2
-				vim.wo[win].wrap = false
+				vim.wo[win].wrap = true
 				vim.wo[win].previewwindow = true
 			end
 		end)
@@ -730,7 +800,7 @@ vim.pack.add({
 })
 
 -- Setup lsp
-vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor" })
+vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor", "bashls" })
 vim.lsp.config("phpactor", {
 	root_markers = { "composer.json", ".phpactor.json", ".phpactor.yml", ".git" },
 })
@@ -740,6 +810,9 @@ require("mason").setup()
 -- Setup treesitter
 require("nvim-treesitter.configs").setup({
 	highlight = {
+		enable = true
+	},
+	indent = {
 		enable = true
 	}
 })
@@ -790,4 +863,5 @@ require("mini.files").setup({
 })
 setupFilesKeymaps()
 require("mini.pick").setup()
+setupPickKeymaps()
 setupPickKeymaps()
