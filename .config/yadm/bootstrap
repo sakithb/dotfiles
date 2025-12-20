@@ -25,6 +25,8 @@ echo "=== Setup ==="
 # Install yay
 
 if ! command -v yay > /dev/null; then
+    sudo pacman -S git --needed --noconfirm
+    
     git clone https://aur.archlinux.org/yay.git "/tmp/yay"
     pushd /tmp/yay
     makepkg -si --noconfirm --clean --cleanbuild --rmdeps
@@ -37,9 +39,9 @@ if ask "Setup SSH"; then
 
     sudo pacman -S openssh --needed --noconfirm
 
-	echo "--------------------------------------------------------"
+	  echo "--------------------------------------------------------"
     echo "PASTE ED25519 PRIVATE KEY BELOW"
-    echo "(Press Enter, paste the key, press Enter, then Ctrl+D)"
+    echo "(paste the key, press Enter, then Ctrl+D)"
     echo "--------------------------------------------------------"
 
     cat > ~/.ssh/id_ed25519
@@ -54,6 +56,8 @@ fi
 
 if ask "Setup secure boot"; then
     echo "=== Secure boot ==="
+    
+    sudo pacman -S sbctl jq --needed --noconfirm
 
     if [[ "$(sbctl status --json | jq '.setup_mode')" = "true" ]]; then
         sudo sbctl create-keys
