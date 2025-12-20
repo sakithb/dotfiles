@@ -32,19 +32,10 @@ if ! command -v yay > /dev/null; then
     rm -rf /tmp/yay
 fi
 
-if ask "Setup Git"; then
-    echo "=== Git ==="
+if ask "Setup SSH"; then
+    echo "=== SSH ==="
 
-    git config --global user.email "pvsakith@gmail.com"
-    git config --global user.name "Sakith B."
-
-    echo "=== Git complete ==="
-fi
-
-if ask "Setup GPG and SSH"; then
-    echo "=== SSH and GPG ==="
-
-    sudo pacman -S openssh opengpg --needed --noconfirm
+    sudo pacman -S openssh --needed --noconfirm
 
 	echo "--------------------------------------------------------"
     echo "PASTE ED25519 PRIVATE KEY BELOW"
@@ -54,19 +45,11 @@ if ask "Setup GPG and SSH"; then
     cat > ~/.ssh/id_ed25519
     chmod 600 ~/.ssh/id_ed25519
 
-	ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
-
-	echo ""
-    echo "--------------------------------------------------------"
-    echo "PASTE GPG PRIVATE KEY BLOCK BELOW"
-    echo "(Press Enter, paste the key, press Enter, then Ctrl+D)"
-    echo "--------------------------------------------------------"
-
-	gpg --batch --import
+	  ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
 
     yadm remote set-url origin "git@github.com:sakithb/dotfiles.git"
 
-    echo "=== SSH and GPG complete ==="
+    echo "=== SSH complete ==="
 fi
 
 if ask "Setup secure boot"; then
