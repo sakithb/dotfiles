@@ -808,7 +808,7 @@ vim.lsp.config("phpactor", {
 require("mason").setup()
 
 -- Setup treesitter
-require("nvim-treesitter.configs").setup({
+require("nvim-treesitter.config").setup({
 	highlight = {
 		enable = true
 	},
