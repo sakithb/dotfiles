@@ -4,7 +4,6 @@ import = [ "gruvbox.toml" ]
 [window]
 padding = { x = 5, y = 5 }
 decorations = "None"
-opacity = 0.90
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
