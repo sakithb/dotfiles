@@ -69,7 +69,8 @@ local mode_map = {
 	["nt"] = { "StModeTerminal", "TERM-N" },
 }
 
-function CustomStatusline()
+---@diagnostic disable-next-line: lowercase-global
+function custom_statusline()
 	local m = mode_map[vim.api.nvim_get_mode().mode] or mode_map["n"]
 	local mode_hl, mode_text = m[1], m[2]
 
@@ -99,13 +100,14 @@ local function scroll_preview_docs(dir)
 end
 
 local function open_mini_files()
+	local files = require("mini.files")
 	local buf = vim.api.nvim_get_current_buf()
 	local bo = vim.bo[buf]
 
 	if bo.buftype == "" and bo.modifiable and bo.buflisted then
-		MiniFiles.open(vim.api.nvim_buf_get_name(buf))
+		files.open(vim.api.nvim_buf_get_name(buf))
 	else
-		MiniFiles.open(MiniFiles.get_latest_path())
+		files.open(files.get_latest_path())
 	end
 end
 
@@ -365,29 +367,49 @@ end
 
 local function open_mini_pick_buffers()
 	local pick = require("mini.pick")
+	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
 
-	pick.builtin.buffers(nil, {
-		mappings = {
-			wipeout = {
-				char = "<C-d>",
-				func = function() delete_buffer_from_picker(false) end
-			},
-		},
+	table.sort(bufs, function(a, b)
+		return a.lastused > b.lastused
+	end)
+
+	local items = {}
+	for _, buf in ipairs(bufs) do
+		local name = buf.name
+		if name == "" then
+			name = "[No Name]"
+		else
+			name = vim.fn.fnamemodify(name, ":~:.")
+		end
+
+		if buf.changed == 1 then
+			name = "[+] " .. name
+		end
+
+		table.insert(items, {
+			text = name,
+			bufnr = buf.bufnr,
+		})
+	end
+
+	pick.start({
 		source = {
+			name = "Buffers",
+			items = items,
 			show = function(buf_id, items_arr, query)
-				for _, item in ipairs(items_arr) do
-					if vim.api.nvim_get_option_value("modified", { buf = item.bufnr }) then
-						if not item.text:match("^%[%+%]") then
-							item.text = "[+] " .. item.text
-						end
-					end
-				end
-
 				pick.default_show(buf_id, items_arr, query, {
 					show_icons = true,
 				})
-			end
-		}
+			end,
+		},
+		mappings = {
+			wipeout = {
+				char = "<C-d>",
+				func = function()
+					delete_buffer_from_picker(false)
+				end,
+			},
+		},
 	})
 end
 
@@ -407,7 +429,7 @@ vim.opt.colorcolumn = "100"
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.laststatus = 3
-vim.opt.statusline = "%!v:lua.CustomStatusline()"
+vim.opt.statusline = "%!v:lua.custom_statusline()"
 vim.opt.showmode = false
 vim.opt.signcolumn = "yes"
 vim.opt.scrolloff = 10
@@ -423,6 +445,7 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 0
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+vim.opt.foldlevel = 99
 
 vim.opt.completeopt = { "menuone", "noinsert", "noselect", "preview" }
 vim.opt.undofile = true
@@ -595,6 +618,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = augroup,
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client == nil then return end
 
 		if client and client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, args.buf, {
@@ -785,6 +809,17 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
 	end
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+	callback = function()
+		pcall(vim.treesitter.start)
+
+		vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+		vim.wo[0][0].foldmethod = 'expr'
+
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	end,
+})
+
 -- Plugins
 
 vim.pack.add({
@@ -806,16 +841,6 @@ vim.lsp.config("phpactor", {
 })
 
 require("mason").setup()
-
--- Setup treesitter
-require("nvim-treesitter.config").setup({
-	highlight = {
-		enable = true
-	},
-	indent = {
-		enable = true
-	}
-})
 
 -- Appearance
 vim.cmd("colorscheme gruvbox")
