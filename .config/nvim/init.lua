@@ -367,7 +367,14 @@ end
 
 local function open_mini_pick_buffers()
 	local pick = require("mini.pick")
-	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+	local all_bufs = vim.fn.getbufinfo({ buflisted = 1 })
+	local bufs = {}
+
+	for _, b in ipairs(all_bufs) do
+		if vim.api.nvim_buf_is_valid(b.bufnr) and vim.bo[b.bufnr].buftype ~= "terminal" then
+			table.insert(bufs, b)
+		end
+	end
 
 	table.sort(bufs, function(a, b)
 		return a.lastused > b.lastused
@@ -832,6 +839,7 @@ vim.pack.add({
 
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.pick" },
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 -- Setup lsp
@@ -878,6 +886,11 @@ for _, hl in ipairs(diag_highlights) do
 end
 
 require("mini.icons").setup()
+require("render-markdown").setup({
+	sign = {
+		enabled = false
+	}
+})
 
 -- Functional
 require("mini.files").setup({

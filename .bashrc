@@ -102,6 +102,9 @@ export EDITOR='nvim'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
+# docker
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+
 # go
 export GOPATH="$HOME/.local/share/go"
 export PATH="$PATH:$GOPATH/bin"
