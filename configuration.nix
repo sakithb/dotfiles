@@ -61,7 +61,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  programs.niri.enable = true;
+  programs = {
+  	niri.enable = true;
+	dconf.enable = true;
+  };
 
   services = {
     tuned.enable = true;
