@@ -13,18 +13,13 @@ input {
     }
 
     mouse {
-        natural-scroll
         accel-profile "flat"
     }
 }
 
 /-output "eDP-1" {
     mode "1920x1080"
-
-    scale 1
-
-    // Transform allows to rotate the output counter-clockwise, valid values are:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    scale 2
     transform "normal"
 
     // Position of the output in the global coordinate space.
