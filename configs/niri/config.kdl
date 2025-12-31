@@ -81,7 +81,7 @@ window-rule {
 }
 
 binds {
-	Mod { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+	Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Return { spawn "alacritty"; }
 
     Mod+Alt+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }

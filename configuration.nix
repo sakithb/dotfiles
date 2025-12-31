@@ -62,8 +62,8 @@
   nixpkgs.config.allowUnfree = true;
 
   programs = {
-  	niri.enable = true;
-	dconf.enable = true;
+    niri.enable = true;
+    dconf.enable = true;
   };
 
   services = {
@@ -88,6 +88,7 @@
           settings = {
             main = {
               capslock = "overload(control, esc)";
+              leftmeta = "overload(meta, M-space)";
             };
           };
         };
