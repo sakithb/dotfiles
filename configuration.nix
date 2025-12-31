@@ -10,59 +10,17 @@
     ./hardware-configuration.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [
-    "i915.enable_psr=0"
-  ];
-
-  hardware.enableAllFirmware = true;
-
-  networking.hostName = "sakithb-nixos";
-  networking.networkmanager.enable = true;
-  hardware.bluetooth.enable = true;
-  services.tuned.enable = true;
-  services.upower.enable = true;
-
-  time.timeZone = "Asia/Colombo";
-
-  zramSwap.enable = true;
-
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
-  services.libinput.enable = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  hardware.graphics.enable = true;
-
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
-    nerd-fonts.jetbrains-mono
-  ];
-
-  users.users.sakithb = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "video"
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [
+      "i915.enable_psr=0"
     ];
   };
-
-  programs.niri.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
-
-  services.openssh.enable = true;
 
   environment.systemPackages = with pkgs; [
     gcc
@@ -73,16 +31,81 @@
     curl
   ];
 
-  system.stateVersion = "25.11";
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    nerd-fonts.jetbrains-mono
+  ];
+
+  hardware = {
+    enableAllFirmware = true;
+    bluetooth.enable = true;
+    graphics.enable = true;
+  };
+
+  networking = {
+    hostName = "sakithb-nixos";
+    networkmanager.enable = true;
+  };
 
   nix.settings = {
-    max-jobs = "auto";
-    cores = 2;
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+
+    settings = {
+      max-jobs = "auto";
+      cores = 2;
+    };
   };
 
-  services.earlyoom = {
-    enable = true;
-    enableNotifications = true;
-    freeMemThreshold = 5;
+  nixpkgs.config.allowUnfree = true;
+
+  programs.niri.enable = true;
+
+  services = {
+    tuned.enable = true;
+    upower.enable = true;
+    libinput.enable = true;
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+    earlyoom = {
+      enable = true;
+      enableNotifications = true;
+      freeMemThreshold = 5;
+    };
+    openssh.enable = true;
+    keyd = {
+      enable = true;
+      keyboards = {
+        default = {
+          ids = [ "*" ];
+          settings = {
+            main = {
+              capslock = "overload(control, esc)";
+            };
+          };
+        };
+      };
+    };
   };
+
+  system.stateVersion = "25.11";
+
+  time.timeZone = "Asia/Colombo";
+
+  users.users.sakithb = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+    ];
+  };
+
+  zramSwap.enable = true;
 }

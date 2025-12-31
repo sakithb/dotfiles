@@ -14,16 +14,18 @@
     ./modules/alacritty.nix
   ];
 
-  home.username = "sakithb";
-  home.homeDirectory = "/home/sakithb";
+  home = {
+	  username = "sakithb";
+	  homeDirectory = "/home/sakithb";
 
-  home.packages = with pkgs; [
-    alacritty
-    brave
-    slack
-    nixd
-    nixfmt-rfc-style
-  ];
+	  packages = with pkgs; [
+		  alacritty
+			  brave
+			  slack
+			  nixd
+			  nixfmt-rfc-style
+	  ];
 
-  home.stateVersion = "25.11";
+	  stateVersion = "25.11";
+  };
 }
