@@ -55,10 +55,8 @@
       "flakes"
     ];
 
-    settings = {
-      max-jobs = "auto";
-      cores = 2;
-    };
+    max-jobs = "auto";
+    cores = 2;
   };
 
   nixpkgs.config.allowUnfree = true;
