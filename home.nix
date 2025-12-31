@@ -14,8 +14,6 @@
     ./modules/alacritty.nix
   ];
 
-  programs.thunar.enable = true;
-
   home = {
     username = "sakithb";
     homeDirectory = "/home/sakithb";
@@ -28,6 +26,7 @@
       nixfmt-rfc-style
       adw-gtk3
       papirus-icon-theme
+	  thunar
     ];
 
     stateVersion = "25.11";
