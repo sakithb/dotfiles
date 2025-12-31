@@ -58,6 +58,8 @@
 		gnumake
 		binutils
 		pkg-config
+		wget
+		curl
 	];
 
 	system.stateVersion = "25.11";
