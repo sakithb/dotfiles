@@ -7,13 +7,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    niri = {
+      url = "github:YaLTeR/niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    niri = {
-      url = "github:YaLTeR/niri";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -27,7 +27,6 @@
       self,
       nixpkgs,
       home-manager,
-      niri,
       ...
     }:
     {
@@ -37,9 +36,12 @@
           ./configuration.nix
 
           (
-            { pkgs, ... }:
+            { ... }:
             {
-              nixpkgs.overlays = [ niri.overlays.default ];
+              nixpkgs.overlays = [
+                inputs.niri.overlays.default
+                inputs.neovim-nightly-overlay.overlays.default
+              ];
             }
           )
 

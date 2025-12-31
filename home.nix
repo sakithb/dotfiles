@@ -9,6 +9,7 @@
   imports = [
     ./modules/bash.nix
     ./modules/niri.nix
+    ./modules/quickshell.nix
     ./modules/nvim.nix
     ./modules/git.nix
     ./modules/alacritty.nix
@@ -26,13 +27,7 @@
       nixfmt-rfc-style
       adw-gtk3
       papirus-icon-theme
-      (xfce.thunar.override {
-        thunarPlugins = [
-          xfce.thunar-archive-plugin
-          xfce.thunar-volman
-        ];
-      })
-      xfce.tumbler
+	  spaceFM
     ];
 
     stateVersion = "25.11";
