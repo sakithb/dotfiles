@@ -53,6 +53,13 @@
 
 	services.openssh.enable = true;
 
+	environment.systemPackages = with pkgs; [
+		gcc
+		gnumake
+		binutils
+		pkg-config
+	];
+
 	system.stateVersion = "25.11";
 
 	nix.settings = {
