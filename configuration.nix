@@ -15,8 +15,8 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-	
-	supportedFilesystems = [ "ntfs" ];
+
+    supportedFilesystems = [ "ntfs" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "i915.enable_psr=0"
@@ -30,6 +30,7 @@
     pkg-config
     wget
     curl
+    greetd.tuigreet
   ];
 
   fonts.packages = with pkgs; [
@@ -68,8 +69,18 @@
   };
 
   services = {
-  	udisks2.enable = true;
-	gvfs.enable = true;
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --asterisks --cmd niri-session";
+          user = "greeter";
+        };
+      };
+    };
+
+    udisks2.enable = true;
+    gvfs.enable = true;
     tuned.enable = true;
     upower.enable = true;
     libinput.enable = true;
