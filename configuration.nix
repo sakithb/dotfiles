@@ -10,6 +10,11 @@
 	boot.loader.efi.canTouchEfiVariables = true;
 
 	boot.kernelPackages = pkgs.linuxPackages_latest;
+	boot.kernelParams = [ 
+		"i915.enable_psr=0" 
+	];
+
+	hardware.enableAllFirmware = true;
 
 	networking.hostName = "sakithb-nixos";
 	networking.networkmanager.enable = true;
@@ -50,5 +55,15 @@
 
 	system.stateVersion = "25.11";
 
+	nix.settings = {
+		max-jobs = "auto";
+		cores = 2;
+	}
+
+	services.earlyoom = {
+		enable = true;
+		enableNotifications = true;
+		freeMemThreshold = 5;
+	};
 }
 

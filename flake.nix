@@ -2,13 +2,10 @@
 	inputs = {
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+		neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
 		home-manager = {
 			url = "github:nix-community/home-manager";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-
-		niri = {
-			url = "github:sodiboo/niri-flake";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
@@ -17,16 +14,11 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 	};
-	outputs = inputs@{ self, nixpkgs, home-manager, niri, ... }: {
+	outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
 		nixosConfigurations.sakithb-nixos = nixpkgs.lib.nixosSystem {
 			specialArgs = { inherit inputs; };
 			modules = [
 				./configuration.nix 
-
-				niri.nixosModules.niri
-				{
-					nixpkgs.overlays = [ niri.overlays.niri ];
-				}
 
 				home-manager.nixosModules.home-manager{
 					home-manager.useGlobalPkgs = true;

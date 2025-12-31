@@ -2,6 +2,7 @@
 
 {
 	programs.bash = {
+		enable = true;
 		enableVteIntegration = true;
 		historyControl = [ "erasedups" "ignoreboth" ];
 		historyFileSize = 100000;
@@ -11,7 +12,11 @@
 		shellAliases = {
 			ls = "ls --color=auto";
 			grep = "grep --color=auto";
-			nrs = "nixos-rebuild switch --flake $HOME/projects/dotfiles";
+			nrs = "cd $HOME/projects/dotfiles && git add . && git commit -m \"$(date +%d-%m-%y_%H:%M:%S)\" && sudo nixos-rebuild switch --flake .";
+		};
+
+		sessionVariables = {
+			EDITOR = "nvim";
 		};
 
 		initExtra = ''
