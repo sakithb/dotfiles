@@ -58,7 +58,7 @@
 	nix.settings = {
 		max-jobs = "auto";
 		cores = 2;
-	}
+	};
 
 	services.earlyoom = {
 		enable = true;
