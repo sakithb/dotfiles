@@ -17,6 +17,7 @@
 		brave
 		slack
 		nixd
+		nixfmt-rfc-style
 	];
 
 	home.stateVersion = "25.11";
