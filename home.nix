@@ -8,7 +8,7 @@
 {
   imports = [
     ./modules/bash.nix
-    ./modules/niri-home.nix
+    ./modules/niri.nix
     ./modules/nvim.nix
     ./modules/git.nix
     ./modules/alacritty.nix

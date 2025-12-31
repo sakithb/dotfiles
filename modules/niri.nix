@@ -419,5 +419,6 @@
     };
   };
 
-  xdg.configFile."niri".source = ../configs/niri;
+  xdg.configFile."niri".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/sakithb/projects/dotfiles/configs/niri";
 }
