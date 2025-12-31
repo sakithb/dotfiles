@@ -843,7 +843,7 @@ vim.pack.add({
 })
 
 -- Setup lsp
-vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor", "bashls" })
+vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor", "bashls", "nixd" })
 vim.lsp.config("phpactor", {
 	root_markers = { "composer.json", ".phpactor.json", ".phpactor.yml", ".git" },
 })

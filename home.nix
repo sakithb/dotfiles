@@ -16,6 +16,7 @@
 		alacritty
 		brave
 		slack
+		nixd
 	];
 
 	home.stateVersion = "25.11";
