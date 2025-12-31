@@ -20,6 +20,7 @@
 
     extraPackages = with pkgs; [
       ripgrep
+      tree-sitter
     ];
   };
 
