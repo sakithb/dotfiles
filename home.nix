@@ -14,6 +14,10 @@
     ./modules/alacritty.nix
   ];
 
+  programs = {
+  	thunar.enable = true;
+  };
+
   home = {
     username = "sakithb";
     homeDirectory = "/home/sakithb";
