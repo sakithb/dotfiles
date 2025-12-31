@@ -15,7 +15,8 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-
+	
+	supportedFilesystems = [ "ntfs" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "i915.enable_psr=0"
@@ -67,6 +68,8 @@
   };
 
   services = {
+  	udisks.enable = true;
+	gvfs.enable = true;
     tuned.enable = true;
     upower.enable = true;
     libinput.enable = true;
