@@ -11,7 +11,6 @@
           y = 5;
         };
         decorations = "None";
-        startup_mode = "Maximized";
       };
 
       font = {

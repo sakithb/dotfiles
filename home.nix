@@ -1,7 +1,5 @@
 {
-  config,
   pkgs,
-  inputs,
   ...
 }:
 
@@ -10,24 +8,32 @@
     ./modules/bash.nix
     ./modules/niri.nix
     ./modules/quickshell.nix
+    ./modules/noctalia.nix
     ./modules/nvim.nix
     ./modules/git.nix
     ./modules/alacritty.nix
   ];
+
+  programs = {
+    gh = {
+      enable = true;
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+  };
 
   home = {
     username = "sakithb";
     homeDirectory = "/home/sakithb";
 
     packages = with pkgs; [
-      alacritty
       brave
       slack
-      nixd
-      nixfmt-rfc-style
-      adw-gtk3
-      papirus-icon-theme
-	  spaceFM
+      pcmanfm
+      xarchiver
     ];
 
     stateVersion = "25.11";

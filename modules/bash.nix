@@ -22,6 +22,7 @@
   programs.bash = {
     enable = true;
     enableVteIntegration = true;
+    enableCompletion = true;
     historyControl = [
       "erasedups"
       "ignoreboth"
@@ -42,7 +43,9 @@
     shellAliases = {
       ls = "ls --color=auto";
       grep = "grep --color=auto";
-      nrs = "cd $HOME/projects/dotfiles && git add . && git commit -m \"$(date +%d-%m-%y_%H:%M:%S)\" && sudo nixos-rebuild switch --flake .";
+      nrs = ''cd $HOME/projects/dotfiles && git add . && sudo nixos-rebuild switch --flake . && git commit -m "$(date +%d-%m-%y_%H:%M:%S)"'';
+      nfu = ''cd $HOME/projects/dotfiles && nix flake update && nrs'';
+      denv = "echo 'use flake \"$HOME/projects/dotfiles/devenvs/\${PWD##*/}\"' > .envrc && direnv allow";
     };
 
     sessionVariables = {
@@ -62,8 +65,8 @@
     ];
 
     initExtra = ''
-      set -o noclobber
-	  PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
+            set -o noclobber
+      	  PS1='\[\e[38;5;34m\]\w\[\e[38;5;214m\]$(git branch 2>/dev/null | grep '"'"'*'"'"' | colrm 1 1) \[\e[0m\]\\$ '
     '';
 
   };

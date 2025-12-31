@@ -21,6 +21,15 @@
     extraPackages = with pkgs; [
       ripgrep
       tree-sitter
+      nixd
+	  nixfmt
+      lua-language-server
+      typescript-language-server
+      svelte-language-server
+      phpactor
+      bash-language-server
+      ols
+      qt6Packages.qtdeclarative
     ];
   };
 

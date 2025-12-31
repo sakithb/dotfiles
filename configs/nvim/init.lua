@@ -548,7 +548,7 @@ local function setupPickKeymaps()
 	local pick = require("mini.pick")
 
 	vim.keymap.set("n", "<leader>ff", pick.builtin.files, { desc = "Pick files" })
-	vim.keymap.set("n", "<leader>fb", open_mini_pick_buffers, { desc = "Pick buffers" })
+	vim.keymap.set("n", "<leader><space>", open_mini_pick_buffers, { desc = "Pick buffers" })
 	vim.keymap.set("n", "<leader>ft", open_mini_pick_terminals, { desc = "Pick terminals" })
 	vim.keymap.set("n", "<leader>fg", pick.builtin.grep_live, { desc = "Search across files" })
 
@@ -617,7 +617,7 @@ local augroup = vim.api.nvim_create_augroup("UserConfig", {})
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = augroup,
 	callback = function()
-		vim.highlight.on_yank()
+		vim.hl.on_yank()
 	end,
 })
 
@@ -832,7 +832,6 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.pack.add({
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-	{ src = "https://github.com/mason-org/mason.nvim" },
 
 	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.icons" },
@@ -843,17 +842,55 @@ vim.pack.add({
 })
 
 -- Setup lsp
-vim.lsp.enable({ "lua_ls", "ts_ls", "svelte", "phpactor", "bashls", "nixd" })
+vim.lsp.enable({ 
+	"lua_ls",
+	"ts_ls",
+	"svelte",
+	"phpactor",
+	"bashls",
+	"nixd",
+	"ols",
+	"qmlls"
+})
+
 vim.lsp.config("phpactor", {
 	root_markers = { "composer.json", ".phpactor.json", ".phpactor.yml", ".git" },
 })
+
 vim.lsp.config("nixd", {
 	formattings = {
-		command = { "nixfmt", "--indent=4" }
+		command = { "nix", "fmt" }
 	}
 })
 
-require("mason").setup()
+-- local packages = {
+--     "lua-language-server",
+--     "typescript-language-server",
+--     "svelte-language-server",
+--     "phpactor",
+--     "bash-language-server",
+--     "ols",
+--     "qmlls"
+-- }
+
+require("nvim-treesitter").install({
+	"javascript",
+	"typescript",
+	"jsx",
+	"tsx",
+	"bash",
+	"nix",
+	"qmljs",
+	"qmldir",
+	"html",
+	"css",
+	"php",
+	"odin",
+	"yaml",
+	"json",
+	"svelte",
+	"blade"
+})
 
 -- Appearance
 vim.cmd("colorscheme gruvbox")
