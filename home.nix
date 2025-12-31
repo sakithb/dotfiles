@@ -26,7 +26,13 @@
       nixfmt-rfc-style
       adw-gtk3
       papirus-icon-theme
-	  thunar
+      (xfce.thunar.override {
+        thunarPlugins = [
+          xfce.thunar-archive-plugin
+          xfce.thunar-volman
+        ];
+      })
+      xfce.tumbler
     ];
 
     stateVersion = "25.11";
