@@ -9,7 +9,7 @@ Variants {
 	PanelWindow {
 		id: bar
 
-		required property var modelData
+		required property ShellScreen modelData
 
 		screen: modelData
 
@@ -33,20 +33,16 @@ Variants {
 				anchors.left: parent.left
 
 				BarClock {}
-				BarClock {}
-				BarClock {}
 			}
 
 			BarSection {
 				anchors.horizontalCenter: parent.horizontalCenter
 
-				BarClock {}
 			}
 
 			BarSection {
 				anchors.right: parent.right
 
-				BarClock {}
 			}
 		}
     }

@@ -43,7 +43,7 @@ PopupWindow {
 
 		anchors.margins: Config.popupPadding
 
-		GridLayout {
+		ColumnLayout {
 			id: container
 
 			anchors.centerIn: parent
