@@ -842,7 +842,7 @@ vim.pack.add({
 })
 
 -- Setup lsp
-vim.lsp.enable({ 
+vim.lsp.enable({
 	"lua_ls",
 	"ts_ls",
 	"svelte",
@@ -850,7 +850,8 @@ vim.lsp.enable({
 	"bashls",
 	"nixd",
 	"ols",
-	"qmlls"
+	"qmlls",
+	"pylsp"
 })
 
 vim.lsp.config("phpactor", {
@@ -889,7 +890,8 @@ require("nvim-treesitter").install({
 	"yaml",
 	"json",
 	"svelte",
-	"blade"
+	"blade",
+	"python"
 })
 
 -- Appearance

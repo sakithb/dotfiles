@@ -29,7 +29,6 @@
   };
   outputs =
     inputs@{
-      self,
       nixpkgs,
       home-manager,
       ...

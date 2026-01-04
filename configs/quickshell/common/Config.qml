@@ -14,9 +14,9 @@ Singleton {
 
     readonly property int barHeight: 36
     readonly property int barPaddingX: 6
-	readonly property int barPaddingY: 4
+	readonly property int barPaddingY: 6
 
-	readonly property int barBtnPadding: 12
+	readonly property int barBtnPaddingX: 12
 	readonly property int barBtnRadius: 99
 	readonly property color barBtnCol: "#00000000"
 	readonly property color barBtnColHover: "#7F403D39"

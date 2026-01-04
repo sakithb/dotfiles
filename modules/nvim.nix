@@ -22,7 +22,7 @@
       ripgrep
       tree-sitter
       nixd
-	  nixfmt
+      nixfmt
       lua-language-server
       typescript-language-server
       svelte-language-server
@@ -30,6 +30,7 @@
       bash-language-server
       ols
       qt6Packages.qtdeclarative
+      python313Packages.python-lsp-server
     ];
   };
 

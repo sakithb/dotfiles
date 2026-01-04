@@ -1,5 +1,5 @@
 {
-  config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -8,6 +8,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    inputs.dms.nixosModules.greeter
   ];
 
   boot = {
@@ -100,6 +101,20 @@
         };
       };
     };
+
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin
+        thunar-volman
+      ];
+    };
+
+    dankMaterialShell.greeter = {
+      enable = true;
+      compositor.name = "niri";
+      configHome = "/home/sakithb";
+    };
   };
 
   security.pam.loginLimits = [
@@ -112,15 +127,6 @@
   ];
 
   services = {
-    greetd = {
-      enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --cmd niri-session";
-        };
-      };
-    };
-
     pipewire = {
       enable = true;
       pulse.enable = true;
