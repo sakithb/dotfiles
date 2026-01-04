@@ -41,12 +41,9 @@ PopupWindow {
 		implicitWidth: container.implicitWidth + (Config.popupPadding * 2)
 		implicitHeight: container.implicitHeight + (Config.popupPadding * 2)
 
-		anchors.margins: Config.popupPadding
-
 		ColumnLayout {
 			id: container
-
-			anchors.centerIn: parent
+			anchors.centerIn: wrapper
 		}
 	}
 }

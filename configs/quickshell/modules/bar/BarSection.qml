@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import qs.common
 
 RowLayout {
-	spacing: Config.barBtnSpacing
+	spacing: Config.itemSpacing
 	anchors.top: parent.top
 	anchors.bottom: parent.bottom
 }

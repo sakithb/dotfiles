@@ -36,6 +36,11 @@
       xarchiver
     ];
 
+	sessionVariables = {
+		Q_ICON_THEME_FALLBACK_THEME = "Papirus-Dark";
+		QT_QPA_PLATFORMTHEME = "gtk3";
+	};
+
     stateVersion = "25.11";
   };
 

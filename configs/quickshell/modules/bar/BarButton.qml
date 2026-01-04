@@ -49,7 +49,7 @@ Rectangle {
     RowLayout {
         id: container
         anchors.centerIn: parent
-		spacing: Config.barBtnSpacing
+		spacing: Config.itemSpacing / 2
     }
 
     MouseArea {
