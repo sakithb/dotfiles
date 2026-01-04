@@ -7,8 +7,8 @@
   imports = [
     ./modules/bash.nix
     ./modules/niri.nix
-    ./modules/quickshell.nix
-    ./modules/noctalia.nix
+    # ./modules/quickshell.nix
+    ./modules/dms.nix
     ./modules/nvim.nix
     ./modules/git.nix
     ./modules/alacritty.nix

@@ -74,24 +74,19 @@ BarButton {
                             Item {
                                 id: closeBtn
 
-                                // 1. HITBOX: 32px is a comfortable minimum for mouse interaction
                                 Layout.preferredWidth: 32
                                 Layout.preferredHeight: 32
 
-                                // 2. LAYOUT: Ensure it doesn't get crushed by long text
                                 Layout.minimumWidth: 32
 
-                                // 3. VISUALS: The background circle
                                 Rectangle {
                                     anchors.centerIn: parent
-                                    width: 24 // Visual size can be smaller than hitbox
+                                    width: 24
                                     height: 24
                                     radius: 12
 
-                                    // Only show background when hovered
                                     color: closeMa.containsMouse ? Config.colBgHover : "transparent"
 
-                                    // Smooth fade for the flicker-free look
                                     Behavior on color {
                                         ColorAnimation {
                                             duration: 100
@@ -106,25 +101,17 @@ BarButton {
                                     }
                                 }
 
-                                // 4. INTERACTION: Raw MouseArea for total control
                                 MouseArea {
                                     id: closeMa
                                     anchors.fill: parent
 
-                                    // Essential for "opacity: ... ? 1 : 0.5" to work
                                     hoverEnabled: true
 
-                                    // Stops ListView from stealing the click if you drag slightly
                                     preventStealing: true
 
-                                    // Ensures this sits on top of any delegate background clicks
                                     z: 1
 
                                     onClicked: modelData.dismiss()
-
-                                    // Debug: Uncomment if you still see issues
-                                    // onEntered: console.log("Hover Enter")
-                                    // onExited: console.log("Hover Exit")
                                 }
                             }
                         }
