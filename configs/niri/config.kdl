@@ -61,7 +61,7 @@ layout {
     }
 }
 
-spawn-at-startup "noctalia-shell"
+// spawn-at-startup "noctalia-shell"
 
 hotkey-overlay {
     skip-at-startup
@@ -81,26 +81,26 @@ window-rule {
 }
 
 binds {
-	Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+	// Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Return { spawn "alacritty"; }
 
-    Mod+Alt+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
-    Mod+Alt+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
-    Mod+Alt+L { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-    Mod+Alt+I { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
-    Mod+Alt+P { power-off-monitors; }
+    // Mod+Alt+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
+    // Mod+Alt+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    // Mod+Alt+L { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
+    // Mod+Alt+I { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
+    // Mod+Alt+P { power-off-monitors; }
 
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
-    XF86AudioMute        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteInput"; }
+    //XF86AudioRaiseVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
+    //XF86AudioLowerVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
+    //XF86AudioMute        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
+    //XF86AudioMicMute     allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteInput"; }
 
-    XF86AudioPlay        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "playPause"; }
-    XF86AudioPrev        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "previous"; }
-    XF86AudioNext        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "next"; }
+    //XF86AudioPlay        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "playPause"; }
+    //XF86AudioPrev        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "previous"; }
+    //XF86AudioNext        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "next"; }
 
-    XF86MonBrightnessUp allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
+    //XF86MonBrightnessUp allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
+    //XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Q repeat=false { close-window; }
@@ -163,8 +163,10 @@ binds {
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
-    Shift+Print { spawn "noctalia-shell" "ipc" "call" "screenRecorder" "toggle"; }
+    //Shift+Print { spawn "noctalia-shell" "ipc" "call" "screenRecorder" "toggle"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
 }
+
+include "dms/binds.kdl"

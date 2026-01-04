@@ -36,6 +36,12 @@
       xarchiver
     ];
 
+	file = {
+		"Pictures/Wallpapers" = {
+			source = ./configs/wallpapers;
+		};
+	};
+
 	sessionVariables = {
 		Q_ICON_THEME_FALLBACK_THEME = "Papirus-Dark";
 		QT_QPA_PLATFORMTHEME = "gtk3";
