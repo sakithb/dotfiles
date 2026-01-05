@@ -1,3 +1,15 @@
+spawn-at-startup "dms" "run"
+
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
+
+window-rule {
+    geometry-corner-radius 6
+    clip-to-geometry true
+}
+
+
 input {
     keyboard {
         numlock
@@ -68,17 +80,6 @@ hotkey-overlay {
 animations {
     slowdown 1.0
 }
-
-window-rule {
-    geometry-corner-radius 6
-    clip-to-geometry true
-}
-
-spawn-at-startup "dms" "run"
-
-prefer-no-csd
-
-screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
 
 switch-events {
     lid-close { spawn "bash" "-c" "dms ipc call lock lock && systemctl suspend"; }
@@ -167,7 +168,6 @@ binds {
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
-    //Shift+Print { spawn "noctalia-shell" "ipc" "call" "screenRecorder" "toggle"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 

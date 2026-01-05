@@ -5,14 +5,6 @@
 }:
 
 {
-  # programs.qutebrowser = {
-  #   enable = true;
-
-  #   package = pkgs.qutebrowser.override {
-  #     enableWideVine = true;
-  #   };
-  # };
-
   home.packages = [
     (pkgs.qutebrowser.override { enableWideVine = true; })
   ];

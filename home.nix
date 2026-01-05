@@ -11,6 +11,7 @@
     ./modules/nvim.nix
     ./modules/git.nix
     ./modules/alacritty.nix
+    ./modules/qutebrowser.nix
     ./modules/theme.nix
   ];
 
