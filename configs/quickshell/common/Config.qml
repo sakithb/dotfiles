@@ -1,8 +1,5 @@
 pragma Singleton
 
-import QtQuick
-import Quickshell
-
 Singleton {
     readonly property color colBg: "#252422"
     readonly property color colBgSecondary: "#403D39"

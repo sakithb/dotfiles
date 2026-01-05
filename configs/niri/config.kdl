@@ -174,4 +174,7 @@ binds {
 
 }
 
+include "dms/colors.kdl"
+include "dms/alttab.kdl"
 include "dms/binds.kdl"
+include "dms/wpblur.kdl"

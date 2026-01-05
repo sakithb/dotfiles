@@ -512,7 +512,7 @@ vim.keymap.set("v", "rr", ":s///gc<left><left><left><left>", { desc = "Replace i
 vim.keymap.set({ "n", "v" }, "<M-y>", "\"+y", { desc = "Copy to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlights:" })
-vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<C-t>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 vim.keymap.set("i", "<C-f>", function() scroll_preview_docs("down") end, { desc = "Scroll preview docs" })
 vim.keymap.set("i", "<C-b>", function() scroll_preview_docs("up") end, { desc = "Scroll preview docs" })

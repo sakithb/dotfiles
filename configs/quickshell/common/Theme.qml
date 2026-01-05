@@ -1,0 +1,4 @@
+pragma Singleton
+
+Singleton {
+}

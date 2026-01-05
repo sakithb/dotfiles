@@ -33,6 +33,7 @@
     packages = with pkgs; [
       brave
       slack
+	  matugen
     ];
 
     stateVersion = "25.11";
