@@ -8,7 +8,9 @@
 {
   imports = [
     ./hardware-configuration.nix
-    inputs.dms.nixosModules.greeter
+	./modules/thunar.nix
+	./modules/gaming.nix
+	inputs.dms.nixosModules.greeter
   ];
 
   boot = {
@@ -82,32 +84,6 @@
             --prefix PATH : ${lib.makeBinPath [ pkgs.xwayland-satellite ]}
         '';
       });
-    };
-
-    steam = {
-      enable = true;
-      package = pkgs.steam.override {
-        extraArgs = "-system-composer";
-      };
-    };
-
-    gamemode = {
-      enable = true;
-      enableRenice = true;
-
-      settings = {
-        general = {
-          renice = 10;
-        };
-      };
-    };
-
-    thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-      ];
     };
 
     dankMaterialShell.greeter = {
