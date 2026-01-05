@@ -13,7 +13,8 @@
   services.tumbler.enable = true;
 
   environment.systemPackages = with pkgs; [
-    xarchiver
+  	unrar
+	xarchiver
     ffmpegthumbnailer
   ];
 }

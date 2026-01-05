@@ -33,10 +33,8 @@
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    p7zip-rar
-	peazip
-  ];
+  # environment.systemPackages = with pkgs; [
+  # ];
 
   fonts.packages = with pkgs; [
     noto-fonts
