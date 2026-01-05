@@ -128,6 +128,11 @@
 	power-profiles-daemon = {
 		enable = true;
 	};
+
+	earlyoom = {
+		enable = true;
+		enableNotifications = true;
+	};
   };
 
   system.stateVersion = "25.11";
