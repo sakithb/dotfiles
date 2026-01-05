@@ -13,7 +13,7 @@
   services.tumbler.enable = true;
 
   environment.systemPackages = with pkgs; [
-    file-roller
+    mate.engrampa
     ffmpegthumbnailer
   ];
 }
