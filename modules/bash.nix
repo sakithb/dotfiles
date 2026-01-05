@@ -4,6 +4,8 @@
   programs.readline = {
     enable = true;
     variables = {
+      editing-mode = "vi";
+      show-mode-in-prompt = true;
       completion-ignore-case = true;
       completion-map-case = true;
       show-all-if-ambiguous = true;
