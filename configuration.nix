@@ -34,7 +34,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    p7zip-rar
+    unrar
+	unzip
   ];
 
   fonts.packages = with pkgs; [
