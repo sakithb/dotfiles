@@ -80,6 +80,10 @@ prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png"
 
+switch-events {
+    lid-close { spawn "bash" "-c" "dms ipc call lock lock && systemctl suspend"; }
+}
+
 binds {
 	// Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Return { spawn "alacritty"; }
