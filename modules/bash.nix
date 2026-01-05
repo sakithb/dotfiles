@@ -5,8 +5,8 @@
     enable = true;
     variables = {
       editing-mode = "vi";
-      vi-ins-mode-string = "+";
-      vi-cmd-mode-string = ":";
+      vi-ins-mode-string = "\"+\"";
+      vi-cmd-mode-string = "\":\"";
       keyseq-timeout = 10;
       completion-ignore-case = true;
       completion-map-case = true;
