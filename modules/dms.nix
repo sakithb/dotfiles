@@ -9,6 +9,11 @@
     inputs.dms.homeModules.dankMaterialShell.default
   ];
 
+  home.packages = with pkgs; [
+  	cliphist
+	wl-clipboard
+  ];
+
   programs.dankMaterialShell = {
     enable = true;
 	enableClipboard = true;
