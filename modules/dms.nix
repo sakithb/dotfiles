@@ -11,6 +11,7 @@
 
   programs.dankMaterialShell = {
     enable = true;
+	enableClipboard = true;
     plugins = {
       EmojiLauncher = {
         src = pkgs.fetchFromGitHub {
