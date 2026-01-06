@@ -33,8 +33,9 @@
     ];
   };
 
-  # environment.systemPackages = with pkgs; [
-  # ];
+  environment.systemPackages = with pkgs; [
+  	protonvpn-gui
+  ];
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -132,10 +133,6 @@
 	earlyoom = {
 		enable = true;
 		enableNotifications = true;
-	};
-
-	cloudflare-warp = {
-		enable = true;
 	};
   };
 
