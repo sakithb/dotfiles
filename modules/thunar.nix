@@ -14,7 +14,8 @@
 
   environment.systemPackages = with pkgs; [
   	unrar
-	xarchiver
+	unzip
+	file-roller
     ffmpegthumbnailer
   ];
 }
