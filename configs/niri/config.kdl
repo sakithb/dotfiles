@@ -1,4 +1,5 @@
 spawn-at-startup "dms" "run"
+spawn-sh-at-startup "wl-paste --watch cliphist store &"
 
 prefer-no-csd
 

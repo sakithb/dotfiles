@@ -133,6 +133,10 @@
 		enable = true;
 		enableNotifications = true;
 	};
+
+	cloudflare-warp = {
+		enable = true;
+	};
   };
 
   system.stateVersion = "25.11";
