@@ -36,6 +36,7 @@
   environment.systemPackages = with pkgs; [
   	protonvpn-gui
 	mysql-workbench
+	anydesk
   ];
 
   fonts.packages = with pkgs; [
