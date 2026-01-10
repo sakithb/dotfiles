@@ -30,11 +30,5 @@
         };
       };
     };
-
-	default.settings = {
-		qtThemingEnabled = true;
-		gtkThemingEnabled = true;
-		iconTheme = "Papirus-Dark";
-	};
   };
 }
