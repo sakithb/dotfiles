@@ -10,8 +10,8 @@
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
-    name = "capitaine-cursors";
-    package = pkgs.capitaine-cursors;
+	name = "Adwaita";
+	package = pkgs.adwaita-icon-theme;
     size = 16;
   };
 
