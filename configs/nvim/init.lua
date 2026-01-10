@@ -823,7 +823,7 @@ vim.api.nvim_create_autocmd('FileType', {
 		vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 		vim.wo[0][0].foldmethod = 'expr'
 
-		-- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 	end,
 })
 
@@ -839,6 +839,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.pick" },
 	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+	{ src = "https://github.com/nmac427/guess-indent.nvim" },
 })
 
 -- Setup lsp

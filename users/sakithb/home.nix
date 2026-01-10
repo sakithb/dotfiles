@@ -8,6 +8,7 @@
     ../../modules/home/nvim.nix
     ../../modules/home/git.nix
     ../../modules/home/alacritty.nix
+    ../../modules/home/mpv.nix
     ../../modules/home/theme.nix
   ];
 
