@@ -891,7 +891,10 @@ require("nvim-treesitter").install({
 	"json",
 	"svelte",
 	"blade",
-	"python"
+	"python",
+	"sql",
+	"jsdoc",
+	"scss"
 })
 
 -- Appearance

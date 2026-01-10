@@ -10,7 +10,6 @@ window-rule {
     clip-to-geometry true
 }
 
-
 input {
     keyboard {
         numlock
@@ -50,19 +49,12 @@ layout {
     default-column-width { }
 
     focus-ring {
-        width 2
-
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 1
     }
 
     border {
         off
-
         width 2
-        active-color "#ffc87f"
-        inactive-color "#505050"
-        urgent-color "#9b0000"
     }
 
     shadow {
@@ -71,7 +63,6 @@ layout {
         softness 30
         spread 5
         offset x=0 y=0
-        color "#0007"
     }
 }
 
@@ -88,26 +79,8 @@ switch-events {
 }
 
 binds {
-	// Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+Return { spawn "alacritty"; }
-
-    // Mod+Alt+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
-    // Mod+Alt+Period { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
-    // Mod+Alt+L { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
-    // Mod+Alt+I { spawn "noctalia-shell" "ipc" "call" "idleInhibitor" "toggle"; }
-    // Mod+Alt+P { power-off-monitors; }
-
-    //XF86AudioRaiseVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
-    //XF86AudioLowerVolume allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
-    //XF86AudioMute        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
-    //XF86AudioMicMute     allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "volume" "muteInput"; }
-
-    //XF86AudioPlay        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "playPause"; }
-    //XF86AudioPrev        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "previous"; }
-    //XF86AudioNext        allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "media" "next"; }
-
-    //XF86MonBrightnessUp allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
-    //XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
+    Mod+Alt+B { spawn "brave"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Q repeat=false { close-window; }

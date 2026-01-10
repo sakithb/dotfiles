@@ -17,11 +17,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,20 +29,10 @@
       ...
     }:
     {
-      nixosConfigurations.sakithb-nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.sakithb-laptop = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
-
-          (
-            { ... }:
-            {
-              nixpkgs.overlays = [
-                inputs.niri.overlays.default
-                inputs.neovim-nightly-overlay.overlays.default
-              ];
-            }
-          )
+          ./hosts/laptop/default.nix
 
           home-manager.nixosModules.home-manager
           {
@@ -55,7 +40,7 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.sakithb = import ./home.nix;
+            home-manager.users.sakithb = import ./users/sakithb/home.nix;
           }
         ];
       };
