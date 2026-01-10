@@ -7,5 +7,6 @@
   environment.systemPackages = with pkgs; [
   	nautilus
 	file-roller
+	sushi
   ];
 }

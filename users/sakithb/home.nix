@@ -20,7 +20,20 @@
     nix-direnv.enable = true;
   };
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+  };
+
   home.packages = with pkgs; [
+  	loupe
+	decibels
+	kdePackages.okular
+	libreoffice
+	pavucontrol
+	gedit
+	snapshot
+	kooha
     brave
     slack
     protonvpn-gui
