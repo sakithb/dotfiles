@@ -39,6 +39,8 @@
     slack
     protonvpn-gui
     anydesk
+	kdePackages.kdenlive
+	heroic
   ];
 
   home.stateVersion = "25.11";
