@@ -27,7 +27,8 @@
     });
   };
 
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-  services.blueman.enable = true;
+  services = {
+    gvfs.enable = true;
+    udisks2.enable = true;
+  };
 }

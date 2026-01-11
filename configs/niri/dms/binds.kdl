@@ -2,7 +2,7 @@ binds {
     Mod+Alt+I hotkey-overlay-title="Idle Inhibit: Toggle" { spawn "dms" "ipc" "call" "inhibit" "toggle"; }
     Mod+Alt+L hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lock"; }
     Mod+Alt+V hotkey-overlay-title="Clipboard: Toggle" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
-    Mod+Space hotkey-overlay-title="App Launcher: Toggle" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    F24 hotkey-overlay-title="App Launcher: Toggle" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
     XF86AudioLowerVolume hotkey-overlay-title="Volume Down (5%)" { spawn "dms" "ipc" "call" "audio" "decrement" "5"; }
     XF86AudioMicMute hotkey-overlay-title="Microphone Mute Toggle" { spawn "dms" "ipc" "call" "audio" "micmute"; }
     XF86AudioMute hotkey-overlay-title="Volume Mute Toggle" { spawn "dms" "ipc" "call" "audio" "mute"; }

@@ -85,7 +85,8 @@ switch-events {
 
 binds {
     Mod+Return { spawn "alacritty"; }
-    Mod+Alt+B { spawn "brave"; }
+    Mod+Alt+B { spawn "firefox"; }
+    Mod+Alt+F { spawn "nautilus"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Q repeat=false { close-window; }

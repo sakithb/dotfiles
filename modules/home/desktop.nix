@@ -22,12 +22,8 @@
     resources
     gnome-disk-utility
     pavucontrol
-    blueman
-    (networkmanagerapplet.overrideAttrs (oldAttrs: {
-      postInstall = (oldAttrs.postInstall or "") + ''
-        rm $out/etc/xdg/autostart/nm-applet.desktop
-      '';
-    }))
+	overskride
+	iwgtk
     baobab
   ];
 

@@ -512,7 +512,6 @@ vim.keymap.set("v", "rr", ":s///gc<left><left><left><left>", { desc = "Replace i
 vim.keymap.set({ "n", "v" }, "<M-y>", "\"+y", { desc = "Copy to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<M-p>", "\"+p", { desc = "Paste to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<Esc>", ":nohlsearch<CR>", { desc = "Discard search highlights:" })
-vim.keymap.set("t", "<C-t>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 vim.keymap.set("i", "<C-f>", function() scroll_preview_docs("down") end, { desc = "Scroll preview docs" })
 vim.keymap.set("i", "<C-b>", function() scroll_preview_docs("up") end, { desc = "Scroll preview docs" })
@@ -520,6 +519,9 @@ vim.keymap.set("i", "<C-space>", "<C-x><C-o>", { desc = "Trigger completion" })
 
 -- sessions
 vim.keymap.set("n", "sc", create_session, { desc = "Create session" })
+
+-- terminal mode
+vim.keymap.set("t", "<C-t>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 local function setupLspKeymaps(buf)
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { buffer = buf, desc = "Rename symbol" })

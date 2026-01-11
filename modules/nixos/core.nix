@@ -1,33 +1,55 @@
 { pkgs, inputs, ... }:
 
 {
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "ntfs" ];
-  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
-  boot.kernelParams = [ "i915.enable_psr=0" ];
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+      };
 
-  networking.networkmanager.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.settings.auto-optimise-store = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-    persistent = true;
-    randomizedDelaySec = "10min";
+    supportedFilesystems = [ "ntfs" ];
+
+    kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
+    kernelParams = [ "i915.enable_psr=0" ];
   };
-  nixpkgs.config.allowUnfree = true;
 
-  nixpkgs.overlays = [
-    inputs.niri.overlays.default
-    inputs.neovim-nightly-overlay.overlays.default
-  ];
+  networking = {
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+  };
+
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+
+      auto-optimise-store = true;
+    };
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+      persistent = true;
+      randomizedDelaySec = "10min";
+    };
+  };
+
+  nixpkgs = {
+    config.allowUnfree = true;
+    overlays = [
+      inputs.niri.overlays.default
+      inputs.neovim-nightly-overlay.overlays.default
+    ];
+  };
 
   security.pam.loginLimits = [
     {
@@ -37,34 +59,40 @@
       value = "65536";
     }
   ];
-  systemd.settings.Manager.DefaultLimitNOFILE = "65536";
-  systemd.user.extraConfig = "DefaultLimitNOFILE=65536";
 
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
+  systemd = {
+    settings.Manager.DefaultLimitNOFILE = "65536";
+    user.extraConfig = "DefaultLimitNOFILE=65536";
   };
-  services.power-profiles-daemon.enable = true;
-  services.earlyoom = {
-    enable = true;
-    enableNotifications = true;
+
+  services = {
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+    power-profiles-daemon.enable = true;
+    earlyoom = {
+      enable = true;
+      enableNotifications = true;
+    };
   };
-  zramSwap.enable = true;
 
-  fonts.packages = with pkgs; [
-	inter
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
-    nerd-fonts.jetbrains-mono
-  ];
+  fonts = {
+    packages = with pkgs; [
+      inter
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+      nerd-fonts.jetbrains-mono
+    ];
 
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = {
-      serif = [ "Noto Serif" ];
-      sansSerif = [ "Inter" ];
-      monospace = [ "JetBrainsMono Nerd Font" ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [ "Noto Serif" ];
+        sansSerif = [ "Inter" ];
+        monospace = [ "JetBrainsMono Nerd Font" ];
+      };
     };
   };
 
@@ -76,4 +104,6 @@
       "gamemode"
     ];
   };
+
+  zramSwap.enable = true;
 }
