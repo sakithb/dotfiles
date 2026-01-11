@@ -23,11 +23,13 @@
     gnome-disk-utility
     pavucontrol
     blueman
-    networkmanagerapplet
+    (networkmanagerapplet.overrideAttrs (oldAttrs: {
+      postInstall = (oldAttrs.postInstall or "") + ''
+        rm $out/etc/xdg/autostart/nm-applet.desktop
+      '';
+    }))
     baobab
   ];
-
-  services.network-manager-applet.enable = false;
 
   # Shell and compositor
 
