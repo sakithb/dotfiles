@@ -50,7 +50,7 @@
       grep = "grep --color=auto";
       nrs = ''cd $HOME/Projects/dotfiles && git add . && sudo nixos-rebuild switch --flake . && git commit -m "$(date +%d-%m-%y_%H:%M:%S)"'';
       nfu = ''cd $HOME/Projects/dotfiles && nix flake update && nrs'';
-      ngc = ''nix-garbage-collect -d'';
+      ngc = ''nix-collect-garbage -d'';
     };
 
     sessionVariables = {
