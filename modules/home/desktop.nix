@@ -23,7 +23,11 @@
     gnome-disk-utility
     pavucontrol
 	overskride
-	iwgtk
+    (networkmanagerapplet.overrideAttrs (oldAttrs: {
+      postInstall = (oldAttrs.postInstall or "") + ''
+        rm $out/etc/xdg/autostart/nm-applet.desktop
+      '';
+    }))
     baobab
   ];
 
