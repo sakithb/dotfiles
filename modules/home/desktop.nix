@@ -53,13 +53,13 @@
   };
 
   xdg.configFile."niri".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/dotfiles/configs/niri";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/niri";
 
   # Theming
 
   home.file = {
     "Pictures/Wallpapers" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/dotfiles/configs/wallpapers";
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/wallpapers";
     };
   };
 
