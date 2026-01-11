@@ -7,7 +7,7 @@
       ids = [ "*" ];
       settings.main = {
         capslock = "overload(control, esc)";
-        leftmeta = "overload(meta, f24)";
+        leftmeta = "overload(meta, f13)";
         leftmouse = "leftmouse";
         rightmouse = "rightmouse";
       };
