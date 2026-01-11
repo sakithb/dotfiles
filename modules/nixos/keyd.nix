@@ -6,7 +6,7 @@
     keyboards.default = {
       ids = [ "*" ];
       settings.main = {
-		tap_time = 200;
+		tap_time = 100;
         capslock = "overload(control, esc)";
         leftmeta = "overload(meta, f13)";
         leftmouse = "leftmouse";
