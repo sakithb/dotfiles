@@ -20,6 +20,7 @@
     protonvpn-gui
     anydesk
 	heroic
+	kdePackages.kdenlive
   ];
 
   home.stateVersion = "25.11";
