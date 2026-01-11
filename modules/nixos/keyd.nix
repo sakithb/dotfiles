@@ -6,10 +6,10 @@
     keyboards.default = {
       ids = [ "*" ];
       settings.main = {
-        capslock = "overload(control, esc)";
+        # capslock = "overload(control, esc)";
         leftmeta = "overload(meta, f13)";
-        leftmouse = "leftmouse";
-        rightmouse = "rightmouse";
+        # leftmouse = "leftmouse";
+        # rightmouse = "rightmouse";
       };
     };
   };
