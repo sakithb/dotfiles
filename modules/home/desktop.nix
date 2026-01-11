@@ -27,6 +27,8 @@
     baobab
   ];
 
+  services.network-manager-applet.enable = false;
+
   # Shell and compositor
 
   programs.dankMaterialShell = {
