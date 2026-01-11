@@ -3,43 +3,22 @@
 {
   imports = [
     ../../modules/home/bash.nix
-    ../../modules/home/niri.nix
-    ../../modules/home/dms.nix
+    ../../modules/home/desktop.nix
     ../../modules/home/nvim.nix
     ../../modules/home/git.nix
     ../../modules/home/alacritty.nix
-    ../../modules/home/mpv.nix
-    ../../modules/home/theme.nix
+    ../../modules/home/dev.nix
   ];
 
   home.username = "sakithb";
   home.homeDirectory = "/home/sakithb";
 
-  programs.gh.enable = true;
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
-  };
-
   home.packages = with pkgs; [
-  	loupe
-	decibels
-	kdePackages.okular
-	libreoffice
-	pavucontrol
-	gedit
-	snapshot
-	kooha
-    brave
+	google-chrome
+	firefox
     slack
     protonvpn-gui
     anydesk
-	kdePackages.kdenlive
 	heroic
   ];
 

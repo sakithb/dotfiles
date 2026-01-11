@@ -8,12 +8,12 @@
   boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
   boot.kernelParams = [ "i915.enable_psr=0" ];
 
-  hardware.enableAllFirmware = true;
-  hardware.bluetooth.enable = true;
-
   networking.networkmanager.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nix.settings.auto-optimise-store = true;
   nix.gc = {
     automatic = true;
@@ -29,21 +29,51 @@
     inputs.neovim-nightly-overlay.overlays.default
   ];
 
-  security.pam.loginLimits = [{ domain = "*"; type = "-"; item = "nofile"; value = "65536"; }];
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "-";
+      item = "nofile";
+      value = "65536";
+    }
+  ];
   systemd.settings.Manager.DefaultLimitNOFILE = "65536";
   systemd.user.extraConfig = "DefaultLimitNOFILE=65536";
 
-  services.pipewire = { enable = true; pulse.enable = true; };
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
   services.power-profiles-daemon.enable = true;
-  services.earlyoom = { enable = true; enableNotifications = true; };
+  services.earlyoom = {
+    enable = true;
+    enableNotifications = true;
+  };
   zramSwap.enable = true;
 
   fonts.packages = with pkgs; [
-    noto-fonts noto-fonts-cjk-sans noto-fonts-color-emoji nerd-fonts.jetbrains-mono
+	inter
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    nerd-fonts.jetbrains-mono
   ];
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      serif = [ "Noto Serif" ];
+      sansSerif = [ "Inter" ];
+      monospace = [ "JetBrainsMono Nerd Font" ];
+    };
+  };
 
   users.users.sakithb = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "gamemode" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "gamemode"
+    ];
   };
 }
