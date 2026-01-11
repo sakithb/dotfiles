@@ -3,8 +3,6 @@
 {
   imports = [
     ../../modules/home/bash.nix
-    ../../modules/home/niri.nix
-    ../../modules/home/dms.nix
     ../../modules/home/nvim.nix
     ../../modules/home/git.nix
     ../../modules/home/alacritty.nix
@@ -27,19 +25,10 @@
   };
 
   home.packages = with pkgs; [
-  	loupe
-	decibels
-	kdePackages.okular
-	libreoffice
-	pavucontrol
-	gedit
-	snapshot
-	kooha
     brave
     slack
     protonvpn-gui
     anydesk
-	kdePackages.kdenlive
 	heroic
   ];
 

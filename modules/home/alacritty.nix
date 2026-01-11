@@ -10,7 +10,6 @@
           x = 5;
           y = 5;
         };
-        decorations = "None";
       };
 
       font = {
