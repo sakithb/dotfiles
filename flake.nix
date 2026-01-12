@@ -21,6 +21,11 @@
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    kvLibadwaita = {
+      url = "github:GabePoel/KvLibadwaita";
+      flake = false;
+    };
   };
   outputs =
     inputs@{
