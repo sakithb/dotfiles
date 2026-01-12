@@ -20,7 +20,6 @@
     anydesk
 	heroic
 	libreoffice
-	kdePackages.kdenlive
   ];
 
   home.stateVersion = "25.11";

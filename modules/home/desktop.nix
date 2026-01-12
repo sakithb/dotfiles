@@ -104,11 +104,11 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "x-scheme-handler/about" = "firefox.desktop";
-      "x-scheme-handler/unknown" = "firefox.desktop";
+      "text/html" = "com.google.Chrome.desktop";
+      "x-scheme-handler/http" = "com.google.Chrome.desktop";
+      "x-scheme-handler/https" = "com.google.Chrome.desktop";
+      "x-scheme-handler/about" = "com.google.Chrome.desktop";
+      "x-scheme-handler/unknown" = "com.google.Chrome.desktop";
 
       "image/jpeg" = "org.gnome.Loupe.desktop";
       "image/png" = "org.gnome.Loupe.desktop";
@@ -126,6 +126,23 @@
       "text/plain" = "org.gnome.TextEditor.desktop";
 
       "inode/directory" = "org.gnome.Nautilus.desktop";
+    };
+  };
+
+  xdg.portal = {
+    enable = true;
+    xdgOpenUsePortal = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+      };
     };
   };
 
