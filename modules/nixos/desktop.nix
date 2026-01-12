@@ -60,6 +60,10 @@
       compositor = {
         name = "niri";
 		customConfig = ''
+			hotkey-overlay {
+				skip-at-startup
+			}
+
 			cursor {
 				xcursor-theme "Adwaita"
 				xcursor-size 24

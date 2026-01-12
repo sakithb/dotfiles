@@ -241,7 +241,6 @@
       ],
       "showOnLastDisplay": true,
       "leftWidgets": [
-        "launcherButton",
         "workspaceSwitcher",
         "focusedWindow"
       ],
