@@ -29,11 +29,6 @@
       '';
     }))
     baobab
-
-    libsForQt5.qt5ct
-    kdePackages.qt6ct
-    libsForQt5.qtstyleplugin-kvantum
-    kdePackages.qtstyleplugin-kvantum
   ];
 
   # Shell and compositor
@@ -100,7 +95,11 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
+    platformTheme.name = "gtk";
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
   };
 
   home.pointerCursor = {
