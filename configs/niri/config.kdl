@@ -85,8 +85,8 @@ switch-events {
 
 binds {
     Mod+Return { spawn "alacritty"; }
-    Mod+Alt+B { spawn "firefox"; }
-    Mod+Alt+F { spawn "nautilus"; }
+    Mod+Shift+B { spawn "firefox"; }
+    Mod+Shift+F { spawn "nautilus"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Q repeat=false { close-window; }
@@ -130,6 +130,7 @@ binds {
     Mod+Ctrl+R { reset-window-height; }
 
     Mod+M { maximize-column; }
+    Mod+Ctrl+M { maximize-window-to-edges; }
     Mod+F { fullscreen-window; }
     Mod+Ctrl+F { expand-column-to-available-width; }
 
@@ -142,8 +143,8 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+Ctrl+V       { toggle-window-floating; }
+    Mod+V { switch-focus-between-floating-and-tiling; }
     Mod+T { toggle-column-tabbed-display; }
 
     Print { screenshot; }

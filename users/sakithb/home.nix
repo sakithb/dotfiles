@@ -21,6 +21,7 @@
     anydesk
 	heroic
 	kdePackages.kdenlive
+	(pkgs.callPackage ../../modules/home/authpass.nix {})
   ];
 
   home.stateVersion = "25.11";
