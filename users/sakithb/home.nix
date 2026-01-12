@@ -15,13 +15,12 @@
 
   home.packages = with pkgs; [
 	google-chrome
-	firefox
     slack
     protonvpn-gui
     anydesk
 	heroic
+	libreoffice
 	kdePackages.kdenlive
-	gemini-cli
   ];
 
   home.stateVersion = "25.11";

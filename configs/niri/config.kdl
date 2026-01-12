@@ -1,4 +1,4 @@
-spawn-at-startup "dms" "run"
+// spawn-at-startup "dms" "run"
 spawn-sh-at-startup "wl-paste --watch cliphist store &"
 
 prefer-no-csd
@@ -13,6 +13,11 @@ window-rule {
 window-rule {
 	match app-id="org.gnome.NautilusPreviewer"
 	open-floating true
+}
+
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
 }
 
 input {
@@ -33,11 +38,14 @@ input {
     mouse {
         accel-profile "flat"
     }
+
+	focus-follows-mouse
 }
 
 layout {
     gaps 6
-    center-focused-column "never"
+    center-focused-column "on-overflow"
+	always-center-single-column
 
     preset-column-widths {
         proportion 0.33333

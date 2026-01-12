@@ -6,9 +6,9 @@
 }:
 
 {
-  imports = [
-    inputs.dms.homeModules.dankMaterialShell.default
-  ];
+  # imports = [
+  #   inputs.dms.homeModules.dankMaterialShell.default
+  # ];
 
   home.packages = with pkgs; [
     nautilus
@@ -29,32 +29,35 @@
       '';
     }))
     baobab
+
+    libsForQt5.qtstyleplugin-kvantum
+    kdePackages.qtstyleplugin-kvantum
   ];
 
   # Shell and compositor
 
-  programs.dankMaterialShell = {
-    enable = true;
-
-    plugins = {
-      EmojiLauncher = {
-        src = pkgs.fetchFromGitHub {
-          owner = "devnullvoid";
-          repo = "dms-emoji-launcher";
-          rev = "2951ec7";
-          sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
-        };
-      };
-      CalculatorLauncher = {
-        src = pkgs.fetchFromGitHub {
-          owner = "rochacbruno";
-          repo = "DankCalculator";
-          rev = "de6dbd5";
-          sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
-        };
-      };
-    };
-  };
+  # programs.dankMaterialShell = {
+  #   enable = true;
+  #
+  #   plugins = {
+  #     EmojiLauncher = {
+  #       src = pkgs.fetchFromGitHub {
+  #         owner = "devnullvoid";
+  #         repo = "dms-emoji-launcher";
+  #         rev = "2951ec7";
+  #         sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
+  #       };
+  #     };
+  #     CalculatorLauncher = {
+  #       src = pkgs.fetchFromGitHub {
+  #         owner = "rochacbruno";
+  #         repo = "DankCalculator";
+  #         rev = "de6dbd5";
+  #         sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
+  #       };
+  #     };
+  #   };
+  # };
 
   xdg.configFile."niri".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/niri";
@@ -96,11 +99,13 @@
   qt = {
     enable = true;
     platformTheme.name = "gtk";
-    style = {
-      name = "adwaita-dark";
-      package = pkgs.adwaita-qt;
-    };
+    style.name = "kvantum";
   };
+
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+    [General]
+    theme=KvGnomeDark
+  '';
 
   home.pointerCursor = {
     gtk.enable = true;

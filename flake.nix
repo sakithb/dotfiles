@@ -7,25 +7,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    niri = {
-      url = "github:YaLTeR/niri";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # niri = {
+    #   url = "github:YaLTeR/niri";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    kvLibadwaita = {
-      url = "github:GabePoel/KvLibadwaita";
-      flake = false;
-    };
+    # dms = {
+    #   url = "github:AvengeMedia/DankMaterialShell/stable";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    #
+    # kvLibadwaita = {
+    #   url = "github:GabePoel/KvLibadwaita";
+    #   flake = false;
+    # };
   };
   outputs =
     inputs@{

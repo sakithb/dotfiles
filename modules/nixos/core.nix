@@ -45,7 +45,7 @@
   nixpkgs = {
     config.allowUnfree = true;
     overlays = [
-      inputs.niri.overlays.default
+      # inputs.niri.overlays.default
       inputs.neovim-nightly-overlay.overlays.default
     ];
   };

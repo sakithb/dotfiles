@@ -1,49 +1,5 @@
 {
   "nodes": {
-    "dgop": {
-      "inputs": {
-        "nixpkgs": [
-          "dms",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1762835999,
-        "narHash": "sha256-UykYGrGFOFTmDpKTLNxj1wvd1gbDG4TkqLNSbV0TYwk=",
-        "owner": "AvengeMedia",
-        "repo": "dgop",
-        "rev": "799301991cd5dcea9b64245f9d500dcc76615653",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AvengeMedia",
-        "repo": "dgop",
-        "type": "github"
-      }
-    },
-    "dms": {
-      "inputs": {
-        "dgop": "dgop",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "quickshell": "quickshell"
-      },
-      "locked": {
-        "lastModified": 1765552734,
-        "narHash": "sha256-rWjWYu5rs3ZOJ4YJpvIscBZSYu74thJHc0VYyYKJTUc=",
-        "owner": "AvengeMedia",
-        "repo": "DankMaterialShell",
-        "rev": "7fb358bada0d3a229ec5ee6aaad0f9b64f367331",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AvengeMedia",
-        "ref": "stable",
-        "repo": "DankMaterialShell",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -85,22 +41,6 @@
         "type": "github"
       }
     },
-    "kvLibadwaita": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1757782301,
-        "narHash": "sha256-jCXME6mpqqWd7gWReT04a//2O83VQcOaqIIXa+Frntc=",
-        "owner": "GabePoel",
-        "repo": "KvLibadwaita",
-        "rev": "1f4e0bec44b13dabfa1fe4047aa8eeaccf2f3557",
-        "type": "github"
-      },
-      "original": {
-        "owner": "GabePoel",
-        "repo": "KvLibadwaita",
-        "type": "github"
-      }
-    },
     "neovim-nightly-overlay": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -139,27 +79,6 @@
         "type": "github"
       }
     },
-    "niri": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": "rust-overlay"
-      },
-      "locked": {
-        "lastModified": 1768133338,
-        "narHash": "sha256-nI9qvOIwL7ZIc9BQBFgsbFXOYPXEriouUpAJapy4m7w=",
-        "owner": "YaLTeR",
-        "repo": "niri",
-        "rev": "7e559dc4686f204b23e6b968d493023d51614f90",
-        "type": "github"
-      },
-      "original": {
-        "owner": "YaLTeR",
-        "repo": "niri",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1766902085,
@@ -176,57 +95,11 @@
         "type": "github"
       }
     },
-    "quickshell": {
-      "inputs": {
-        "nixpkgs": [
-          "dms",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1764663772,
-        "narHash": "sha256-sHqLmm0wAt3PC4vczJeBozI1/f4rv9yp3IjkClHDXDs=",
-        "ref": "refs/heads/master",
-        "rev": "26531fc46ef17e9365b03770edd3fb9206fcb460",
-        "revCount": 713,
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      },
-      "original": {
-        "rev": "26531fc46ef17e9365b03770edd3fb9206fcb460",
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      }
-    },
     "root": {
       "inputs": {
-        "dms": "dms",
         "home-manager": "home-manager",
-        "kvLibadwaita": "kvLibadwaita",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
-        "niri": "niri",
         "nixpkgs": "nixpkgs"
-      }
-    },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "niri",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1757989933,
-        "narHash": "sha256-9cpKYWWPCFhgwQTww8S94rTXgg8Q8ydFv9fXM6I8xQM=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "8249aa3442fb9b45e615a35f39eca2fe5510d7c3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
       }
     }
   },
