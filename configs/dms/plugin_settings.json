@@ -1,0 +1,9 @@
+{
+  "calculator": {
+    "enabled": true,
+    "trigger": "="
+  },
+  "emojiLauncher": {
+    "enabled": true
+  }
+}

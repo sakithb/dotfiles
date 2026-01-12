@@ -1,4 +1,3 @@
-// spawn-at-startup "dms" "run"
 spawn-sh-at-startup "wl-paste --watch cliphist store &"
 
 prefer-no-csd
@@ -44,22 +43,25 @@ input {
 
 layout {
     gaps 6
-    center-focused-column "on-overflow"
+    center-focused-column "never"
 	always-center-single-column
 
     preset-column-widths {
-        proportion 0.33333
+        proportion 0.4
         proportion 0.5
-        proportion 0.66667
+        proportion 0.6
+        proportion 0.8
     }
 
     preset-window-heights { 
-        proportion 0.33333
+        proportion 0.4
         proportion 0.5
-        proportion 0.66667
+        proportion 0.6
 	}
 
-    default-column-width { }
+    default-column-width {
+		proportion 0.8
+	}
 
     focus-ring {
         width 2
@@ -112,15 +114,15 @@ binds {
 	Mod+Shift+K   { move-workspace-up; }
     Mod+Shift+J { move-workspace-down; }
 
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+Shift+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+Shift+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+Shift+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
 
-    Mod+Shift+WheelScrollDown      { focus-column-right; }
-    Mod+Shift+WheelScrollUp        { focus-column-left; }
-    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
-    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+    Mod+WheelScrollDown      { focus-column-right; }
+    Mod+WheelScrollUp        { focus-column-left; }
+    Mod+Ctrl+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+WheelScrollUp   { move-column-left; }
 
     Mod+Tab { focus-window-previous; }
     Mod+Shift+Tab { focus-workspace-previous; }
@@ -155,7 +157,6 @@ binds {
     Alt+Print { screenshot-window; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
 }
 
 include "dms/colors.kdl"

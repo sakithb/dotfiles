@@ -69,7 +69,6 @@
       enable = true;
       pulse.enable = true;
     };
-    power-profiles-daemon.enable = true;
     earlyoom = {
       enable = true;
       enableNotifications = true;
