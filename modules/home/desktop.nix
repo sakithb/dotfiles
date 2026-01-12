@@ -72,6 +72,8 @@
     };
   };
 
+  xdg.configFile."Kvantum/KvLibadwaita".source = "${inputs.kvLibadwaita}/src/KvLibadwaita";
+
   gtk = {
     enable = true;
 
@@ -101,25 +103,6 @@
   qt = {
     enable = true;
     platformTheme.name = "qtct";
-    style.name = "kvantum";
-  };
-
-  xdg.configFile."Kvantum/KvLibadwaita".source = "${inputs.kvLibadwaita}/src/KvLibadwaita";
-  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-    [General]
-    theme=KvLibadwaita
-  '';
-  xdg.configFile = {
-    "qt5ct/qt5ct.conf".text = ''
-      [Appearance]
-      style=kvantum
-      icon_theme=Adwaita
-    '';
-    "qt6ct/qt6ct.conf".text = ''
-      [Appearance]
-      style=kvantum
-      icon_theme=Adwaita
-    '';
   };
 
   home.pointerCursor = {
