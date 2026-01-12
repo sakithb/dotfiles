@@ -54,11 +54,6 @@ layout {
     default-column-width { }
 
     focus-ring {
-        width 1
-    }
-
-    border {
-        off
         width 2
     }
 

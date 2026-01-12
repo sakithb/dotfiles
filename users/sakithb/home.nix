@@ -21,6 +21,7 @@
     anydesk
 	heroic
 	kdePackages.kdenlive
+	gemini-cli
 	(pkgs.callPackage ../../modules/home/authpass.nix {})
   ];
 

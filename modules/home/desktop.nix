@@ -72,8 +72,6 @@
     };
   };
 
-  xdg.configFile."Kvantum/KvLibadwaita".source = "${inputs.kvLibadwaita}/src/KvLibadwaita";
-
   gtk = {
     enable = true;
 
