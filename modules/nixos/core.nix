@@ -20,20 +20,18 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
+      dns = "none";
     };
 
-    nameservers = [
-      "1.1.1.1#cloudflare-dns.com"
-      "1.0.0.1#cloudflare-dns.com"
-      "2606:4700:4700::1111#cloudflare-dns.com"
-      "2606:4700:4700::1001#cloudflare-dns.com"
-    ];
+	useDHCP = false;
+	dhcpcd.enable = false;
 
-	firewall = {
-		enable = true;
-		checkReversePath = "loose";
-	};
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+      "2606:4700:4700::1111"
+      "2606:4700:4700::1001"
+    ];
   };
 
   nix = {
@@ -84,13 +82,6 @@
     earlyoom = {
       enable = true;
       enableNotifications = true;
-    };
-    resolved = {
-      enable = true;
-      dnssec = "true";
-      domains = [ "~." ];
-      dnsovertls = "opportunistic";
-      fallbackDns = [ ];
     };
   };
 
