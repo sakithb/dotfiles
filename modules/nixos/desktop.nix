@@ -23,24 +23,24 @@
   programs.dms-shell = {
     enable = true;
 
-    # plugins = {
-    #   EmojiLauncher = {
-    #     src = pkgs.fetchFromGitHub {
-    #       owner = "devnullvoid";
-    #       repo = "dms-emoji-launcher";
-    #       rev = "2951ec7";
-    #       sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
-    #     };
-    #   };
-    #   CalculatorLauncher = {
-    #     src = pkgs.fetchFromGitHub {
-    #       owner = "rochacbruno";
-    #       repo = "DankCalculator";
-    #       rev = "de6dbd5";
-    #       sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
-    #     };
-    #   };
-    # };
+    plugins = {
+      EmojiLauncher = {
+        src = pkgs.fetchFromGitHub {
+          owner = "devnullvoid";
+          repo = "dms-emoji-launcher";
+          rev = "2951ec7";
+          sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
+        };
+      };
+      CalculatorLauncher = {
+        src = pkgs.fetchFromGitHub {
+          owner = "rochacbruno";
+          repo = "DankCalculator";
+          rev = "de6dbd5";
+          sha256 = "sha256-aub5pXRMlMs7dxiv5P+/Rz/dA4weojr+SGZAItmbOvo=";
+        };
+      };
+    };
 
     systemd = {
       enable = true;
@@ -73,6 +73,7 @@
     };
 
     gnome.sushi.enable = true;
+	# flatpak.enable = true;
 
     gvfs.enable = true;
     udisks2.enable = true;

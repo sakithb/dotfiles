@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
@@ -8,6 +8,8 @@
     ../../modules/home/git.nix
     ../../modules/home/alacritty.nix
     ../../modules/home/dev.nix
+
+	# inputs.nix-flatpak.homeManagerModules.nix-flatpak
   ];
 
   home.username = "sakithb";
@@ -21,6 +23,9 @@
 	heroic
 	libreoffice
   ];
+
+	#  services.flatpak.packages = [
+	# ];
 
   home.stateVersion = "25.11";
 }

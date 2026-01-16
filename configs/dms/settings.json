@@ -158,7 +158,7 @@
   "batteryProfileName": "",
   "lockBeforeSuspend": true,
   "loginctlLockIntegration": true,
-  "fadeToLockEnabled": false,
+  "fadeToLockEnabled": true,
   "fadeToLockGracePeriod": 5,
   "launchPrefix": "",
   "brightnessDevicePins": {},
@@ -207,16 +207,15 @@
   "osdPowerProfileEnabled": false,
   "osdAudioOutputEnabled": true,
   "powerActionConfirm": true,
-  "powerActionHoldDuration": 0.5,
+  "powerActionHoldDuration": 0.25,
   "powerMenuActions": [
     "reboot",
     "logout",
     "poweroff",
     "lock",
-    "suspend",
-    "restart"
+    "suspend"
   ],
-  "powerMenuDefaultAction": "logout",
+  "powerMenuDefaultAction": "suspend",
   "powerMenuGridLayout": false,
   "customPowerActionLock": "",
   "customPowerActionLogout": "",
