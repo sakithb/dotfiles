@@ -5,8 +5,8 @@
     enable = true;
     setSocketVariable = true;
     daemon.settings = {
-		dns = ["172.17.0.1"];
 		min-api-version = "1.24";
+		dns = [ "1.1.1.1" "1.0.0.1" ];
 	};
   };
 }
