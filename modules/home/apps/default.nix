@@ -23,7 +23,8 @@ in
 	# school
 	libreoffice
 
-	# gaming
+	# gaming/windows
+	bottles
 	
 	# dev
 	dbeaver-bin
