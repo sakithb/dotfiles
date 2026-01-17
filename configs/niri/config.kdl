@@ -45,10 +45,11 @@ layout {
 	always-center-single-column
 
     preset-column-widths {
+        proportion 0.3
         proportion 0.4
         proportion 0.5
         proportion 0.6
-        proportion 0.8
+        proportion 0.7
     }
 
     preset-window-heights { 
