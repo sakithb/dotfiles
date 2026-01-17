@@ -13,6 +13,7 @@
 	ignores = [
 		".direnv"
 		".envrc"
+		".phpactor.json"
 	];
 
     settings = {

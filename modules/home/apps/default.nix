@@ -24,7 +24,6 @@ in
 	libreoffice
 
 	# gaming
-	lutris
 	
 	# dev
 	dbeaver-bin
