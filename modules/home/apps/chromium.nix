@@ -9,7 +9,7 @@
   programs.chromium =
     let
       package = pkgs.ungoogled-chromium;
-      installExtensions = true;
+      installExtensions = false;
     in
     {
       inherit package;
