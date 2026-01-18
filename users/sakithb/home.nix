@@ -16,6 +16,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     PROJECTS = "$HOME/Projects";
+	PASSWORD_STORE_DIR = "$HOME/.password-store";
   };
 
   home.shellAliases = {
