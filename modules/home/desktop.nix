@@ -62,10 +62,10 @@
     style.name = "kvantum";
   };
 
-  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-    [General]
-    theme=KvGnomeDark
-  '';
+  # xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+  #   [General]
+  #   theme=KvGnomeDark
+  # '';
 
   home.pointerCursor = {
     gtk.enable = true;
