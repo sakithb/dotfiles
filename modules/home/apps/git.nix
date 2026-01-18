@@ -18,7 +18,7 @@
 
     settings = {
 	  core = {
-		editor = "nvr --remote-wait -vs";
+		editor = "nvr --remote-wait";
 	  };
 
       pull = {

@@ -5,26 +5,27 @@
   ...
 }:
 
+let
+  nm-connection-editor = pkgs.networkmanagerapplet.overrideAttrs (oldAttrs: {
+    postInstall = (oldAttrs.postInstall or "") + ''
+      rm $out/etc/xdg/autostart/nm-applet.desktop
+    '';
+  });
+in
 {
   home.packages = with pkgs; [
-    nautilus
-    loupe
-    celluloid
-    evince
-    file-roller
-    gnome-text-editor
-    gnome-calculator
+	kdePackages.dolphin
+	kdePackages.gwenview
+	kdePackages.okular
+	kdePackages.ark
+	kdePackages.kate
+	kdePackages.kcalc
+	kdePackages.kamoso
+	kdePackages.partitionmanager
+    haruna
 
-    resources
-    gnome-disk-utility
-    pavucontrol
-    overskride
-    (networkmanagerapplet.overrideAttrs (oldAttrs: {
-      postInstall = (oldAttrs.postInstall or "") + ''
-        rm $out/etc/xdg/autostart/nm-applet.desktop
-      '';
-    }))
-    baobab
+    nm-connection-editor
+    lxqt.pavucontrol-qt
 
     libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
