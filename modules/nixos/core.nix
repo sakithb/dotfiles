@@ -20,14 +20,11 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
+      dns = "none";
     };
 
     nameservers = [
-      "1.1.1.1#cloudflare-dns.com"
-      "1.0.0.1#cloudflare-dns.com"
-      "2606:4700:4700::1111#cloudflare-dns.com"
-      "2606:4700:4700::1001#cloudflare-dns.com"
+      "127.0.0.1"
     ];
 
     firewall = {
@@ -86,15 +83,16 @@
       enable = true;
       enableNotifications = true;
     };
-    resolved = {
+    dnscrypt-proxy = {
       enable = true;
-      dnssec = "true";
-      domains = [ "~." ];
-      dnsovertls = "true";
-      fallbackDns = [ ];
-      extraConfig = ''
-        DNSStubListenerExtra=0.0.0.0
-      '';
+      settings = {
+        listen_addresses = [ "0.0.0.0:53" ];
+        server_names = [ "cloudflare" ];
+
+        require_dnssec = true;
+        require_nolog = true;
+        require_nofilter = false;
+      };
     };
   };
 
