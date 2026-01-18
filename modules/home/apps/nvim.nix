@@ -32,4 +32,8 @@
       python313Packages.python-lsp-server
     ];
   };
+
+  home.packages = with pkgs; [
+    neovim-remote
+  ];
 }

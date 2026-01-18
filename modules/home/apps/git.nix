@@ -17,6 +17,10 @@
 	];
 
     settings = {
+	  core = {
+		editor = "nvr --remote-wait -vs";
+	  };
+
       pull = {
         rebase = true;
       };
