@@ -8,6 +8,7 @@
       settings = {
         main = {
           capslock = "overload(control, esc)";
+		  leftmeta = "overload(meta, tools)";
           tab = "overload(nav, tab)";
           rightalt = "layer(command_layer)";
         };
