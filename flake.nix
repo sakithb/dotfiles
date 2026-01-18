@@ -23,6 +23,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/laptop/default.nix
+          ./modules/overlays.nix
 
           home-manager.nixosModules.home-manager
           {

@@ -1,17 +1,8 @@
 {
   pkgs,
-  inputs,
-  config,
   ...
 }:
 
-let
-  nm-connection-editor = pkgs.networkmanagerapplet.overrideAttrs (oldAttrs: {
-    postInstall = (oldAttrs.postInstall or "") + ''
-      rm $out/etc/xdg/autostart/nm-applet.desktop
-    '';
-  });
-in
 {
   home.packages = with pkgs; [
 	kdePackages.dolphin

@@ -1,15 +1,12 @@
 {
   pkgs,
-  lib,
   ...
 }:
 
 {
   programs.chromium = {
     enable = true;
-    package = pkgs.ungoogled-chromium.override {
-      enableWideVine = true;
-    };
+    package = pkgs.ungoogled-chromium;
 
     commandLineArgs = [
       "--extension-mime-request-handling=always-prompt-for-install"
