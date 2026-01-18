@@ -20,17 +20,14 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "none";
+      dns = "systemd-resolved";
     };
-
-    nameservers = [
-      "127.0.0.1"
-    ];
 
     firewall = {
       enable = true;
       allowedTCPPorts = [ 53 ];
       allowedUDPPorts = [ 53 ];
+      trustedInterfaces = [ "CloudflareWARP" ];
     };
   };
 
@@ -83,16 +80,14 @@
       enable = true;
       enableNotifications = true;
     };
-    dnscrypt-proxy = {
+    # cloudflare-warp = {
+    #   enable = true;
+    # };
+    resolved = {
       enable = true;
-      settings = {
-        listen_addresses = [ "0.0.0.0:53" ];
-        server_names = [ "cloudflare" ];
-
-        require_dnssec = true;
-        require_nolog = true;
-        require_nofilter = false;
-      };
+      extraConfig = ''
+        DNSStubListenerExtra=0.0.0.0
+      '';
     };
   };
 
