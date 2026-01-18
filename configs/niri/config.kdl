@@ -87,7 +87,7 @@ switch-events {
 
 binds {
     Mod+Return { spawn "alacritty"; }
-    Mod+Shift+B { spawn "firefox"; }
+    Mod+Shift+B { spawn "chromium"; }
     Mod+Shift+F { spawn "nautilus"; }
 
     Mod+O repeat=false { toggle-overview; }

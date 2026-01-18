@@ -110,11 +110,11 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "com.google.Chrome.desktop";
-      "x-scheme-handler/http" = "com.google.Chrome.desktop";
-      "x-scheme-handler/https" = "com.google.Chrome.desktop";
-      "x-scheme-handler/about" = "com.google.Chrome.desktop";
-      "x-scheme-handler/unknown" = "com.google.Chrome.desktop";
+      "text/html" = "chrome-browser.desktop";
+      "x-scheme-handler/http" = "chrome-browser.desktop";
+      "x-scheme-handler/https" = "chrome-browser.desktop";
+      "x-scheme-handler/about" = "chrome-browser.desktop";
+      "x-scheme-handler/unknown" = "chrome-browser.desktop";
 
       "image/jpeg" = "org.gnome.Loupe.desktop";
       "image/png" = "org.gnome.Loupe.desktop";
