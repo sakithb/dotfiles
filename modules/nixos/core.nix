@@ -29,6 +29,12 @@
       "2606:4700:4700::1111#cloudflare-dns.com"
       "2606:4700:4700::1001#cloudflare-dns.com"
     ];
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 ];
+    };
   };
 
   nix = {
@@ -86,6 +92,9 @@
       domains = [ "~." ];
       dnsovertls = "opportunistic";
       fallbackDns = [ ];
+      extraConfig = ''
+        DNSStubListenerExtra=0.0.0.0
+      '';
     };
   };
 
