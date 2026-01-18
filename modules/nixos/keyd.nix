@@ -7,8 +7,7 @@
       ids = [ "*" ];
       settings = {
         main = {
-          capslock = "overload(control, capslock)";
-          leftshift = "overload(shift, esc)";
+          capslock = "overload(control, esc)";
           tab = "overload(nav, tab)";
         };
 		
@@ -17,6 +16,8 @@
 		  j = "down";
 		  k = "up";
 		  l = "right";
+		  u = "pageup";
+		  d = "pagedown";
 		};
       };
     };
