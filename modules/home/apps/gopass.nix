@@ -3,6 +3,12 @@
 {
 	home.packages = with pkgs; [
 		gopass
-		gopass-jsonapi
 	];
+
+	programs.browserpass = {
+		enable = true;
+		browsers = [
+			"chromium"
+		];
+	};
 }
