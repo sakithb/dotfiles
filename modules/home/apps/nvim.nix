@@ -34,5 +34,5 @@
   };
 
   xdg.configFile."nvim".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/nvim";
+    config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/nvim";
 }

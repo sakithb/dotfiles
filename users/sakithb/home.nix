@@ -20,8 +20,8 @@
   home.shellAliases = {
     ls = "ls --color=auto";
     grep = "grep --color=auto";
-    nrs = ''cd $HOME/Projects/dotfiles && git add . && sudo nixos-rebuild switch --flake . && git commit -m "$(date +%d-%m-%y_%H:%M:%S)"'';
-    nfu = ''cd $HOME/Projects/dotfiles && nix flake update && nrs'';
+    nrs = ''cd $PROJECTS/dotfiles && git add . && sudo nixos-rebuild switch --flake . && git commit -m "$(date +%d-%m-%y_%H:%M:%S)"'';
+    nfu = ''cd $PROJECTS/dotfiles && nix flake update && nrs'';
     ngc = ''nix-collect-garbage -d'';
   };
 

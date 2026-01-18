@@ -33,19 +33,19 @@
   # Shell and compositor
 
   xdg.configFile."DankMaterialShell/settings.json".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/dms/settings.json";
+    config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/dms/settings.json";
 
   xdg.configFile."DankMaterialShell/plugin_settings.json".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/dms/plugin_settings.json";
+    config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/dms/plugin_settings.json";
 
   xdg.configFile."niri".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/niri";
+    config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/niri";
 
   # Theming
 
   home.file = {
     "Pictures/Wallpapers" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Projects/dotfiles/configs/wallpapers";
+      source = config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/wallpapers";
     };
   };
 
