@@ -15,7 +15,6 @@
           pkg:
           pkg.overrideAttrs (old: {
             nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ prev.makeWrapper ];
-
             postInstall = (old.postInstall or "") + ''
               wrapProgram $out/bin/niri \
                 --prefix PATH : ${prev.lib.makeBinPath [ prev.xwayland-satellite ]}

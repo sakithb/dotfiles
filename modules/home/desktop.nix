@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 
@@ -17,8 +18,8 @@
     gnome-disk-utility
     baobab
 
-	nm-connection-editor
-	pavucontrol
+    nm-connection-editor
+    pavucontrol
 
     libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
@@ -82,6 +83,15 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+
+    extraPortals = lib.mkForce [
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-gtk
+    ];
   };
 
   xdg.mimeApps = {
