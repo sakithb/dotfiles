@@ -20,14 +20,6 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
-    };
-
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 53 ];
-      allowedUDPPorts = [ 53 ];
-      trustedInterfaces = [ "CloudflareWARP" ];
     };
   };
 
@@ -82,12 +74,6 @@
     };
     cloudflare-warp = {
       enable = true;
-    };
-    resolved = {
-      enable = true;
-      extraConfig = ''
-        DNSStubListenerExtra=0.0.0.0
-      '';
     };
   };
 
