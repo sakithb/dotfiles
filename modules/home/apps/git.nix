@@ -5,7 +5,8 @@
     enable = true;
 
     signing = {
-      key = "C404859B57D9F8895C61A956F94060A80A23542B";
+      key = "/home/sakithb/.ssh/id_ed25519.pub";
+      format = "ssh";
       signByDefault = true;
     };
 
@@ -16,10 +17,6 @@
     ];
 
     settings = {
-      commit = {
-        gpgsign = true;
-      };
-
       core = {
         editor = "nvr --remote-wait";
       };
