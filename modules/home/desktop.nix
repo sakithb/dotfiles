@@ -18,8 +18,8 @@
     nm-connection-editor
     lxqt.pavucontrol-qt
 
-    libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
+    kdePackages.qt6ct
   ];
 
   # Theming
@@ -58,8 +58,7 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
-    style.name = "kvantum";
+    platformTheme.name = "qt6ct";
   };
 
   # xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
