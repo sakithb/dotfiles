@@ -4,7 +4,7 @@
   imports = [
     ../../modules/home/desktop.nix
     ../../modules/home/misc.nix
-    ../../modules/home/secrets.nix
+    ../../modules/home/keys.nix
     ../../modules/home/nixpkgs.nix
 
     ../../modules/home/apps

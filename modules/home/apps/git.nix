@@ -5,21 +5,24 @@
     enable = true;
 
     signing = {
-      key = "/home/sakithb/.ssh/id_ed25519.pub";
+      key = "C404859B57D9F8895C61A956F94060A80A23542B";
       signByDefault = true;
-      format = "ssh";
     };
 
-	ignores = [
-		".direnv"
-		".envrc"
-		".phpactor.json"
-	];
+    ignores = [
+      ".direnv"
+      ".envrc"
+      ".phpactor.json"
+    ];
 
     settings = {
-	  core = {
-		editor = "nvr --remote-wait";
-	  };
+      commit = {
+        gpgsign = true;
+      };
+
+      core = {
+        editor = "nvr --remote-wait";
+      };
 
       pull = {
         rebase = true;
