@@ -7,8 +7,8 @@
       ids = [ "*" ];
       settings = {
         main = {
-          capslock = "overload(ctrl, capslock)";
-          shift = "overload(shift, esc)";
+          capslock = "overload(control, capslock)";
+          leftshift = "overload(shift, esc)";
           tab = "overload(nav, tab)";
         };
 		
