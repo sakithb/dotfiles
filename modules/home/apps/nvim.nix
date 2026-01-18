@@ -32,7 +32,4 @@
       python313Packages.python-lsp-server
     ];
   };
-
-  xdg.configFile."nvim".source =
-    config.lib.file.mkOutOfStoreSymlink "$PROJECTS/dotfiles/configs/nvim";
 }
