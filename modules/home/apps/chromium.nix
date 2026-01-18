@@ -13,6 +13,7 @@
 
     commandLineArgs = [
       "--extension-mime-request-handling=always-prompt-for-install"
+      "--profile-directory=Default"
     ];
   };
 }
