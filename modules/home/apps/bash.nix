@@ -52,6 +52,7 @@
     sessionVariables = {
       PROMPT_DIRTRIM = "2";
       HISTTIMEFORMAT = "%F %T ";
+	  PROJECTS = "$HOME/Projects";
     };
 
     shellOptions = [

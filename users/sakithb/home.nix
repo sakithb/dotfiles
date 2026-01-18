@@ -3,7 +3,7 @@
 {
   imports = [
     ../../modules/home/desktop.nix
-    ../../modules/home/dev.nix
+    ../../modules/home/misc.nix
     ../../modules/home/nixpkgs.nix
 
     ../../modules/home/apps
