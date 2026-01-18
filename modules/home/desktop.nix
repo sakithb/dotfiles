@@ -5,21 +5,23 @@
 
 {
   home.packages = with pkgs; [
-	kdePackages.dolphin
-	kdePackages.gwenview
-	kdePackages.okular
-	kdePackages.ark
-	kdePackages.kate
-	kdePackages.kcalc
-	kdePackages.kamoso
-	kdePackages.partitionmanager
-    haruna
+    nautilus
+    loupe
+    celluloid
+    evince
+    file-roller
+    gnome-text-editor
+    gnome-calculator
 
-    nm-connection-editor
-    lxqt.pavucontrol-qt
+    resources
+    gnome-disk-utility
+    baobab
 
+	nm-connection-editor
+	pavucontrol
+
+    libsForQt5.qtstyleplugin-kvantum
     kdePackages.qtstyleplugin-kvantum
-    kdePackages.qt6ct
   ];
 
   # Theming
@@ -58,13 +60,14 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "qt6ct";
+    platformTheme.name = "gtk";
+    style.name = "kvantum";
   };
 
-  # xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-  #   [General]
-  #   theme=KvGnomeDark
-  # '';
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+    [General]
+    theme=KvGnomeDark
+  '';
 
   home.pointerCursor = {
     gtk.enable = true;
