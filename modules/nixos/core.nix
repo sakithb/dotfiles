@@ -90,7 +90,7 @@
       enable = true;
       dnssec = "true";
       domains = [ "~." ];
-      dnsovertls = "opportunistic";
+      dnsovertls = "true";
       fallbackDns = [ ];
       extraConfig = ''
         DNSStubListenerExtra=0.0.0.0
