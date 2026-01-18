@@ -40,10 +40,10 @@
     };
   };
 
-  programs.dsearch = {
-    enable = true;
-    systemd.enable = true;
-  };
+  # programs.dsearch = {
+  #   enable = true;
+  #   systemd.enable = true;
+  # };
 
   services = {
     displayManager.dms-greeter = {
