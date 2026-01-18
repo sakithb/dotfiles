@@ -80,9 +80,9 @@
       enable = true;
       enableNotifications = true;
     };
-    # cloudflare-warp = {
-    #   enable = true;
-    # };
+    cloudflare-warp = {
+      enable = true;
+    };
     resolved = {
       enable = true;
       extraConfig = ''
