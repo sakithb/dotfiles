@@ -1,6 +1,8 @@
 { ... }:
 
 {
+  home.shell.enableBashIntegration = true;
+
   programs.readline = {
     enable = true;
     variables = {

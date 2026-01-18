@@ -4,6 +4,7 @@
   imports = [
     ../../modules/home/desktop.nix
     ../../modules/home/misc.nix
+    ../../modules/home/secrets.nix
     ../../modules/home/nixpkgs.nix
 
     ../../modules/home/apps
@@ -27,13 +28,13 @@
 
   home.activation = {
     symlinks = lib.mkAfter ''
-		ln -sf $PROJECTS/dotfiles/configs/dms/settings.json $HOME/.config/DankMaterialShell/settings.json
-		ln -sf $PROJECTS/dotfiles/configs/dms/plugin_settings.json $HOME/.config/DankMaterialShell/plugin_settings.json
-		ln -sf $PROJECTS/dotfiles/configs/niri $HOME/.config/niri
-		ln -sf $PROJECTS/dotfiles/configs/wallpapers $HOME/Pictures/Wallpapers
+      		ln -sf $PROJECTS/dotfiles/configs/dms/settings.json $HOME/.config/DankMaterialShell/settings.json
+      		ln -sf $PROJECTS/dotfiles/configs/dms/plugin_settings.json $HOME/.config/DankMaterialShell/plugin_settings.json
+      		ln -sf $PROJECTS/dotfiles/configs/niri $HOME/.config/niri
+      		ln -sf $PROJECTS/dotfiles/configs/wallpapers $HOME/Pictures/Wallpapers
 
-		ln -sf $PROJECTS/dotfiles/configs/nvim $HOME/.config/nvim
-	'';
+      		ln -sf $PROJECTS/dotfiles/configs/nvim $HOME/.config/nvim
+      	'';
   };
 
   home.stateVersion = "25.11";
