@@ -1,59 +1,54 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }:
 
-{
-  programs.chromium =
-    let
-      package = pkgs.ungoogled-chromium;
-      installExtensions = false;
-    in
+let
+  browserPkg = pkgs.ungoogled-chromium.override {
+    enableWideVine = true;
+  };
+
+  browserVer = lib.versions.major browserPkg.version;
+
+  createExtension =
     {
-      inherit package;
-
-      enable = true;
-
-      commandLineArgs = [
-        "--extension-mime-request-handling=always-prompt-for-install"
-      ]
-      ++ lib.optionals installExtensions (
-        [
-          "https://github.com/NeverDecaf/chromium-web-store/releases/latest/download/Chromium.Web.Store.crx"
-        ]
-        ++ map (
-          extension:
-          "https://clients2.google.com/service/update2/crx?response=redirect\\&acceptformat=crx2,crx3\\&prodversion=${package.version}\\&x=id%3D${extension.id}%26uc"
-        ) config.programs.chromium.extensions
-      );
-
-      extensions = [
-        {
-          # I still don't care about cookies
-          id = "edibdbjcniadpccecjdfdjjppcpchdlm";
-        }
-        {
-          # KeePassXC-Browser
-          id = "oboonakemofpalcgghocfoadofidjkkk";
-        }
-        {
-          # Privacy Badger
-          id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";
-        }
-        {
-          # Refined GitHub
-          id = "hlepfoohegkhhmjieoechaddaejaokhf";
-        }
-        {
-          # uBlock Origin Lite
-          id = "ddkjiahejlhfcafbddmgiahcphecmpfh";
-        }
-        {
-          # Wayback Machine
-          id = "fpnmgdkabkmnadcjpehmlllkndpkmiak";
-        }
-      ];
+      id,
+      sha256,
+      version,
+    }:
+    {
+      inherit id;
+      crxPath = pkgs.fetchurl {
+        url = "https://clients2.google.com/service/update2/crx?response=redirect&acceptformat=crx2,crx3&prodversion=${browserVer}&x=id%3D${id}%26installsource%3Dondemand%26uc";
+        name = "${id}.crx";
+        inherit sha256;
+      };
+      inherit version;
     };
+in
+{
+  programs.chromium = {
+    enable = true;
+    package = browserPkg;
+
+    commandLineArgs = [
+      "--extension-mime-request-handling=always-prompt-for-install"
+    ];
+
+    extensions = [
+      (createExtension {
+        # ublock origin
+        id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";
+        sha256 = "sha256-w4o5W5ZMUUXmCJ+R8z2e5mGfjGOxf22Yo1DYlE9Bal0=";
+        version = "1.68.0";
+      })
+      (createExtension {
+        # dark reader
+        id = "eimadpbcbfnmbkopoojfekhnkhdbieeh";
+        sha256 = "sha256-aCAGePzaywNfNUwqSqhsM+GifJPz+NT71RiT0Z6QMkI=";
+        version = "4.9.118";
+      })
+    ];
+  };
 }
