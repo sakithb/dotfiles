@@ -86,10 +86,12 @@
       enable = true;
       settings = {
         ipv6_servers = true;
+		doh_servers = true;
+		dnscrypt_servers = true;
         require_dnssec = true;
-        monitoring_ui = {
-          enabled = true;
-        };
+        require_nolog = true;
+        require_nofilter = true;
+		http3 = true;
       };
     };
   };
