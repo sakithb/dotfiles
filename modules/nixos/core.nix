@@ -20,15 +20,17 @@
   networking = {
     networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
+      dns = "none";
     };
 
     nameservers = [
-      "1.1.1.1#one.one.one.one"
-      "1.0.0.1#one.one.one.one"
-      "2606:4700:4700::1111#one.one.one.one"
-      "2606:4700:4700::1001#one.one.one.one"
+      "127.0.0.1"
+      "::1"
     ];
+
+    dhcpcd = {
+      extraConfig = "nohook resolv.conf";
+    };
   };
 
   nix = {
@@ -80,15 +82,12 @@
       enable = true;
       enableNotifications = true;
     };
-    resolved = {
+    dnscrypt-proxy = {
       enable = true;
-      dnssec = "true";
-      domains = [ "~." ];
-      dnsovertls = "true";
-      fallbackDns = [ ];
-      extraConfig = ''
-        DNSStubListenerExtra=0.0.0.0
-      '';
+      settings = {
+        ipv6_servers = true;
+        require_dnssec = true;
+      };
     };
   };
 
