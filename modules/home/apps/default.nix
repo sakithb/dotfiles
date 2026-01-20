@@ -16,6 +16,7 @@ in
 	google-chrome
     protonvpn-gui
     anydesk
+	newsflash
 
 	# work
     slack
