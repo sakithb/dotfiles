@@ -16,7 +16,6 @@ in
 	google-chrome
     protonvpn-gui
     anydesk
-	liferea
 
 	# work
     slack
