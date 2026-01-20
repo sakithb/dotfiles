@@ -16,7 +16,7 @@ in
 	google-chrome
     protonvpn-gui
     anydesk
-	gnome-feeds
+	newsflash
 
 	# work
     slack
