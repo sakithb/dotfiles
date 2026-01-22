@@ -40,10 +40,13 @@
     };
   };
 
-  # programs.dsearch = {
-  #   enable = true;
-  #   systemd.enable = true;
-  # };
+  programs.dsearch = {
+    enable = true;
+    systemd = {
+      enable = true;
+      target = "graphical-session.target";
+    };
+  };
 
   services = {
     displayManager.dms-greeter = {
@@ -51,7 +54,7 @@
       configHome = "/home/sakithb";
       compositor = {
         name = "niri";
-		customConfig = ''
+        customConfig = ''
 			hotkey-overlay {
 				skip-at-startup
 			}
