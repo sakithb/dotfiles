@@ -4,6 +4,10 @@
   programs.git = {
     enable = true;
 
+    aliases = {
+      lazy = "!f() { git add -A && git commit -m \"$1\" && git push; }; f";
+    };
+
     signing = {
       key = "/home/sakithb/.ssh/id_ed25519.pub";
       format = "ssh";
