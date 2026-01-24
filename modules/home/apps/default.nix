@@ -26,6 +26,7 @@ in
 
 	# gaming/windows
 	bottles
+	varia
 	
 	# dev
 	dbeaver-bin
