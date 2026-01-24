@@ -26,8 +26,8 @@ in
 
 	# gaming/windows
 	bottles
-	varia
-	
+	motrix
+
 	# dev
 	dbeaver-bin
   ];
