@@ -26,7 +26,6 @@ in
 
 	# gaming/windows
 	bottles
-	motrix
 
 	# dev
 	dbeaver-bin
